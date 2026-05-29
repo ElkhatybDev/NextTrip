@@ -1,14 +1,7 @@
-* {
-  box-sizing: border-box;
-}
-
 .dashboard-page {
   min-height: 100vh;
   background: #f4f7fb;
   color: #0f172a;
-}
-.spantrip{
-  color: #ff7a1a;
 }
 
 .dashboard-layout {
@@ -30,18 +23,46 @@
 .sidebar-brand {
   padding: 28px;
   border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-brand-mark {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #143b96, #ff7a1a);
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  box-shadow: 0 14px 24px rgba(20, 59, 150, 0.18);
 }
 
 .sidebar-brand h1 {
   margin: 0;
-  font-size: 26px;
-  font-weight: 700;
-  color: #153e9f;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: #102a6b;
+}
+
+.sidebar-brand h1 span {
+  color: #ff7a1a;
 }
 
 .sidebar-brand p {
-  margin: 6px 0 0;
-  font-size: 14px;
+  margin: 7px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: #64748b;
 }
 
@@ -276,9 +297,10 @@
   margin-bottom: 24px;
   display: flex;
   gap: 16px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 .section-title h3 {
@@ -795,7 +817,7 @@
 
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  
   z-index: 50;
   background: rgba(2, 6, 23, 0.5);
   display: flex;

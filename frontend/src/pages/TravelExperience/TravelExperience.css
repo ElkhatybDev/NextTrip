@@ -1,81 +1,8 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
 .travel-page {
   min-height: 100vh;
   background: #f6f7fb;
   color: #0f172a;
   font-family: Arial, sans-serif;
-}
-
-.trip-container {
-  width: min(1180px, calc(100% - 40px));
-  margin: 0 auto;
-}
-
-.trip-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.trip-header-inner {
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.trip-logo {
-    margin-left: 30px;
-}
-
-
-.trip-nav {
-  display: flex;
-  gap: 28px;
-}
-
-.trip-nav a {
-  text-decoration: none;
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.trip-nav a:hover {
-  color: #143b96;
-}
-
-.trip-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.trip-signin-btn {
-  border: none;
-  background: transparent;
-  color: #143b96;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.trip-profile-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #eef2f7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .community-hero {
@@ -90,7 +17,6 @@ body {
 
 .community-hero-overlay {
   position: absolute;
-  inset: 0;
   background: linear-gradient(
     to bottom,
     rgba(20, 59, 150, 0.45),
@@ -176,6 +102,7 @@ body {
   margin: 0;
   color: #0f172a;
   font-weight: 800;
+  text-align: center;
 }
 
 .community-card h2 {
@@ -222,6 +149,8 @@ body {
 .compose-head {
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 12px;
   margin-bottom: 20px;
 }
@@ -245,8 +174,7 @@ body {
 
 .composer-form input,
 .composer-form textarea,
-.comment-form input,
-.trip-newsletter input {
+.comment-form input {
   width: 100%;
   border: 1px solid #dbe3ef;
   border-radius: 16px;
@@ -259,8 +187,7 @@ body {
 
 .composer-form input:focus,
 .composer-form textarea:focus,
-.comment-form input:focus,
-.trip-newsletter input:focus {
+.comment-form input:focus {
   border-color: #143b96;
   background: white;
 }
@@ -487,6 +414,18 @@ body {
   color: #64748b;
 }
 
+.post-details-link {
+  margin-top: 16px;
+  border: none;
+  background: #143b96;
+  color: white;
+  border-radius: 999px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 .post-actions {
   margin-top: 20px;
   display: flex;
@@ -623,123 +562,8 @@ body {
   cursor: pointer;
 }
 
-.trip-footer {
-  background: #e9c9a8;
-  color: #475569;
-  padding-top: 44px;
-}
-
-.trip-footer-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.9fr 0.9fr 0.9fr 1.2fr;
-  gap: 28px;
-  padding-bottom: 30px;
-}
-
-.trip-footer-grid h4 {
-  margin: 0 0 14px;
-  font-size: 22px;
-  font-weight: 700;
-  color: #143b96;
-}
-
-.footer-links p,
-.trip-footer-grid p {
-  color: #475569;
-  font-size: 17px;
-}
-
-.footer-links p {
-  margin: 8px 0;
-}
-
-.trip-footer-logo {
-  color: #143b96;
-}
-
-.trip-footer-logo span {
-  color: #ff8a1d;
-}
-
-.trip-footer-text {
-  max-width: 280px;
-  line-height: 2;
-}
-
-.trip-footer-text-wide {
-  max-width: 420px;
-}
-
-.trip-footer-socials {
-  margin-top: 20px;
-  display: flex;
-  gap: 12px;
-}
-
-.trip-social-circle {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: white;
-  color: #143b96;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-}
-
-.footer-icon {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-}
-
-.globe-stroke {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-}
-
-.trip-newsletter {
-  margin-top: 24px;
-  display: flex;
-  max-width: 420px;
-  background: #f8f8f8;
-  border-radius: 999px;
-  padding: 6px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-}
-
-.trip-newsletter button {
-  border: none;
-  background: #ff8a1d;
-  color: white;
-  border-radius: 999px;
-  padding: 12px 22px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.trip-footer-bottom {
-  padding: 18px 0 22px;
-  border-top: 1px solid rgba(100, 116, 139, 0.3);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #475569;
-  font-size: 15px;
-}
-
-.trip-footer-bottom div {
-  display: flex;
-  gap: 24px;
-}
-
 @media (max-width: 1100px) {
-  .community-grid,
-  .trip-footer-grid {
+  .community-grid {
     grid-template-columns: 1fr;
   }
 
@@ -749,10 +573,6 @@ body {
 }
 
 @media (max-width: 900px) {
-  .trip-nav {
-    display: none;
-  }
-
   .community-hero-content h1 {
     font-size: 40px;
   }
@@ -772,16 +592,6 @@ body {
 }
 
 @media (max-width: 600px) {
-  .trip-header-inner {
-    height: auto;
-    padding: 16px 0;
-    gap: 12px;
-  }
-
-  .trip-logo {
-    font-size: 26px;
-  }
-
   .community-hero {
     min-height: 280px;
   }
@@ -795,16 +605,9 @@ body {
     padding: 20px;
   }
 
-  .trip-newsletter,
-  .trip-footer-bottom,
   .comment-form {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .trip-footer-bottom div {
-    flex-direction: column;
-    gap: 10px;
   }
 
   .post-user {

@@ -1,0 +1,497 @@
+export const workspacePages = {
+  users: {
+    slug: "users",
+    icon: "users",
+    eyebrow: "Access model",
+    title: "User workspace for clients, agencies, and admins.",
+    description:
+      "A clean view for roles, account status, verification, and the actions each user type can access.",
+    heroMetric: "3 roles",
+    heroLabel: "Client, agent, admin",
+    status: "Identity ready",
+    stats: [
+      { label: "Active users", value: "1,284" },
+      { label: "Verified agents", value: "42" },
+      { label: "Admin actions", value: "18" },
+    ],
+    records: [
+      {
+        title: "Amine Traveler",
+        meta: "Client | Casablanca",
+        status: "Verified",
+        detail: "Can create trip drafts, book offers, and receive notifications.",
+      },
+      {
+        title: "Atlas Tours Agency",
+        meta: "Agent | Marrakech",
+        status: "Agency profile",
+        detail: "Can manage offers, availability, quotes, and client messages.",
+      },
+      {
+        title: "Platform Admin",
+        meta: "Admin | Operations",
+        status: "Full access",
+        detail: "Can audit changes, resolve disputes, and monitor platform activity.",
+      },
+    ],
+    workflow: [
+      "Register account and choose role.",
+      "Verify email, phone, or agency documents.",
+      "Attach permissions to the role.",
+      "Track important changes in audit logs.",
+    ],
+    fields: ["id", "fullName", "email", "phone", "role", "status", "createdAt"],
+  },
+  offers: {
+    slug: "offers",
+    icon: "offers",
+    eyebrow: "Offer model",
+    title: "Base offers and packages before customization.",
+    description:
+      "Use this page to review package structure, public details, agency ownership, and the base price before options are added.",
+    heroMetric: "24 offers",
+    heroLabel: "Ready for booking",
+    status: "Catalog live",
+    stats: [
+      { label: "Published", value: "18" },
+      { label: "Draft", value: "4" },
+      { label: "Review", value: "2" },
+    ],
+    records: [
+      {
+        title: "Santorini Sunset Dream",
+        meta: "Greece | 7 days",
+        status: "Published",
+        detail: "Base offer with hotel, transfer, and sunset cruise options.",
+      },
+      {
+        title: "Kyoto Heritage Journey",
+        meta: "Japan | 8 days",
+        status: "Review",
+        detail: "Needs availability check before the next package push.",
+      },
+      {
+        title: "Morocco Imperial Cities",
+        meta: "Morocco | 6 days",
+        status: "Draft",
+        detail: "Agency is still completing itinerary and included services.",
+      },
+    ],
+    workflow: [
+      "Create the base offer.",
+      "Attach offer options and availability.",
+      "Generate quote rules.",
+      "Publish when the package is complete.",
+    ],
+    fields: ["id", "agencyId", "title", "destination", "basePrice", "status", "publishedAt"],
+  },
+  "offer-options": {
+    slug: "offer-options",
+    icon: "options",
+    eyebrow: "Customization model",
+    title: "Offer options for hotels, transport, meals, and services.",
+    description:
+      "Every selectable package detail lives here so travelers can personalize without breaking the base offer.",
+    heroMetric: "64 options",
+    heroLabel: "Attached to offers",
+    status: "Composable",
+    stats: [
+      { label: "Hotel choices", value: "21" },
+      { label: "Transport", value: "16" },
+      { label: "Services", value: "27" },
+    ],
+    records: [
+      {
+        title: "4-star city hotel",
+        meta: "Hotel option | +1,200 MAD",
+        status: "Active",
+        detail: "Available for comfort packages in Europe and Morocco.",
+      },
+      {
+        title: "Private airport transfer",
+        meta: "Transport option | +450 MAD",
+        status: "Active",
+        detail: "Can be selected per booking item and included in quote details.",
+      },
+      {
+        title: "Local cultural guide",
+        meta: "Service option | +900 MAD",
+        status: "Limited",
+        detail: "Requires agency confirmation before final booking.",
+      },
+    ],
+    workflow: [
+      "Attach option to one or many offers.",
+      "Define price impact and availability rule.",
+      "Show it inside package personalization.",
+      "Store selected options as booking items.",
+    ],
+    fields: ["id", "offerId", "type", "label", "priceDelta", "isAvailable", "metadata"],
+  },
+  availability: {
+    slug: "availability",
+    icon: "availability",
+    eyebrow: "Inventory model",
+    title: "Inventory and availability by date.",
+    description:
+      "A clear operations page for stock, seats, hotel rooms, blackout dates, and date-based capacity.",
+    heroMetric: "312 slots",
+    heroLabel: "Across packages",
+    status: "Calendar synced",
+    stats: [
+      { label: "Open dates", value: "188" },
+      { label: "Low stock", value: "14" },
+      { label: "Blocked", value: "9" },
+    ],
+    records: [
+      {
+        title: "Santorini | 2026-06-18",
+        meta: "8 seats | 3 rooms",
+        status: "Open",
+        detail: "Enough stock for couples and small group bookings.",
+      },
+      {
+        title: "Kyoto | 2026-07-04",
+        meta: "2 seats | 1 room",
+        status: "Low stock",
+        detail: "Needs agency confirmation before accepting bigger groups.",
+      },
+      {
+        title: "Bali | 2026-08-15",
+        meta: "0 seats | 0 rooms",
+        status: "Blocked",
+        detail: "Blocked by supplier until new hotel allocation is confirmed.",
+      },
+    ],
+    workflow: [
+      "Select offer and travel date.",
+      "Set seats, rooms, or service capacity.",
+      "Block dates that cannot be sold.",
+      "Let booking and quote pages read the current stock.",
+    ],
+    fields: ["id", "offerId", "date", "stock", "reserved", "available", "status"],
+  },
+  "trip-drafts": {
+    slug: "trip-drafts",
+    icon: "drafts",
+    eyebrow: "Personalization model",
+    title: "Trip drafts for unfinished custom requests.",
+    description:
+      "This page keeps traveler preferences before they become a final request or confirmed booking.",
+    heroMetric: "36 drafts",
+    heroLabel: "In progress",
+    status: "Autosave ready",
+    stats: [
+      { label: "Completed", value: "19" },
+      { label: "Need dates", value: "11" },
+      { label: "Abandoned", value: "6" },
+    ],
+    records: [
+      {
+        title: "Japan culture route for two",
+        meta: "Kyoto, Osaka, Tokyo",
+        status: "Agency reviewing",
+        detail: "Traveler added mood, budget, services, and notes.",
+      },
+      {
+        title: "Family seaside break",
+        meta: "Agadir or Antalya",
+        status: "Offer ready",
+        detail: "Family preferences and transfer needs are already stored.",
+      },
+      {
+        title: "Europe train escape",
+        meta: "Paris, Zurich, Milan",
+        status: "Need dates",
+        detail: "Destination is selected but dates and budget are missing.",
+      },
+    ],
+    workflow: [
+      "Traveler starts a custom trip.",
+      "Draft saves filters, notes, options, and dates.",
+      "Traveler submits when ready.",
+      "Draft becomes request, quote, or booking.",
+    ],
+    fields: ["id", "userId", "destination", "dates", "travelers", "preferences", "status"],
+  },
+  bookings: {
+    slug: "bookings",
+    icon: "bookings",
+    eyebrow: "Reservation model",
+    title: "Booking requests and final reservations.",
+    description:
+      "A management page for reservation status, traveler details, payment state, and agency next actions.",
+    heroMetric: "128 bookings",
+    heroLabel: "Tracked this month",
+    status: "Operational",
+    stats: [
+      { label: "Confirmed", value: "81" },
+      { label: "Pending", value: "29" },
+      { label: "Needs action", value: "18" },
+    ],
+    records: [
+      {
+        title: "BK-2026-1042",
+        meta: "Santorini Sunset Dream",
+        status: "Confirmed",
+        detail: "Paid booking with receipt and travel documents ready.",
+      },
+      {
+        title: "BK-2026-1035",
+        meta: "Kyoto Heritage Journey",
+        status: "Deposit pending",
+        detail: "Traveler needs pickup confirmation before final payment.",
+      },
+      {
+        title: "BK-2026-1028",
+        meta: "Bali Wellness Retreat",
+        status: "Draft",
+        detail: "Checkout can still be completed from the traveler workspace.",
+      },
+    ],
+    workflow: [
+      "Traveler selects an offer or accepts a quote.",
+      "Booking captures traveler and payment status.",
+      "Agency confirms availability.",
+      "Final reservation becomes visible in My Bookings.",
+    ],
+    fields: ["id", "userId", "offerId", "status", "paymentStatus", "total", "createdAt"],
+  },
+  "booking-items": {
+    slug: "booking-items",
+    icon: "items",
+    eyebrow: "Selected details",
+    title: "Booking items selected inside a reservation.",
+    description:
+      "Each hotel, transport, service, and add-on selected by the traveler is stored as a booking item.",
+    heroMetric: "402 items",
+    heroLabel: "Linked to bookings",
+    status: "Itemized",
+    stats: [
+      { label: "Hotels", value: "146" },
+      { label: "Transfers", value: "118" },
+      { label: "Services", value: "138" },
+    ],
+    records: [
+      {
+        title: "Luxury cave suite",
+        meta: "Hotel | Santorini booking",
+        status: "Confirmed",
+        detail: "Selected option included in final package price.",
+      },
+      {
+        title: "Airport pickup",
+        meta: "Transport | Kyoto booking",
+        status: "Needs time",
+        detail: "Agency needs traveler arrival time to confirm service.",
+      },
+      {
+        title: "Wellness massage",
+        meta: "Service | Bali booking",
+        status: "Optional",
+        detail: "Can be removed before checkout is completed.",
+      },
+    ],
+    workflow: [
+      "Traveler selects options from an offer.",
+      "System converts options into booking items.",
+      "Quote calculates item prices.",
+      "Booking keeps the exact selected details.",
+    ],
+    fields: ["id", "bookingId", "optionId", "type", "quantity", "unitPrice", "total"],
+  },
+  "price-quotes": {
+    slug: "price-quotes",
+    icon: "quotes",
+    eyebrow: "Pricing model",
+    title: "Price quotes with calculated totals and details.",
+    description:
+      "A pricing page for base package price, selected items, fees, discounts, and the final traveler total.",
+    heroMetric: "56 quotes",
+    heroLabel: "Generated today",
+    status: "Calculated",
+    stats: [
+      { label: "Accepted", value: "21" },
+      { label: "Waiting", value: "27" },
+      { label: "Expired", value: "8" },
+    ],
+    records: [
+      {
+        title: "QT-2026-8810",
+        meta: "Santorini | 20,850 MAD",
+        status: "Accepted",
+        detail: "Includes base package, hotel upgrade, transfer, and platform fee.",
+      },
+      {
+        title: "QT-2026-8804",
+        meta: "Kyoto | 11,925 MAD",
+        status: "Waiting",
+        detail: "Deposit and local guide service are still pending confirmation.",
+      },
+      {
+        title: "QT-2026-8798",
+        meta: "Bali | 18,250 MAD",
+        status: "Expired",
+        detail: "Quote expired after availability changed for the chosen date.",
+      },
+    ],
+    workflow: [
+      "Read base offer and selected items.",
+      "Apply traveler count, stock rules, and discounts.",
+      "Generate visible quote details.",
+      "Attach accepted quote to booking.",
+    ],
+    fields: ["id", "bookingId", "basePrice", "itemsTotal", "fees", "discount", "grandTotal"],
+  },
+  notifications: {
+    slug: "notifications",
+    icon: "notifications",
+    eyebrow: "Communication model",
+    title: "Notifications for users, agencies, and admins.",
+    description:
+      "Central place to preview booking alerts, quote updates, message notifications, and admin warnings.",
+    heroMetric: "91 alerts",
+    heroLabel: "Last 24 hours",
+    status: "Realtime ready",
+    stats: [
+      { label: "Unread", value: "17" },
+      { label: "Booking alerts", value: "42" },
+      { label: "System", value: "9" },
+    ],
+    records: [
+      {
+        title: "New quote ready",
+        meta: "For Amine Traveler",
+        status: "Unread",
+        detail: "Agency submitted a tailored offer for Japan culture route.",
+      },
+      {
+        title: "Low availability warning",
+        meta: "Kyoto Heritage Journey",
+        status: "System",
+        detail: "Inventory dropped under the configured stock threshold.",
+      },
+      {
+        title: "Payment confirmed",
+        meta: "BK-2026-1042",
+        status: "Read",
+        detail: "Traveler payment was marked as paid and receipt can be downloaded.",
+      },
+    ],
+    workflow: [
+      "Trigger event from booking, quote, message, or inventory.",
+      "Send notification to the correct role.",
+      "Mark read or archive.",
+      "Keep important events connected to audit logs.",
+    ],
+    fields: ["id", "userId", "type", "title", "body", "readAt", "createdAt"],
+  },
+  "audit-logs": {
+    slug: "audit-logs",
+    icon: "audit",
+    eyebrow: "History model",
+    title: "Audit logs for important platform changes.",
+    description:
+      "Track who changed what, when it happened, and which record was affected so admin work stays accountable.",
+    heroMetric: "2,418 logs",
+    heroLabel: "Immutable history",
+    status: "Traceable",
+    stats: [
+      { label: "Today", value: "134" },
+      { label: "Admin changes", value: "27" },
+      { label: "Booking edits", value: "61" },
+    ],
+    records: [
+      {
+        title: "Offer price updated",
+        meta: "Atlas Tours Agency",
+        status: "Offer",
+        detail: "Base price changed from 9,500 MAD to 9,900 MAD.",
+      },
+      {
+        title: "Booking moved to confirmed",
+        meta: "System action",
+        status: "Booking",
+        detail: "Payment confirmation updated booking status automatically.",
+      },
+      {
+        title: "Admin resolved support case",
+        meta: "Platform Admin",
+        status: "Support",
+        detail: "Refund question was marked resolved after policy review.",
+      },
+    ],
+    workflow: [
+      "Capture actor, action, and entity.",
+      "Store before and after values.",
+      "Expose logs to admins only.",
+      "Use logs for support, trust, and debugging.",
+    ],
+    fields: ["id", "actorId", "entityType", "entityId", "action", "changes", "createdAt"],
+  },
+  conversations: {
+    slug: "conversations",
+    icon: "messages",
+    eyebrow: "Chat model",
+    title: "Conversation and message center.",
+    description:
+      "A simple chat view for traveler, agency, and admin conversations connected to bookings and trip requests.",
+    heroMetric: "38 threads",
+    heroLabel: "Open conversations",
+    status: "Support ready",
+    stats: [
+      { label: "Unread", value: "12" },
+      { label: "Agency threads", value: "19" },
+      { label: "Support cases", value: "7" },
+    ],
+    records: [
+      {
+        title: "Japan culture route",
+        meta: "Traveler + Atlas Tours",
+        status: "Unread",
+        detail: "Traveler asked about temple timing and hotel location.",
+      },
+      {
+        title: "Santorini documents",
+        meta: "Agency + Client",
+        status: "Open",
+        detail: "Agency shared receipt and final travel documents.",
+      },
+      {
+        title: "Refund policy question",
+        meta: "Client + Admin",
+        status: "Support",
+        detail: "Admin is reviewing cancellation conditions before reply.",
+      },
+    ],
+    workflow: [
+      "Open thread from booking, quote, or support.",
+      "Send role-based messages.",
+      "Mark read and keep notification state.",
+      "Attach important messages to booking history.",
+    ],
+    fields: ["id", "participants", "bookingId", "lastMessage", "unreadCount", "createdAt"],
+  },
+};
+
+export const workspaceNavItems = [
+  { label: "Users", slug: "users" },
+  { label: "Offers", slug: "offers" },
+  { label: "Offer Options", slug: "offer-options" },
+  { label: "Availability", slug: "availability" },
+  { label: "Trip Drafts", slug: "trip-drafts" },
+  { label: "Bookings", slug: "bookings" },
+  { label: "Booking Items", slug: "booking-items" },
+  { label: "Price Quotes", slug: "price-quotes" },
+  { label: "Notifications", slug: "notifications" },
+  { label: "Audit Logs", slug: "audit-logs" },
+  { label: "Messages", slug: "conversations" },
+].map((item) => ({
+  ...item,
+  to: `/workspace/${item.slug}`,
+  description: workspacePages[item.slug].eyebrow,
+}));
+
+export function getWorkspacePage(slug) {
+  return workspacePages[slug] || null;
+}
