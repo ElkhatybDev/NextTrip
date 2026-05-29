@@ -1,12 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./NotFound.css";
 
 export default function NotFound() {
-  const goHome = () => {
-    if (typeof window !== "undefined") {
-      window.location.href = "/";
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="notfound-page">
@@ -19,11 +16,11 @@ export default function NotFound() {
           The page you are looking for does not exist or has been moved.
         </p>
 
-        <button onClick={goHome} className="notfound-btn">
+        <button type="button" onClick={() => navigate("/")} className="notfound-btn">
           Back to Home
         </button>
 
-        <p className="notfound-footer">NextTrip © 2026</p>
+        <p className="notfound-footer">NextTrip (c) 2026</p>
       </div>
     </div>
   );

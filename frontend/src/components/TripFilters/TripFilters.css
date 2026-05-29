@@ -1,0 +1,86 @@
+.trip-filters-panel {
+  margin-bottom: 30px;
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, #f8fbff 0%, #fff7ed 100%);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.trip-filters-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 720px;
+}
+
+.trip-filters-head h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.trip-filters-head span {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.trip-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.trip-filter-group {
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.trip-filter-group p {
+  margin: 0 0 12px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.trip-filter-group div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.trip-filter-chip {
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: white;
+  color: #475569;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.trip-filter-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(20, 59, 150, 0.2);
+  color: #143b96;
+}
+
+.trip-filter-chip.active {
+  background: #143b96;
+  border-color: #143b96;
+  color: white;
+}
+
+@media (max-width: 800px) {
+  .trip-filters-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,147 @@
+.support-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.support-hero {
+  padding: 64px 0;
+  background:
+    linear-gradient(135deg, rgba(20, 59, 150, 0.92), rgba(13, 43, 134, 0.96)),
+    url("https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80") center/cover;
+  color: white;
+}
+
+.support-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 34px;
+  align-items: center;
+}
+
+.support-eyebrow {
+  margin: 0 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffb36b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.support-hero h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.support-hero p {
+  max-width: 620px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+}
+
+.support-contact-card {
+  padding: 28px;
+  border-radius: 30px;
+  background: white;
+  color: #0f172a;
+  box-shadow: 0 30px 70px rgba(2, 6, 23, 0.22);
+}
+
+.support-contact-card svg {
+  color: #ff7a1a;
+}
+
+.support-contact-card h2 {
+  margin: 16px 0 8px;
+}
+
+.support-contact-card p {
+  color: #64748b;
+}
+
+.support-contact-card a {
+  margin-top: 12px;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  background: #143b96;
+  color: white;
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.support-cards {
+  padding: 56px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.support-card {
+  padding: 26px;
+  border-radius: 28px;
+  background: white;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+}
+
+.support-card svg {
+  color: #143b96;
+}
+
+.support-card h3 {
+  margin: 18px 0 8px;
+}
+
+.support-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.8;
+}
+
+.support-faq {
+  padding: 56px 0;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 28px;
+}
+
+.support-faq h2 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 52px);
+  letter-spacing: -0.04em;
+}
+
+.support-question-list {
+  display: grid;
+  gap: 12px;
+}
+
+.support-question-list a {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: white;
+  color: #143b96;
+  text-decoration: none;
+  font-weight: 900;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+@media (max-width: 900px) {
+  .support-hero-grid,
+  .support-faq {
+    grid-template-columns: 1fr;
+  }
+
+  .support-cards {
+    grid-template-columns: 1fr;
+  }
+}

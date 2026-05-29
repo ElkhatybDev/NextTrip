@@ -1,0 +1,164 @@
+.info-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.info-shell {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.info-main {
+  padding: 28px 0 44px;
+}
+
+.info-content {
+  display: grid;
+  gap: 16px;
+}
+
+.info-card {
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.info-header-card {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.info-eyebrow {
+  margin: 0 0 10px;
+  color: #143b96;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.info-header-card h1 {
+  margin: 0 auto;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  line-height: 1.08;
+}
+
+.info-description {
+  margin: 12px auto 0;
+  max-width: 720px;
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.info-summary-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.info-summary-title {
+  margin: 18px auto 0;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.info-summary-item {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.info-summary-item span {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.info-summary-item strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.info-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.08rem;
+  text-align: center;
+}
+
+.info-card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.info-list,
+.info-cta-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.info-list {
+  margin-top: 14px;
+}
+
+.info-list-item {
+  padding: 13px 14px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.info-list-item h3 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.info-cta-card {
+  background: #fff;
+}
+
+.info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.info-btn-primary {
+  background: #143b96;
+  color: #fff;
+}
+
+.info-btn-secondary {
+  background: #eff6ff;
+  color: #143b96;
+  border: 1px solid rgba(20, 59, 150, 0.12);
+}
+
+@media (max-width: 640px) {
+  .info-main {
+    padding-top: 20px;
+  }
+
+  .info-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .info-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

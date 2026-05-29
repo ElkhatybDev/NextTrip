@@ -1,0 +1,263 @@
+.success-main {
+  width: min(1100px, calc(100% - 40px));
+}
+
+.success-card {
+  padding: 24px;
+  background: white;
+  border: 1px solid #eef2f7;
+  border-radius: 28px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+.success-top-box {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 32px;
+  padding: 20px;
+  background: #f8fbff;
+  border: 1px solid #eef2f7;
+  border-radius: 24px;
+}
+
+.success-top-box h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.success-subtext {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.receipt-meta-box {
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #eef2f7;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  font-size: 14px;
+}
+
+.receipt-meta-box p {
+  margin: 0;
+  color: #64748b;
+}
+
+.receipt-meta-box p + p {
+  margin-top: 8px;
+}
+
+.receipt-meta-box span,
+.success-info-grid span,
+.email-meta span {
+  color: #1e293b;
+  font-weight: 800;
+}
+
+.success-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 24px;
+}
+
+.success-left,
+.success-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.success-info-card,
+.success-actions-card,
+.success-image-card {
+  background: white;
+  border: 1px solid #eef2f7;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.success-info-card,
+.success-actions-card {
+  padding: 20px;
+}
+
+.success-info-card h3,
+.success-actions-card h3,
+.success-image-content h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.success-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.payment-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.payment-lines div,
+.payment-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.payment-lines div {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.payment-lines strong,
+.payment-total span {
+  color: #0f172a;
+}
+
+.payment-total {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.payment-total span {
+  font-weight: 800;
+}
+
+.payment-total strong {
+  color: #143b96;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.success-image-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.success-image-card img {
+  display: block;
+  width: 100%;
+  height: 224px;
+  object-fit: cover;
+}
+
+.success-image-content {
+  padding: 20px;
+}
+
+.success-image-content p {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.success-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.receipt-panel {
+  margin-top: 16px;
+  padding: 16px;
+  text-align: left;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.receipt-panel textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panel-head h4 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.panel-head button {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.panel-text {
+  margin-bottom: 12px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.email-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+@media (max-width: 1100px) {
+  .success-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .success-top-box {
+    flex-direction: column;
+  }
+
+  .success-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .success-main {
+    width: min(100% - 24px, 1100px);
+  }
+
+  .success-card {
+    padding: 20px;
+  }
+
+  .success-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
