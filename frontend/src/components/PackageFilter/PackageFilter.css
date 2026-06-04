@@ -21,6 +21,14 @@
   margin-bottom: 8px;
 }
 
+.package-filter-top h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.18;
+  font-weight: 900;
+}
+
 .package-filter-search-wrap {
   width: min(420px, 100%);
 }
@@ -77,5 +85,25 @@
   .package-filter-top {
     flex-direction: column;
     align-items: stretch;
+  }
+}
+
+@media (max-width: 560px) {
+  .package-filter-card {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .package-filter-top h2 {
+    font-size: 24px;
+  }
+
+  .package-filter-search-bar {
+    border-radius: 18px;
+  }
+
+  .package-filter-chip {
+    min-height: 40px;
+    padding: 0 14px;
   }
 }

@@ -2,8 +2,21 @@
   box-sizing: border-box;
 }
 
+:root {
+  --nt-blue: #143b96;
+  --nt-blue-deep: #0d2b86;
+  --nt-blue-soft: #e8f0ff;
+  --nt-orange: #ff7a1a;
+  --nt-shadow: rgba(20, 59, 150, 0.28);
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+  overflow-y: auto;
+  scrollbar-gutter: auto;
+  scrollbar-color: var(--nt-blue) var(--nt-blue-soft);
+  scrollbar-width: thin;
 }
 
 body {
@@ -11,6 +24,35 @@ body {
   font-family: Arial, sans-serif;
   background: #f7f8fb;
   color: #0f172a;
+  max-width: 100vw;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+#root {
+  min-height: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+html::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+html::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f7f8fb, var(--nt-blue-soft));
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 3px solid var(--nt-blue-soft);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2f63d8, var(--nt-blue));
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--nt-orange), var(--nt-blue));
 }
 
 button,
@@ -18,6 +60,55 @@ input,
 select,
 textarea {
   font-family: inherit;
+}
+
+img,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+a,
+button,
+label,
+p,
+li,
+span,
+strong,
+small {
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.site-shell > *,
+.trip-container > *,
+[class*="grid"] > *,
+[class*="layout"] > *,
+[class*="card"] > *,
+[class*="panel"] > * {
+  min-width: 0;
 }
 
 .site-shell {
@@ -30,6 +121,38 @@ textarea {
   margin: 0 auto;
 }
 
+.responsive-section {
+  width: min(1180px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.responsive-grid,
+.responsive-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+}
+
+.responsive-two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.responsive-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.responsive-media {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 @keyframes pageReveal {
   from {
     opacity: 0;
@@ -39,6 +162,16 @@ textarea {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes routeEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
@@ -54,6 +187,28 @@ textarea {
   }
 }
 
+@keyframes buttonPulse {
+  0%,
+  100% {
+    box-shadow: 0 18px 38px var(--nt-shadow);
+  }
+
+  50% {
+    box-shadow: 0 18px 50px rgba(255, 122, 26, 0.34);
+  }
+}
+
+@keyframes backToTopArrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
 @keyframes subtleFloat {
   0%,
   100% {
@@ -62,6 +217,37 @@ textarea {
 
   50% {
     transform: translateY(-6px);
+  }
+}
+
+.route-page-transition {
+  min-height: 100dvh;
+  overflow-y: visible;
+  max-width: 100vw;
+  overflow-x: clip;
+  animation: routeEnter 0.28s ease both;
+  transform-origin: top center;
+  will-change: opacity;
+}
+
+.route-loading-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+}
+
+.route-loading-shell span {
+  width: 42px;
+  height: 42px;
+  border: 4px solid var(--nt-blue-soft);
+  border-top-color: var(--nt-blue);
+  border-radius: 50%;
+  animation: routeLoadingSpin 0.8s linear infinite;
+}
+
+@keyframes routeLoadingSpin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -82,6 +268,192 @@ textarea {
   animation: pageReveal 0.55s ease both;
 }
 
+.shared-package-card,
+.destination-tile,
+.experience-post-card,
+.agency-card,
+.dashboard-card,
+.service-card,
+.travel-style-card,
+.package-detail-card,
+.home-flow-strip > div,
+.destination-type-list span,
+.site-drawer-link {
+  animation: softRise 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@supports (content-visibility: auto) {
+  .home-page main > section,
+  .destinations-page main > section,
+  .packages-page main > section,
+  .travel-page main > section,
+  .agency-page main > section,
+  .about-platform-page main > section,
+  .support-page main > section,
+  .portal-page main > section,
+  .package-detail-page main > section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 760px;
+  }
+
+  .shared-package-card,
+  .destination-tile,
+  .experience-post-card,
+  .agency-card,
+  .dashboard-card,
+  .service-card,
+  .travel-style-card,
+  .package-detail-card {
+    contain: layout paint style;
+  }
+}
+
+.shared-package-card:nth-child(2),
+.destination-tile:nth-child(2),
+.experience-post-card:nth-child(2),
+.agency-card:nth-child(2),
+.service-card:nth-child(2),
+.travel-style-card:nth-child(2) {
+  animation-delay: 0.04s;
+}
+
+.shared-package-card:nth-child(3),
+.destination-tile:nth-child(3),
+.experience-post-card:nth-child(3),
+.agency-card:nth-child(3),
+.service-card:nth-child(3),
+.travel-style-card:nth-child(3) {
+  animation-delay: 0.08s;
+}
+
+.shared-package-card:nth-child(n + 4),
+.destination-tile:nth-child(n + 4),
+.experience-post-card:nth-child(n + 4),
+.agency-card:nth-child(n + 4),
+.service-card:nth-child(n + 4),
+.travel-style-card:nth-child(n + 4) {
+  animation-delay: 0.12s;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 180;
+  width: 52px;
+  max-width: 52px;
+  height: 52px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--nt-blue), var(--nt-blue-deep));
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px) scale(0.86);
+  box-shadow: 0 18px 38px var(--nt-shadow);
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease,
+    background 0.22s ease,
+    max-width 0.26s ease,
+    width 0.26s ease,
+    box-shadow 0.22s ease;
+}
+
+.back-to-top-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  animation: buttonPulse 2.4s ease-in-out infinite;
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  width: auto;
+  max-width: 188px;
+  padding-inline: 15px 18px;
+  background: linear-gradient(135deg, var(--nt-orange), var(--nt-blue));
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 22px 44px rgba(20, 59, 150, 0.32);
+  outline: none;
+}
+
+.back-to-top svg {
+  flex: 0 0 auto;
+  stroke-width: 3;
+}
+
+.back-to-top-visible svg {
+  animation: backToTopArrow 1.35s ease-in-out infinite;
+}
+
+.back-to-top span {
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translateX(6px);
+  transition:
+    max-width 0.26s ease,
+    opacity 0.18s ease,
+    transform 0.22s ease;
+}
+
+.back-to-top:hover span,
+.back-to-top:focus-visible span {
+  max-width: 128px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+html[dir="rtl"] .back-to-top {
+  right: auto;
+  left: 22px;
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .back-to-top:hover,
+html[dir="rtl"] .back-to-top:focus-visible {
+  padding-inline: 18px 15px;
+}
+
+html[dir="rtl"] .back-to-top span {
+  transform: translateX(-6px);
+}
+
+html[dir="rtl"] .back-to-top:hover span,
+html[dir="rtl"] .back-to-top:focus-visible span {
+  transform: translateX(0);
+}
+
+@media (max-width: 900px) {
+  .site-shell,
+  .trip-container,
+  .responsive-section {
+    width: min(1180px, calc(100% - 24px));
+  }
+
+  [class*="grid"],
+  [class*="layout"] {
+    min-width: 0;
+  }
+
+  .responsive-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -90,5 +462,425 @@ textarea {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .back-to-top-visible {
+    animation: none;
+  }
+
+  .back-to-top-visible svg {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-shell,
+  .trip-container,
+  .responsive-section {
+    width: min(1180px, calc(100% - 20px));
+  }
+
+  .responsive-grid,
+  .responsive-card-grid {
+    gap: 14px;
+  }
+
+  .responsive-actions {
+    flex-direction: column;
+  }
+
+  .responsive-actions > * {
+    width: 100%;
+  }
+
+  .back-to-top {
+    right: 16px;
+    bottom: 16px;
+    width: 46px;
+    max-width: 46px;
+    height: 46px;
+    padding-inline: 13px;
+  }
+
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    max-width: 176px;
+  }
+
+  html[dir="rtl"] .back-to-top {
+    left: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  body,
+  #root,
+  .route-page-transition,
+  main,
+  section,
+  header,
+  footer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .site-shell,
+  .trip-container,
+  .container,
+  .responsive-section {
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 16px;
+  }
+
+  .site-header .site-shell {
+    padding-inline: 18px;
+  }
+
+  :where(
+    .hero-content,
+    .hero-copy,
+    .section-heading,
+    .packages-hero-content,
+    .packages-head,
+    .package-filter,
+    .destinations-hero-copy,
+    .destinations-section-head,
+    .destination-types,
+    .trip-hero-content,
+    .trip-hero-grid,
+    .community-hero-content,
+    .travel-style-hero-content,
+    .travel-style-copy,
+    .portal-hero,
+    .info-header-card,
+    .auth-heading-block,
+    .package-detail-hero-content,
+    .experience-details-hero-content,
+    .about-platform-hero,
+    .agency-hero,
+    .support-hero,
+    .workspace-hero
+  ) {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  :where(
+    .hero-content h1,
+    .section-heading h2,
+    .packages-hero-content h1,
+    .packages-head h3,
+    .package-filter-top h2,
+    .destinations-hero h1,
+    .destination-types h2,
+    .destinations-section-head h2,
+    .trip-hero-content h1,
+    .trip-form-head h2,
+    .community-hero-content h1,
+    .travel-style-copy h1,
+    .travel-style-section-head h2,
+    .portal-hero h1,
+    .info-header-card h1,
+    .auth-heading-block h1,
+    .package-detail-hero h1,
+    .experience-details-hero h1,
+    .about-platform-hero h1,
+    .agency-hero h1,
+    .support-hero h1,
+    .workspace-hero h1
+  ) {
+    max-width: 100%;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: auto;
+  }
+
+  :where(
+    .hero-content p,
+    .section-desc,
+    .packages-hero-content p,
+    .destinations-hero p,
+    .destinations-section-head span,
+    .trip-hero-content p,
+    .community-hero-content p,
+    .travel-style-copy > p,
+    .portal-hero p,
+    .info-header-card p,
+    .auth-heading-block p,
+    .about-platform-hero p,
+    .agency-hero p,
+    .support-hero p,
+    .workspace-hero p
+  ) {
+    max-width: 100%;
+  }
+
+  :where(
+    .destinations-actions,
+    .travel-style-actions,
+    .trip-hero-actions,
+    .home-final-actions,
+    .package-modal-actions,
+    .portal-actions,
+    .agency-actions,
+    .support-actions
+  ) {
+    width: 100%;
+  }
+
+  :where(
+    .destinations-actions > *,
+    .travel-style-actions > *,
+    .home-final-actions > *,
+    .package-modal-actions > *,
+    .portal-actions > *,
+    .agency-actions > *,
+    .support-actions > *
+  ) {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-shell,
+  .trip-container,
+  .container,
+  .responsive-section,
+  .packages-main,
+  .portal-main {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-inline: auto !important;
+    padding-inline: 14px !important;
+  }
+
+  .site-header .site-shell {
+    padding-inline: 14px 64px !important;
+  }
+
+  :where(
+    .hero-content,
+    .packages-hero-content,
+    .destinations-hero-grid,
+    .trip-hero-content,
+    .trip-hero-grid,
+    .community-hero-content,
+    .travel-style-hero-content,
+    .travel-style-copy,
+    .portal-hero,
+    .info-header-card,
+    .auth-heading-block,
+    .package-detail-hero-content,
+    .experience-details-hero-content,
+    .about-platform-hero,
+    .agency-hero,
+    .support-hero,
+    .workspace-hero
+  ) {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding-inline: 0 !important;
+    transform: none;
+  }
+
+  :where(
+    .hero-copy,
+    .packages-hero-content,
+    .destinations-hero-copy,
+    .trip-hero-grid > div:first-child,
+    .community-hero-content,
+    .travel-style-copy,
+    .portal-hero > div:first-child,
+    .info-header-card,
+    .auth-heading-block,
+    .package-detail-hero-content,
+    .experience-details-hero-content,
+    .about-platform-hero,
+    .agency-hero,
+    .support-hero > div:first-child,
+    .workspace-hero
+  ) {
+    width: min(100%, 360px) !important;
+    max-width: 360px !important;
+    margin-inline: 0 auto !important;
+    justify-self: start !important;
+    align-self: center !important;
+    text-align: center !important;
+  }
+
+  :where(
+    .destinations-actions,
+    .travel-style-actions,
+    .trip-hero-actions,
+    .home-final-actions,
+    .package-modal-actions,
+    .portal-actions,
+    .agency-actions,
+    .support-actions
+  ) {
+    max-width: 360px !important;
+    margin-inline: 0 auto !important;
+  }
+
+  :where(
+    .hero-content h1,
+    .section-heading h2,
+    .packages-hero-content h1,
+    .packages-head h3,
+    .package-filter-top h2,
+    .destinations-hero h1,
+    .destination-types h2,
+    .destinations-section-head h2,
+    .trip-hero-content h1,
+    .trip-form-head h2,
+    .community-hero-content h1,
+    .travel-style-copy h1,
+    .travel-style-section-head h2,
+    .portal-hero h1,
+    .info-header-card h1,
+    .auth-heading-block h1,
+    .package-detail-hero h1,
+    .experience-details-hero h1,
+    .about-platform-hero h1,
+    .agency-hero h1,
+    .support-hero h1,
+    .workspace-hero h1
+  ) {
+    max-width: calc(100vw - 36px) !important;
+    font-size: 24px !important;
+    line-height: 1.18 !important;
+    letter-spacing: 0 !important;
+    text-wrap: wrap !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  :where(
+    .hero-content p,
+    .hero-text,
+    .section-desc,
+    .packages-hero-content p,
+    .destinations-hero p,
+    .destinations-section-head span,
+    .trip-hero-content p,
+    .community-hero-content p,
+    .travel-style-copy > p,
+    .portal-hero p,
+    .info-header-card p,
+    .auth-heading-block p,
+    .about-platform-hero p,
+    .agency-hero p,
+    .support-hero p,
+    .workspace-hero p
+  ) {
+    max-width: calc(100vw - 36px) !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    text-wrap: wrap !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-shell,
+  .trip-container,
+  .container,
+  .responsive-section,
+  .packages-main,
+  .portal-main {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-inline: auto !important;
+    padding-inline: 14px !important;
+  }
+
+  .site-header .site-shell {
+    padding-inline: 14px !important;
+  }
+
+  :where(
+    .hero-content,
+    .hero-copy,
+    .packages-hero-content,
+    .destinations-hero-grid,
+    .destinations-hero-copy,
+    .trip-hero-content,
+    .trip-hero-grid,
+    .community-hero-content,
+    .travel-style-hero-content,
+    .travel-style-copy,
+    .portal-hero,
+    .info-header-card,
+    .auth-heading-block,
+    .package-detail-hero-content,
+    .experience-details-hero-content,
+    .about-platform-hero,
+    .agency-hero,
+    .support-hero,
+    .workspace-hero
+  ) {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-inline: 0 !important;
+    transform: none;
+  }
+
+  :where(
+    .hero-content h1,
+    .section-heading h2,
+    .packages-hero-content h1,
+    .packages-head h3,
+    .destinations-hero h1,
+    .destination-types h2,
+    .destinations-section-head h2,
+    .trip-hero-content h1,
+    .community-hero-content h1,
+    .travel-style-copy h1,
+    .portal-hero h1,
+    .info-header-card h1,
+    .auth-heading-block h1,
+    .package-detail-hero h1,
+    .experience-details-hero h1,
+    .about-platform-hero h1,
+    .agency-hero h1,
+    .support-hero h1
+  ) {
+    max-width: calc(100vw - 36px) !important;
+    font-size: 24px !important;
+    line-height: 1.18 !important;
+    letter-spacing: 0 !important;
+    text-wrap: wrap !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  :where(
+    .hero-content p,
+    .hero-text,
+    .section-desc,
+    .packages-hero-content p,
+    .destinations-hero p,
+    .destinations-section-head span,
+    .trip-hero-content p,
+    .community-hero-content p,
+    .travel-style-copy > p,
+    .portal-hero p,
+    .info-header-card p,
+    .auth-heading-block p,
+    .about-platform-hero p,
+    .agency-hero p,
+    .support-hero p,
+    .workspace-hero p
+  ) {
+    max-width: calc(100vw - 36px) !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    text-wrap: wrap !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
   }
 }

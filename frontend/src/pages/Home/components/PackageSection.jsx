@@ -24,7 +24,13 @@ export default function PackageSection({
         {packages.map((item) => (
           <article key={item.title} className="package-card">
             <div className="package-image-wrap">
-              <img src={item.image} alt={item.title} className="package-image" />
+              <img
+                src={item.image}
+                alt={item.title}
+                className="package-image"
+                loading="lazy"
+                decoding="async"
+              />
               <span className="package-tag">{item.tag}</span>
               {showOfferSign ? (
                 <span className="package-offer-sign">{badgeText}</span>

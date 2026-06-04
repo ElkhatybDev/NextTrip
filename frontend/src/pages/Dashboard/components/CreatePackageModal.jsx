@@ -14,7 +14,7 @@ export default function CreatePackageModal({
     <div className="modal-overlay">
       <div className="modal-box">
         <div className="modal-header">
-          <h3>Create new package</h3>
+          <h3>Create agency package</h3>
           <button type="button" onClick={onClose} className="close-btn">
             <CloseIcon size={20} />
           </button>
@@ -24,13 +24,13 @@ export default function CreatePackageModal({
           <input
             value={form.title}
             onChange={(event) => onFormChange("title", event.target.value)}
-            placeholder="Package title"
+            placeholder="Agency package title"
             className="modal-input"
           />
           <input
             value={form.place}
             onChange={(event) => onFormChange("place", event.target.value)}
-            placeholder="Destination"
+            placeholder="Destination or city"
             className="modal-input"
           />
           <input
@@ -41,7 +41,7 @@ export default function CreatePackageModal({
           />
 
           <div className="upload-box">
-            <label>Upload image from your device</label>
+            <label>Upload agency package image</label>
             <input
               type="file"
               accept="image/*"
@@ -55,7 +55,7 @@ export default function CreatePackageModal({
             Cancel
           </button>
           <button type="button" onClick={onSubmit} className="primary-btn">
-            Save package
+            Save agency package
           </button>
         </div>
       </div>

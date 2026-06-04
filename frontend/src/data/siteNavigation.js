@@ -2,9 +2,9 @@ export const primaryNavLinks = [
   { label: "Home", to: "/" },
   { label: "Experiences", to: "/experience" },
   { label: "Packages", to: "/packages" },
-  { label: "Offers", to: "/packages" },
-  { label: "About Us", to: "/about" },
+  { label: "Offers", to: "/offers" },
   { label: "Destinations", to: "/destinations" },
+  { label: "Create Trip", to: "/create-trip", highlight: true },
 ];
 
 export const footerSections = [
@@ -12,7 +12,7 @@ export const footerSections = [
     title: "Discover",
     items: [
       { label: "Experiences", to: "/experience" },
-      { label: "Offers", to: "/packages" },
+      { label: "Offers", to: "/offers" },
       { label: "Services", to: "/services" },
       { label: "Destinations", to: "/destinations" },
       { label: "Reviews", to: "/reviews" },

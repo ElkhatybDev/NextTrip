@@ -6,6 +6,7 @@ import { packageCategories } from "../../data/packageCatalog";
 import {
   calculatePackagePricing,
   filterPackages,
+  getOffers,
   getPackages,
 } from "../../services/packagesService";
 import BookingSuccessView from "./components/BookingSuccessView";
@@ -25,9 +26,10 @@ const bookingInitialState = {
   cvv: "",
 };
 
-export default function Packages() {
+export default function Packages({ variant = "packages" }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const isOffersPage = variant === "offers";
   const filtersFromHome = location.state?.searchFilters || null;
   const [page, setPage] = useState("packages");
   const [search, setSearch] = useState(() => filtersFromHome?.destination || "");
@@ -40,12 +42,18 @@ export default function Packages() {
   const [saveCard, setSaveCard] = useState(true);
 
   const packages = getPackages();
+  const offers = getOffers();
+  const visiblePackages = isOffersPage ? offers : packages;
+  const visibleCategories = useMemo(
+    () => ["All", ...Array.from(new Set(visiblePackages.map((item) => item.category)))],
+    [visiblePackages]
+  );
   const filteredPackages = useMemo(
-    () => filterPackages(packages, { search, category: selectedCategory }),
-    [packages, search, selectedCategory]
+    () => filterPackages(visiblePackages, { search, category: selectedCategory }),
+    [visiblePackages, search, selectedCategory]
   );
 
-  const activePackage = selectedPackage || filteredPackages[0] || packages[0];
+  const activePackage = selectedPackage || filteredPackages[0] || visiblePackages[0] || packages[0];
   const travelersCount = Math.max(1, parseInt(bookingForm.travelers || "1", 10) || 1);
   const pricing = useMemo(
     () => calculatePackagePricing(activePackage, travelersCount),
@@ -78,6 +86,12 @@ export default function Packages() {
         : "All"
     );
   }, [filtersFromHome]);
+
+  useEffect(() => {
+    if (!visibleCategories.includes(selectedCategory)) {
+      setSelectedCategory("All");
+    }
+  }, [selectedCategory, visibleCategories]);
 
   const handleBookingChange = (event) => {
     const { name, value } = event.target;
@@ -134,13 +148,19 @@ export default function Packages() {
         <div className="packages-hero-overlay" />
         <div className="trip-container packages-hero-content">
           <p className="packages-badge">
-            {page === "booking" ? "SECURE BOOKING" : "CURATED TRAVEL PACKAGES"}
+            {page === "booking"
+              ? "SECURE BOOKING"
+              : isOffersPage
+                ? "AGENCY OFFERS"
+                : "CURATED TRAVEL PACKAGES"}
           </p>
-          <h1>{page === "booking" ? "Booking Details" : "Packages"}</h1>
+          <h1>{page === "booking" ? "Booking details" : isOffersPage ? "Offers" : "Packages"}</h1>
           <p>
             {page === "booking"
               ? `Complete your booking for ${activePackage.title} and review your total before checkout.`
-              : "Discover handpicked packages designed for romance, adventure, culture, and unforgettable escapes."}
+              : isOffersPage
+                ? "Compare highlighted agency offers with clear prices, trip styles, and booking details."
+                : "Discover handpicked packages designed for romance, adventure, culture, and unforgettable escapes."}
           </p>
         </div>
       </section>
@@ -160,10 +180,13 @@ export default function Packages() {
       ) : (
         <PackagesListView
           search={search}
-          categories={packageCategories}
+          categories={visibleCategories}
           selectedCategory={selectedCategory}
           packages={filteredPackages}
           activeSearchSummary={activeSearchSummary}
+          title={isOffersPage ? "Available offers" : "Available packages"}
+          countLabel={isOffersPage ? "offers found" : "packages found"}
+          variant={isOffersPage ? "offers" : "packages"}
           onSearchChange={setSearch}
           onCategoryChange={setSelectedCategory}
           onClearFilters={clearFilters}

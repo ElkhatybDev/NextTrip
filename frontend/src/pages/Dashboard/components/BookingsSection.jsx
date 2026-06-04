@@ -19,8 +19,8 @@ export default function BookingsSection({
   return (
     <section className="dashboard-section">
       <SectionTitle
-        title="Recent booking requests"
-        subtitle="Your latest client inquiries ready for action"
+        title="Traveler requests"
+        subtitle="New trip briefs from travelers waiting for your agency offer"
         action={
           <div className="booking-actions">
             <button
@@ -48,11 +48,11 @@ export default function BookingsSection({
                 bookingFilter === "review" ? "filter-pill-active-review" : ""
               }`}
             >
-              Review ({bookingStats.review})
+              In review ({bookingStats.review})
             </button>
             <button type="button" onClick={onExport} className="secondary-btn">
               <DownloadIcon size={16} />
-              Export
+              Export requests
             </button>
           </div>
         }
@@ -60,16 +60,17 @@ export default function BookingsSection({
 
       <div className="booking-list">
         {bookings.length === 0 ? (
-          <div className="empty-box">No bookings found for this filter.</div>
+          <div className="empty-box">No traveler requests found for this filter.</div>
         ) : (
           bookings.map((item) => (
             <div key={item.id} className="booking-card">
               <div className="booking-card-inner">
                 <div className="booking-client">
-                  <img src={item.avatar} alt={item.client} />
+                  <img src={item.avatar} alt={item.client} loading="lazy" decoding="async" />
                   <div>
                     <h4>{item.client}</h4>
                     <p>{item.tier}</p>
+                    <span className="request-code">{item.requestId}</span>
                   </div>
                 </div>
 
@@ -94,14 +95,16 @@ export default function BookingsSection({
                   <div>
                     <span>Dates</span>
                     <p className="booking-main-text no-icon">{item.dates}</p>
+                    <small>Submitted {item.submitted}</small>
                   </div>
 
                   <div>
-                    <span>Duration</span>
+                    <span>Travelers</span>
                     <p className="booking-main-text">
                       <ClockIcon size={16} className="icon-blue" />
-                      {item.duration}
+                      {item.travelers}
                     </p>
+                    <small>{item.duration}</small>
                   </div>
                 </div>
 
@@ -115,7 +118,7 @@ export default function BookingsSection({
                     onClick={() => onSubmitOffer(item.id)}
                     className="primary-btn"
                   >
-                    Submit offer
+                    Send agency offer
                   </button>
                 </div>
               </div>

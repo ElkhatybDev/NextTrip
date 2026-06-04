@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ArrowRight, MapPin } from "lucide-react";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 
 export default function ExperienceCarouselSection({ experiences, onOpenExperience }) {
-  const carouselItems = [...experiences, ...experiences];
+  const carouselItems = useMemo(() => [...experiences, ...experiences], [experiences]);
 
   return (
     <section id="home-experiences" className="home-experiences-section">
@@ -23,7 +23,7 @@ export default function ExperienceCarouselSection({ experiences, onOpenExperienc
               className="experience-slide-card"
               onClick={() => onOpenExperience(item.id)}
             >
-              <img src={item.image} alt={item.title} />
+              <img src={item.image} alt={item.title} loading="lazy" decoding="async" />
               <span>
                 <MapPin size={14} />
                 {item.location}

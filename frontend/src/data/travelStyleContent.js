@@ -6,7 +6,7 @@ export const travelStylePages = {
     description:
       "Individual travel on NextTrip focuses on flexible planning, useful agency support, and enough space for personal decisions before booking.",
     image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1513735492246-483525079686?auto=format&fit=crop&w=1400&q=80",
     accent: "Solo rhythm",
     bestFor: "Solo travelers, remote workers, flexible explorers",
     budget: "8,000 - 18,000 MAD",
@@ -36,7 +36,7 @@ export const travelStylePages = {
     description:
       "Group travel needs shared planning, transparent package details, and clear communication so everyone understands the plan.",
     image:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=1400&q=80",
     accent: "Shared plans",
     bestFor: "Friends, teams, associations, student groups",
     budget: "6,000 - 14,000 MAD / person",
@@ -53,7 +53,7 @@ export const travelStylePages = {
       },
       {
         title: "One clear contact",
-        text: "Agencies can respond to the group leader with cleaner offers and fewer repeated questions.",
+        text: "Agencies can respond to the group leader with clearer offers and fewer repeated questions.",
       },
     ],
     itinerary: ["Group arrival", "Main city tour", "Shared activity day", "Flexible evening plan"],
@@ -66,7 +66,7 @@ export const travelStylePages = {
     description:
       "Family travel works best when hotels, transport, activities, and daily rhythm are planned for different ages.",
     image:
-      "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=80",
     accent: "Comfort first",
     bestFor: "Parents, children, multi-generation trips",
     budget: "10,000 - 24,000 MAD",
@@ -96,7 +96,7 @@ export const travelStylePages = {
     description:
       "Honeymoon travel on NextTrip is about atmosphere, comfort, and curated moments that feel special from booking to arrival.",
     image:
-      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1400&q=80",
     accent: "Romantic detail",
     bestFor: "Couples, anniversary trips, premium escapes",
     budget: "15,000 - 38,000 MAD",
@@ -156,7 +156,7 @@ export const travelStylePages = {
     description:
       "Adventure travel helps travelers compare outdoor packages, safety details, and agency support before choosing high-energy experiences.",
     image:
-      "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=1400&q=80",
     accent: "Active energy",
     bestFor: "Hikers, outdoor groups, nature explorers",
     budget: "7,500 - 20,000 MAD",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -24,22 +24,34 @@ import "./Navbar.css";
 import logo from "../../Assets/images/NextTrip logo.png";
 import { primaryNavLinks } from "../../data/siteNavigation";
 import {
-  fallbackCurrencies,
-  fallbackLanguages,
-  fetchTravelPreferences,
-} from "../../services/preferencesApi";
+  changeSiteCurrency,
+  changeSiteLanguage,
+  getSavedCurrencyCode,
+  getSavedLanguageCode,
+  supportedCurrencies,
+  supportedLanguages,
+} from "../../i18n/siteLanguage";
+
+function isPathActive(pathname, to) {
+  if (!to) {
+    return false;
+  }
+
+  return to === "/" ? pathname === "/" : pathname === to || pathname.startsWith(`${to}/`);
+}
 
 function NavItem({ item, pathname, onNavigate }) {
+  const shouldMatchPath = item.matchPath !== false;
   const isActive =
     item.active ||
-    item.children?.some((child) =>
-      child.to === "/" ? pathname === "/" : pathname === child.to || pathname.startsWith(`${child.to}/`)
-    ) ||
-    (item.to
-      ? item.to === "/"
-        ? pathname === "/"
-        : pathname === item.to || pathname.startsWith(`${item.to}/`)
-      : false);
+    (shouldMatchPath &&
+      (item.children?.some((child) =>
+        isPathActive(pathname, child.to)
+      ) ||
+        isPathActive(pathname, item.to)));
+  const itemClassName = `site-nav-item ${item.highlight ? "site-nav-item-highlight" : ""} ${
+    isActive ? "site-nav-item-active" : ""
+  }`;
 
   if (item.children?.length) {
     return (
@@ -49,6 +61,7 @@ function NavItem({ item, pathname, onNavigate }) {
           className={`site-nav-item site-nav-button site-nav-dropdown-trigger ${
             isActive ? "site-nav-item-active" : ""
           }`}
+          aria-current={isActive ? "page" : undefined}
         >
           {item.label}
           <ChevronDown size={15} />
@@ -76,7 +89,8 @@ function NavItem({ item, pathname, onNavigate }) {
       <Link
         to={item.to}
         onClick={onNavigate}
-        className={`site-nav-item ${isActive ? "site-nav-item-active" : ""}`}
+        className={itemClassName}
+        aria-current={isActive ? "page" : undefined}
       >
         {item.label}
       </Link>
@@ -90,9 +104,8 @@ function NavItem({ item, pathname, onNavigate }) {
         item.onClick?.();
         onNavigate();
       }}
-      className={`site-nav-item site-nav-button ${
-        isActive ? "site-nav-item-active" : ""
-      }`}
+      className={`${itemClassName} site-nav-button`}
+      aria-current={isActive ? "page" : undefined}
     >
       {item.label}
     </button>
@@ -105,7 +118,7 @@ const drawerSections = [
     items: [
       { label: "Create Trip", to: "/create-trip", icon: Route },
       { label: "Packages", to: "/packages", icon: Gift },
-      { label: "Offers", to: "/packages", icon: Percent },
+      { label: "Offers", to: "/offers", icon: Percent },
     ],
   },
   {
@@ -143,7 +156,17 @@ const drawerSections = [
   },
 ];
 
-function SideMenuDrawer({ isOpen, onClose, onSignIn }) {
+function SideMenuDrawer({ isOpen, onClose, onSignIn, pathname }) {
+  const drawerRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    drawerRef.current?.scrollTo({ top: 0, behavior: "auto" });
+  }, [isOpen]);
+
   return (
     <>
       <button
@@ -154,6 +177,7 @@ function SideMenuDrawer({ isOpen, onClose, onSignIn }) {
       />
 
       <aside
+        ref={drawerRef}
         className={`site-side-drawer ${isOpen ? "site-side-drawer-open" : ""}`}
         aria-hidden={!isOpen}
       >
@@ -192,13 +216,15 @@ function SideMenuDrawer({ isOpen, onClose, onSignIn }) {
               <div className="site-drawer-links">
                 {section.items.map((item) => {
                   const Icon = item.icon;
+                  const isActive = isPathActive(pathname, item.to);
 
                   return (
                     <Link
                       key={`${section.title}-${item.label}`}
                       to={item.to}
-                      className="site-drawer-link"
+                      className={`site-drawer-link ${isActive ? "site-drawer-link-active" : ""}`}
                       onClick={onClose}
+                      aria-current={isActive ? "page" : undefined}
                     >
                       <span className="site-drawer-link-icon">
                         <Icon size={22} />
@@ -218,25 +244,25 @@ function SideMenuDrawer({ isOpen, onClose, onSignIn }) {
 }
 
 function FlagMark({ item, className = "site-pref-flag" }) {
-  const [hasImageError, setHasImageError] = useState(false);
-  const countryCode = item.countryCode?.toLowerCase();
   const fallbackLabel = item.short || item.code?.slice(0, 2).toUpperCase();
 
   return (
     <span className={className} aria-hidden="true">
-      {countryCode && !hasImageError ? (
-        <img
-          src={`https://flagcdn.com/w40/${countryCode}.png`}
-          srcSet={`https://flagcdn.com/w80/${countryCode}.png 2x`}
-          alt=""
-          loading="lazy"
-          onError={() => setHasImageError(true)}
-        />
+      {item.logo ? (
+        <img src={item.logo} alt="" draggable="false" decoding="async" />
       ) : (
-        fallbackLabel
+        item.flag || fallbackLabel
       )}
     </span>
   );
+}
+
+function scrollPageToMenuStart() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 }
 
 function PreferenceOption({ option, isActive, onSelect }) {
@@ -293,29 +319,11 @@ function DrawerPreferenceRow({ title, selectedItem, options, isOpen, onToggle, o
 }
 
 function HeaderPreferences() {
-  const [currencies, setCurrencies] = useState(fallbackCurrencies);
-  const [languages, setLanguages] = useState(fallbackLanguages);
-  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("MAD");
-  const [selectedLanguageCode, setSelectedLanguageCode] = useState("eng");
+  const currencies = supportedCurrencies;
+  const languages = supportedLanguages;
+  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState(getSavedCurrencyCode);
+  const [selectedLanguageCode, setSelectedLanguageCode] = useState(getSavedLanguageCode);
   const [openPicker, setOpenPicker] = useState(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetchTravelPreferences(controller.signal)
-      .then((preferences) => {
-        setCurrencies(preferences.currencies.length ? preferences.currencies : fallbackCurrencies);
-        setLanguages(preferences.languages.length ? preferences.languages : fallbackLanguages);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          setCurrencies(fallbackCurrencies);
-          setLanguages(fallbackLanguages);
-        }
-      });
-
-    return () => controller.abort();
-  }, []);
 
   const selectedCurrency =
     currencies.find((currency) => currency.code === selectedCurrencyCode) || currencies[0];
@@ -331,7 +339,7 @@ function HeaderPreferences() {
         isOpen={openPicker === "language"}
         onToggle={() => setOpenPicker((current) => (current === "language" ? null : "language"))}
         onSelect={(code) => {
-          setSelectedLanguageCode(code);
+          setSelectedLanguageCode(changeSiteLanguage(code));
           setOpenPicker(null);
         }}
       />
@@ -343,7 +351,7 @@ function HeaderPreferences() {
         isOpen={openPicker === "currency"}
         onToggle={() => setOpenPicker((current) => (current === "currency" ? null : "currency"))}
         onSelect={(code) => {
-          setSelectedCurrencyCode(code);
+          setSelectedCurrencyCode(changeSiteCurrency(code));
           setOpenPicker(null);
         }}
       />
@@ -367,6 +375,13 @@ export default function Navbar({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleSignIn = onSignIn || (() => navigate("/auth"));
   const closeMenu = () => setIsMenuOpen(false);
+  const toggleMenu = () => {
+    if (!isMenuOpen) {
+      scrollPageToMenuStart();
+    }
+
+    setIsMenuOpen((isOpen) => !isOpen);
+  };
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -394,7 +409,7 @@ export default function Navbar({
     <header className={`site-header ${className}`.trim()}>
       <div className="site-shell site-header-inner">
         <Link to={logoTo} className="site-logo" aria-label="NextTrip home" onClick={closeMenu}>
-          <img src={logo} alt="NextTrip" className="site-logo-img" />
+          <img src={logo} alt="NextTrip" className="site-logo-img" decoding="async" />
         </Link>
 
         <nav
@@ -421,7 +436,7 @@ export default function Navbar({
               </button>
               {showProfile && profileImageSrc ? (
                 <Link to="/profile" className="site-profile-avatar" onClick={closeMenu}>
-                  <img src={profileImageSrc} alt={profileAlt} />
+                  <img src={profileImageSrc} alt={profileAlt} decoding="async" />
                 </Link>
               ) : null}
             </>
@@ -431,7 +446,7 @@ export default function Navbar({
             className="site-menu-toggle"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
-            onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+            onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -442,6 +457,7 @@ export default function Navbar({
         isOpen={isMenuOpen}
         onClose={closeMenu}
         onSignIn={handleSignIn}
+        pathname={location.pathname}
       />
     </header>
   );

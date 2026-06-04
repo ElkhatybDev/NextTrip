@@ -10,7 +10,6 @@ import {
   PackagePlus,
   ShieldCheck,
   SlidersHorizontal,
-  Sparkles,
   UserRound,
   WalletCards,
 } from "lucide-react";
@@ -24,7 +23,7 @@ const iconMap = {
   offers: PackagePlus,
   options: SlidersHorizontal,
   availability: CalendarCheck,
-  drafts: Sparkles,
+  drafts: SlidersHorizontal,
   bookings: CheckCircle2,
   items: PackageCheck,
   quotes: WalletCards,

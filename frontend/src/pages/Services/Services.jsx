@@ -6,7 +6,6 @@ import {
   Headphones,
   LayoutDashboard,
   SlidersHorizontal,
-  Sparkles,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -28,7 +27,6 @@ export default function Services() {
         <section className="portal-hero services-hero">
           <div>
             <p className="portal-eyebrow">
-              <Sparkles size={14} />
               NextTrip services
             </p>
             <h1>Services for travelers and agencies.</h1>
@@ -49,7 +47,7 @@ export default function Services() {
 
         <section className="services-grid">
           {serviceCatalog.map((service, index) => {
-            const Icon = serviceIcons[service.icon] || Sparkles;
+            const Icon = serviceIcons[service.icon] || SlidersHorizontal;
 
             return (
             <article className="portal-card service-card" key={service.slug}>

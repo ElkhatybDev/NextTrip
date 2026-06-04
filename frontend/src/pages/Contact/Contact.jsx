@@ -8,7 +8,6 @@ import {
   MessageCircle,
   PhoneCall,
   Send,
-  Sparkles,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -36,9 +35,9 @@ const contactChannels = [
 ];
 
 const contactStats = [
-  { icon: Clock3, label: "Response goal", value: "Within 24h" },
+  { icon: Clock3, label: "Response target", value: "Within 24 hours" },
   { icon: MessageCircle, label: "Channels", value: "Email + support" },
-  { icon: MapPin, label: "Coverage", value: "Morocco + global" },
+  { icon: MapPin, label: "Coverage", value: "Morocco and worldwide" },
 ];
 
 export default function Contact() {
@@ -49,19 +48,18 @@ export default function Contact() {
         <section className="portal-hero contact-hero">
           <div>
             <p className="portal-eyebrow">
-              <Sparkles size={14} />
               Contact NextTrip
             </p>
-            <h1>Need a real answer? Reach the right team fast.</h1>
+            <h1>Need a real answer? Reach the right team quickly.</h1>
             <p>
               Whether you are preparing a booking, comparing agencies, or solving an
-              active travel issue, this page gives you a clean way to contact us.
+              active travel issue, this page gives you a clear way to contact us.
             </p>
           </div>
 
           <div className="contact-hero-card">
             <Headphones size={28} />
-            <strong>Support is open</strong>
+            <strong>Support is available</strong>
             <span>7 days a week</span>
           </div>
         </section>
@@ -83,7 +81,7 @@ export default function Contact() {
         <section className="portal-grid portal-grid-two">
           <div className="portal-card contact-form-card">
             <span className="portal-status">Message us</span>
-            <h2>Send a clean request</h2>
+            <h2>Send a clear request</h2>
             <p>
               Add enough context so support can route your message without asking the
               same questions again.

@@ -3,9 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import {
   CalendarDays,
   CheckCircle2,
+  Heart,
   MapPin,
   PlaneTakeoff,
-  Sparkles,
   UsersRound,
   WalletCards,
 } from "lucide-react";
@@ -22,7 +22,7 @@ const snapshotItems = [
   { key: "bestFor", label: "Best for", icon: UsersRound },
   { key: "budget", label: "Budget", icon: WalletCards },
   { key: "duration", label: "Duration", icon: CalendarDays },
-  { key: "mood", label: "Mood", icon: Sparkles },
+  { key: "mood", label: "Mood", icon: Heart },
 ];
 
 export default function TravelStyle() {

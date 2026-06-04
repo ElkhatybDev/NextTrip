@@ -21,6 +21,7 @@ export default function BookingView({
               src={selectedPackage.image}
               alt={selectedPackage.title}
               className="selected-package-image"
+              decoding="async"
             />
             <div className="selected-package-content">
               <p className="section-badge">SELECTED PACKAGE</p>
@@ -45,11 +46,11 @@ export default function BookingView({
 
           <div className="booking-section">
             <p className="section-badge">TRAVELER DETAILS</p>
-            <h3>Enter Your Information</h3>
+            <h3>Enter your information</h3>
           </div>
           <div className="booking-form-grid">
             <div className="booking-field">
-              <label>Full Name</label>
+              <label>Full name</label>
               <input
                 name="fullName"
                 value={bookingForm.fullName}
@@ -67,7 +68,7 @@ export default function BookingView({
               />
             </div>
             <div className="booking-field">
-              <label>Phone Number</label>
+              <label>Phone number</label>
               <input
                 name="phone"
                 value={bookingForm.phone}
@@ -76,7 +77,7 @@ export default function BookingView({
               />
             </div>
             <div className="booking-field">
-              <label>Number of Travelers</label>
+              <label>Number of travelers</label>
               <input
                 type="number"
                 min="1"
@@ -87,7 +88,7 @@ export default function BookingView({
               />
             </div>
             <div className="booking-field booking-field-full">
-              <label>Special Request</label>
+              <label>Special request</label>
               <textarea
                 name="specialRequest"
                 value={bookingForm.specialRequest}
@@ -100,11 +101,11 @@ export default function BookingView({
 
           <div className="booking-section payment-space">
             <p className="section-badge">PAYMENT DETAILS</p>
-            <h3>Bank Card Information</h3>
+            <h3>Bank card information</h3>
           </div>
           <div className="booking-form-grid">
             <div className="booking-field booking-field-full">
-              <label>Card Holder Name</label>
+              <label>Cardholder name</label>
               <input
                 name="cardName"
                 value={bookingForm.cardName}
@@ -113,7 +114,7 @@ export default function BookingView({
               />
             </div>
             <div className="booking-field booking-field-full">
-              <label>Card Number</label>
+              <label>Card number</label>
               <input
                 name="cardNumber"
                 value={bookingForm.cardNumber}
@@ -122,7 +123,7 @@ export default function BookingView({
               />
             </div>
             <div className="booking-field">
-              <label>Expiry Date</label>
+              <label>Expiry date</label>
               <input
                 name="expiry"
                 value={bookingForm.expiry}
@@ -161,15 +162,15 @@ export default function BookingView({
             </div>
             <div className="price-lines">
               <div>
-                <span>Package Price</span>
+                <span>Package price</span>
                 <strong>{pricing.tripPrice.toLocaleString()} MAD</strong>
               </div>
               <div>
-                <span>Taxes and Fees</span>
+                <span>Taxes and fees</span>
                 <strong>{pricing.taxes.toLocaleString()} MAD</strong>
               </div>
               <div>
-                <span>Travel Insurance</span>
+                <span>Travel insurance</span>
                 <strong>{pricing.insurance.toLocaleString()} MAD</strong>
               </div>
             </div>
@@ -182,7 +183,7 @@ export default function BookingView({
                 Checkout
               </button>
               <button type="button" className="secondary-btn" onClick={onBackToPackages}>
-                Back to Packages
+                Back to packages
               </button>
             </div>
           </section>

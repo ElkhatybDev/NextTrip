@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ArrowRight, MapPin, Play, Search, Sparkles } from "lucide-react";
+import { ArrowRight, MapPin, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -36,7 +36,6 @@ export default function Destinations() {
           <div className="site-shell destinations-hero-grid">
             <div className="destinations-hero-copy">
               <p className="destinations-eyebrow">
-                <Sparkles size={16} />
                 Destination Finder
               </p>
               <h1>Pick a city, watch the mood, then plan smarter.</h1>
@@ -104,12 +103,8 @@ export default function Destinations() {
                 className="destination-tile"
                 onClick={() => setSelectedCity(city)}
               >
-                <img src={city.image} alt={city.name} />
-                <span className="destination-play">
-                  <Play size={16} fill="currentColor" />
-                  Watch
-                </span>
-                <div>
+                <img src={city.image} alt={city.name} loading="lazy" decoding="async" />
+                <div className="destination-tile-copy">
                   <span>
                     {city.region} | {city.country}
                   </span>

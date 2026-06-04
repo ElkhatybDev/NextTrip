@@ -30,7 +30,7 @@ export default function ExperienceDetails() {
 
       <main>
         <section className="experience-details-hero">
-          <img src={experience.image} alt={experience.tripTitle} />
+          <img src={experience.image} alt={experience.tripTitle} decoding="async" />
           <div className="experience-details-overlay" />
           <div className="site-shell experience-details-hero-content">
             <Link to="/experience" className="experience-back-link">
@@ -40,7 +40,7 @@ export default function ExperienceDetails() {
             <p className="experience-details-eyebrow">{experience.location}</p>
             <h1>{experience.tripTitle}</h1>
             <div className="experience-author-row">
-              <img src={experience.avatar} alt={experience.user} />
+              <img src={experience.avatar} alt={experience.user} decoding="async" />
               <div>
                 <strong>{experience.user}</strong>
                 <span>{experience.verified ? "Verified Traveler" : "Traveler"}</span>

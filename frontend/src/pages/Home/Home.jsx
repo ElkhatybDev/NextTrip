@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Building2, CheckCircle2, Sparkles } from "lucide-react";
+import { Building2, CheckCircle2, Route } from "lucide-react";
 import Footer from "../../components/Footer/Footer";
 import HeroSearch from "../../components/HeroSearch/HeroSearch";
 import Navbar from "../../components/Navbar/Navbar";
@@ -69,10 +69,10 @@ export default function Home() {
     const items = [
       { label: "Home", id: "home" },
       { label: "Experiences", to: "/experience" },
-      { label: "Packages", id: "packages" },
-      { label: "Offers", to: "/packages" },
-      { label: "About Us", to: "/about" },
+      { label: "Packages", to: "/packages" },
+      { label: "Offers", to: "/offers" },
       { label: "Destinations", to: "/destinations" },
+      { label: "Create Trip", to: "/create-trip", highlight: true },
     ];
 
     return items.map((item) =>
@@ -201,21 +201,19 @@ export default function Home() {
         <section id="platform" className="trip-builder-zone" aria-labelledby="trip-builder-title">
           <div className="trip-builder-zone-head">
             <div>
-              <p>Custom travel workspace</p>
               <h2 id="trip-builder-title">Create a personal trip request.</h2>
             </div>
-            <span>Simple flow from idea to offer</span>
           </div>
 
           <section className="home-flow-strip" aria-label="How NextTrip helps">
             <div>
               <span className="flow-number">01</span>
               <span className="flow-icon">
-                <Sparkles size={18} />
+                <Route size={18} />
               </span>
               <div className="flow-copy">
                 <strong>Choose your mood</strong>
-                <small>Family, adventure, religion, luxury, or calm stay.</small>
+                <small>Family trips, adventure, faith travel, luxury, or calm stays.</small>
               </div>
             </div>
             <div>
@@ -225,7 +223,7 @@ export default function Home() {
               </span>
               <div className="flow-copy">
                 <strong>Compare agencies</strong>
-                <small>One request can bring multiple clear offers.</small>
+                <small>One request can bring several clear offers.</small>
               </div>
             </div>
             <div>
@@ -251,16 +249,16 @@ export default function Home() {
           id="packages"
           label="Agency offers"
           title="Offers ready to compare"
-          desc="These cards are agency offers with clear price, trip type, duration, and details."
+          desc="These cards are agency offers with clear prices, trip types, durations, and details."
           packages={homeOfferPackages}
           badgeText="Agency offer"
           onSelectPackage={setSelectedPackage}
         />
         <PackageSection
           id="normal-packages"
-          label="Normal packages"
-          title="More simple packages"
-          desc="Regular packages for users who just want a clean trip option without a custom request."
+          label="Standard packages"
+          title="Simpler package options"
+          desc="Standard packages for users who want a straightforward trip option without a custom request."
           packages={homeNormalPackages}
           showOfferSign={false}
           onSelectPackage={setSelectedPackage}
@@ -276,12 +274,7 @@ export default function Home() {
         <HomeFaqSection faqs={homeFaqs} />
         <FinalCtaSection
           onCreateTrip={() => navigate("/create-trip")}
-          onBrowsePackages={() => {
-            const section = document.getElementById("packages");
-            if (section) {
-              section.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-          }}
+          onBrowsePackages={() => navigate("/packages")}
         />
       </main>
 

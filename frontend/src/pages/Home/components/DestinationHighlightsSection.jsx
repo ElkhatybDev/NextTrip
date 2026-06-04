@@ -29,7 +29,12 @@ export default function DestinationHighlightsSection({
               className="home-destination-card"
               onClick={() => onOpenDestination(destination)}
             >
-              <img src={destination.image} alt={destination.title} />
+              <img
+                src={destination.image}
+                alt={destination.title}
+                loading="lazy"
+                decoding="async"
+              />
               <span className="home-destination-tag">{destination.tag}</span>
               <div className="home-destination-copy">
                 <span>

@@ -287,3 +287,26 @@
     position: static;
   }
 }
+
+@media (max-width: 640px) {
+  .package-detail-hero {
+    min-height: 420px;
+  }
+
+  .package-detail-hero-content {
+    padding: 42px 0;
+  }
+
+  .package-detail-hero h1 {
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .package-detail-card,
+  .package-booking-panel,
+  .package-detail-empty {
+    padding: 20px;
+    border-radius: 24px;
+  }
+}

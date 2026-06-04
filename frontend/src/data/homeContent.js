@@ -1,25 +1,25 @@
 export const homeImages = {
   hero:
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+    "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1600&q=80",
   why:
-    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?auto=format&fit=crop&w=1400&q=80",
   about:
-    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=80",
 };
 
 export const homeVideos = {
   hero:
-    "https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4",
+    "https://videos.pexels.com/video-files/26731547/11995276_3840_2160_25fps.mp4",
 };
 
 export const homeHowSteps = [
   {
     title: "Search with real context",
-    text: "Choose destination, date, travelers, and trip type before comparing packages.",
+    text: "Choose a destination, travel date, travelers, and trip type before comparing packages.",
   },
   {
     title: "Compare clear options",
-    text: "See ready offers, normal packages, and agency replies in a cleaner flow.",
+    text: "Compare ready offers, standard packages, and agency replies in a clearer flow.",
   },
   {
     title: "Open details or customize",
@@ -33,7 +33,7 @@ export const destinationHighlights = [
     region: "Africa | Morocco",
     tag: "Culture",
     image:
-      "https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/32013475/pexels-photo-32013475.jpeg?auto=compress&cs=tinysrgb&w=900",
     text: "Riads, souks, desert add-ons, and warm Moroccan city energy.",
   },
   {
@@ -41,7 +41,7 @@ export const destinationHighlights = [
     region: "Europe | Greece",
     tag: "Romantic",
     image:
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/16511639/pexels-photo-16511639.jpeg?auto=compress&cs=tinysrgb&w=900",
     text: "White villages, sunset views, boutique stays, and calm sea moments.",
   },
   {
@@ -49,7 +49,7 @@ export const destinationHighlights = [
     region: "Asia | Japan",
     tag: "Heritage",
     image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/1673978/pexels-photo-1673978.jpeg?auto=compress&cs=tinysrgb&w=900",
     text: "Temples, gardens, quiet neighborhoods, and refined cultural routes.",
   },
   {
@@ -87,8 +87,8 @@ export const homeFaqs = [
     answer: "They can start a custom trip and send agencies a clear personal request.",
   },
   {
-    question: "Can agencies compare offers later?",
-    answer: "The structure is ready for backend entities like offers, booking items, and price quotes.",
+    question: "Can agencies send and compare offers later?",
+    answer: "Yes. The platform is ready for offers, booking items, and price quotes, so agencies can manage comparisons as the backend grows.",
   },
   {
     question: "Does search support trip type?",
@@ -104,7 +104,7 @@ export const homeOfferPackages = [
     meta: "6 Days | 4 Adults",
     type: "Cultural",
     image:
-      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/32013475/pexels-photo-32013475.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "Vibrant souks, blue lanes, and a handcrafted cultural route.",
     details:
       "Discover the energy of Marrakech, the beauty of traditional riads, guided cultural tours, local cuisine, and a personalized itinerary designed for comfort and authenticity.",
@@ -116,7 +116,7 @@ export const homeOfferPackages = [
     meta: "10 Days | 2 Adults",
     type: "Luxury",
     image:
-      "https://images.unsplash.com/photo-1612698093158-e07ac200d44e?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/10436112/pexels-photo-10436112.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "A romantic journey through Italy's most iconic coastline.",
     details:
       "Enjoy premium coastal stays, elegant dining experiences, curated excursions, scenic boat moments, and a luxury-focused trip tailored for unforgettable memories.",
@@ -128,7 +128,7 @@ export const homeOfferPackages = [
     meta: "8 Days | 1 Adult",
     type: "Heritage",
     image:
-      "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/1673978/pexels-photo-1673978.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "Calm gardens, old temples, and timeless local traditions.",
     details:
       "Experience peaceful temple visits, immersive cultural walks, local food discoveries, traditional districts, and a balanced itinerary blending calm and exploration.",
@@ -140,7 +140,7 @@ export const homeOfferPackages = [
     meta: "7 Days | 2 Adults",
     type: "Relax",
     image:
-      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "Oceanfront stays, peaceful vibes, and tropical slow living.",
     details:
       "Relax in tropical stays with ocean views, wellness-focused experiences, flexible activity planning, and a smooth island escape built around comfort and nature.",
@@ -155,7 +155,7 @@ export const homeNormalPackages = [
     meta: "5 Days | 2 Adults",
     type: "City",
     image:
-      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/2082103/pexels-photo-2082103.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "A simple city escape with hotel, transfer, and guided highlights.",
     details:
       "Explore Paris with a balanced route including central accommodation, airport transfer, city highlights, free time, and optional museum or dining upgrades.",
@@ -167,10 +167,10 @@ export const homeNormalPackages = [
     meta: "4 Days | 2 Adults",
     type: "City",
     image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/21765772/pexels-photo-21765772.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "A short modern getaway with flexible activities and shopping time.",
     details:
-      "A clean Dubai package with hotel options, airport pickup, city tour, desert add-on option, and enough free time for shopping or beach plans.",
+      "A clear Dubai package with hotel options, airport pickup, a city tour, an optional desert add-on, and enough free time for shopping or beach plans.",
   },
   {
     title: "Istanbul Weekend",
@@ -179,7 +179,7 @@ export const homeNormalPackages = [
     meta: "4 Days | 2 Adults",
     type: "Culture",
     image:
-      "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/12298253/pexels-photo-12298253.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "A practical cultural stay with old city walks and local food.",
     details:
       "Visit Istanbul with hotel, transfer options, guided old city route, Bosphorus experience, and simple agency support before booking.",
@@ -191,7 +191,7 @@ export const homeNormalPackages = [
     meta: "5 Days | 1 Adult",
     type: "Relax",
     image:
-      "https://images.unsplash.com/photo-1513735492246-483525079686?auto=format&fit=crop&w=900&q=80",
+      "https://images.pexels.com/photos/27517994/pexels-photo-27517994.jpeg?auto=compress&cs=tinysrgb&w=900",
     desc: "Sunny streets, food stops, and a calm pace for easy discovery.",
     details:
       "A relaxed Lisbon trip with comfortable stay options, city viewpoints, food suggestions, day-trip options, and flexible planning support.",
@@ -206,15 +206,15 @@ export const featuredExperiences = [
     title: "Santorini Sunset Dream",
     location: "Santorini, Greece",
     image:
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
-    text: "A peaceful luxury stay with sunset views and clean agency support.",
+      "https://images.pexels.com/photos/16511639/pexels-photo-16511639.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    text: "A peaceful luxury stay with sunset views and clear agency support.",
   },
   {
     id: 2,
     title: "Kyoto Heritage Journey",
     location: "Kyoto, Japan",
     image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/1673978/pexels-photo-1673978.jpeg?auto=compress&cs=tinysrgb&w=1200",
     text: "Temples, old streets, calm gardens, and a balanced cultural route.",
   },
   {
@@ -222,7 +222,7 @@ export const featuredExperiences = [
     title: "Swiss Alpine Escape",
     location: "Swiss Alps, Switzerland",
     image:
-      "https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/27436132/pexels-photo-27436132.jpeg?auto=compress&cs=tinysrgb&w=1200",
     text: "Mountain air, train routes, and premium lodge memories.",
   },
 ];
@@ -234,7 +234,7 @@ export const testimonials = [
     location: "Casablanca",
     avatar:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80",
-    text: "NextTrip made planning super easy. I customized everything and the agency replied fast.",
+    text: "NextTrip made planning very easy. I customized everything, and the agency replied quickly.",
   },
   {
     name: "Youssef A.",
@@ -242,7 +242,7 @@ export const testimonials = [
     location: "Marrakech",
     avatar:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80",
-    text: "The real-time pricing and direct communication saved me time and helped me choose better.",
+    text: "The real-time pricing and direct communication saved me time and helped me make a better choice.",
   },
   {
     name: "Imane B.",
@@ -250,7 +250,7 @@ export const testimonials = [
     location: "Rabat",
     avatar:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80",
-    text: "Clean experience, beautiful offers, and I loved how flexible the trip customization was.",
+    text: "A clear experience, beautiful offers, and I loved how flexible the trip customization was.",
   },
   {
     name: "Nadia H.",
@@ -282,17 +282,17 @@ export const reasons = [
   {
     icon: "shield",
     title: "Verified agency flow",
-    text: "Travelers send clear requests and agencies answer from one organized workspace.",
+    text: "Travelers send clear requests, and agencies respond from one organized workspace.",
   },
   {
     icon: "sliders",
     title: "Simple personalization",
-    text: "Choose destination, date, travel type, budget, guests, and preferences without confusion.",
+    text: "Choose a destination, travel date, travel type, budget, guests, and preferences without confusion.",
   },
   {
     icon: "messages",
     title: "Cleaner communication",
-    text: "Keep offers, messages, booking details, and support close to the same trip.",
+    text: "Keep offers, messages, booking details, and support connected to the same trip.",
   },
 ];
 

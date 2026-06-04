@@ -43,6 +43,7 @@ export default function PackageModal({ packageItem, onClose, onBook, onContact }
             src={packageItem.image}
             alt={packageItem.title}
             className="package-modal-image"
+            decoding="async"
           />
           <button type="button" className="package-modal-close" onClick={onClose}>
             <X size={20} />

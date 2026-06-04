@@ -6,7 +6,7 @@ export default function CancellationPolicy() {
     <InfoPageLayout
       eyebrow="Cancellation policy"
       title="Clear cancellation rules before every booking."
-      description="This page gives travelers and agencies a clean place for cancellation expectations before backend rules are connected."
+      description="This page gives travelers and agencies a clear place for cancellation expectations before backend rules are connected."
       sections={[
         {
           title: "Traveler cancellations",

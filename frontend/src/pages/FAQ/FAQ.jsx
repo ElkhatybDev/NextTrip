@@ -40,7 +40,7 @@ export default function FAQ() {
         { label: "Need policy details", value: "Read privacy and terms" },
       ]}
       ctaTitle="Still not answered?"
-      ctaText="Move to a direct support channel and include the trip or booking context so the team can help faster."
+      ctaText="Use a direct support channel and include the trip or booking context so the team can help faster."
       ctaPrimary={{ label: "Contact Us", to: "/contact" }}
       ctaSecondary={{ label: "Browse Packages", to: "/packages" }}
     />

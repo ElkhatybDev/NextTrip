@@ -5,7 +5,7 @@ export default function RefundPolicy() {
   return (
     <InfoPageLayout
       eyebrow="Refund policy"
-      title="Refund handling should stay transparent and easy to track."
+      title="Refund handling should remain transparent and easy to track."
       description="This policy page keeps refund expectations organized until payment and agency rules are connected to the backend."
       sections={[
         {
@@ -26,7 +26,7 @@ export default function RefundPolicy() {
         },
       ]}
       ctaTitle="Questions about payment?"
-      ctaText="Open support or review your bookings."
+      ctaText="Contact support or review your bookings."
       ctaPrimary={{ label: "Support", to: "/support" }}
       ctaSecondary={{ label: "My bookings", to: "/my-bookings" }}
     />

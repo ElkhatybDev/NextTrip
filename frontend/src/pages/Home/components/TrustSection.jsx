@@ -7,7 +7,6 @@ export default function TrustSection({ signals }) {
   return (
     <section className="home-trust-section">
       <div className="home-trust-copy">
-        <p className="section-label">Built for clean decisions</p>
         <h2>Less noise before booking.</h2>
         <p>
           NextTrip keeps the important travel details visible: destination,

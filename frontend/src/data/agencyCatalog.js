@@ -1,4 +1,14 @@
-export const agencyCatalog = [
+import { offerCatalog, packageCatalog } from "./packageCatalog";
+
+export function getAgencySlug(name) {
+  return String(name || "agency")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+const curatedAgencyProfiles = [
   {
     id: "atlas-voyages",
     name: "Atlas Voyages",
@@ -49,6 +59,63 @@ export const agencyCatalog = [
   },
 ];
 
+const marketplaceItems = [...packageCatalog, ...offerCatalog];
+const marketplaceAgencyNames = Array.from(
+  new Set(marketplaceItems.map((item) => item.agency).filter(Boolean))
+);
+
+function buildMarketplaceAgencyProfile(name) {
+  const agencyItems = marketplaceItems.filter((item) => item.agency === name);
+  const firstItem = agencyItems[0];
+  const averageRating =
+    agencyItems.reduce((sum, item) => sum + Number(item.rating || 0), 0) /
+    Math.max(agencyItems.length, 1);
+  const locations = Array.from(new Set(agencyItems.map((item) => item.location).filter(Boolean)));
+  const specialties = Array.from(new Set(agencyItems.map((item) => item.category).filter(Boolean)));
+  const packages = agencyItems.map((item) => item.title);
+
+  return {
+    id: getAgencySlug(name),
+    name,
+    location: locations[0] || "NextTrip marketplace",
+    rating: Number(averageRating.toFixed(1)),
+    responseTime: "Usually replies through NextTrip",
+    verified: agencyItems.length > 1,
+    cover: firstItem?.image || "",
+    tagline: `${specialties.slice(0, 3).join(", ")} trips with clear package planning and agency support.`,
+    specialties,
+    stats: [
+      { label: "Active packages", value: String(packages.length) },
+      { label: "Main location", value: locations[0] || "Marketplace" },
+      { label: "Average rating", value: Number(averageRating.toFixed(1)).toString() },
+    ],
+    services: [
+      "Package planning and availability support",
+      "Traveler request follow-up",
+      "Booking details coordination",
+      "Destination and add-on guidance",
+    ],
+    packages,
+  };
+}
+
+const marketplaceAgencyProfiles = marketplaceAgencyNames.map(buildMarketplaceAgencyProfile);
+
+export const agencyCatalog = [
+  ...curatedAgencyProfiles,
+  ...marketplaceAgencyProfiles.filter(
+    (agency) => !curatedAgencyProfiles.some((profile) => profile.name === agency.name)
+  ),
+];
+
 export function getAgencyById(id) {
-  return agencyCatalog.find((agency) => agency.id === id) || null;
+  return agencyCatalog.find((agency) => agency.id === id || getAgencySlug(agency.name) === id) || null;
+}
+
+export function getAgencyByName(name) {
+  return (
+    agencyCatalog.find(
+      (agency) => agency.name === name || getAgencySlug(agency.name) === getAgencySlug(name)
+    ) || null
+  );
 }

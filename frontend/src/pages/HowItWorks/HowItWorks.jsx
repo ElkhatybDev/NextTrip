@@ -27,7 +27,7 @@ const sections = [
     title: "Why this works better",
     items: [
       "Travelers keep context instead of jumping across disconnected pages.",
-      "Agencies receive cleaner requests and can respond faster.",
+      "Agencies receive clearer requests and can respond faster.",
       "Support pages and policies reduce uncertainty before payment.",
     ],
   },
@@ -48,7 +48,7 @@ export default function HowItWorks() {
         { label: "Backup", value: "Support and FAQ" },
       ]}
       ctaTitle="Try the real journey"
-      ctaText="If you want to feel the product instead of just reading about it, start from the packages page."
+      ctaText="If you want to experience the product instead of just reading about it, start from the packages page."
       ctaPrimary={{ label: "Open Packages", to: "/packages" }}
       ctaSecondary={{ label: "Open Support", to: "/support" }}
     />
