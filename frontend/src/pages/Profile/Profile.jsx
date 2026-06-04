@@ -11,12 +11,16 @@ import {
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { bookingRecords, profileOverview, tripRequests } from "../../data/userWorkspaceContent";
+import {
+  bookingRecords,
+  getAllTripRequests,
+  profileOverview,
+} from "../../data/userWorkspaceContent";
 import "../../styles/portalPages.css";
 
 export default function Profile() {
   const nextBooking = bookingRecords[0];
-  const activeRequest = tripRequests[0];
+  const activeRequest = getAllTripRequests()[0];
 
   return (
     <div className="portal-page profile-page">

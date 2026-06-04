@@ -5,6 +5,7 @@ import {
   messageSeed,
   packageSeed,
 } from "../../data/dashboardContent";
+import { getAgencyRequestCards } from "../../data/userWorkspaceContent";
 import AnalyticsSection from "./components/AnalyticsSection";
 import BookingsSection from "./components/BookingsSection";
 import CreatePackageModal from "./components/CreatePackageModal";
@@ -36,7 +37,10 @@ const emptyMessageForm = {
 export default function Dashboard() {
   const [page, setPage] = useState("overview");
   const [search, setSearch] = useState("");
-  const [bookings, setBookings] = useState(bookingSeed);
+  const [bookings, setBookings] = useState(() => [
+    ...getAgencyRequestCards(),
+    ...bookingSeed,
+  ]);
   const [packages, setPackages] = useState(packageSeed);
   const [messages, setMessages] = useState(messageSeed);
   const [toast, setToast] = useState("");

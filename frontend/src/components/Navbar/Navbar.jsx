@@ -369,6 +369,20 @@ export default function Navbar({
   const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const closeOnExternalRequest = () => setIsMenuOpen(false);
+
+    document.addEventListener("nexttrip:close-side-menu", closeOnExternalRequest);
+
+    return () => {
+      document.removeEventListener("nexttrip:close-side-menu", closeOnExternalRequest);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isMenuOpen) {
       return undefined;
     }

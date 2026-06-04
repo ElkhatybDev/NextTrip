@@ -29,6 +29,7 @@ import {
   getTodayDate,
   parseDateValue,
 } from "../../utils/travelSearch";
+import { getDestinationDisplayParts } from "../../utils/destinationLabels";
 import "./HeroSearch.css";
 
 const tripTypeIcons = {
@@ -80,7 +81,7 @@ export default function HeroSearch({
       ? destinationOptions.filter((destination) => destination.toLowerCase().includes(query))
       : destinationOptions;
 
-    return matches.slice(0, 8);
+    return matches.slice(0, 14);
   }, [destinationOptions, searchForm.destination]);
 
   const updateSearchForm = (field, value) => {
@@ -314,7 +315,7 @@ export default function HeroSearch({
               <div className="destination-menu" role="listbox" aria-label="Destination options">
                 {filteredDestinations.length ? (
                   filteredDestinations.map((destination) => {
-                    const [city, ...details] = destination.split(",");
+                    const destinationParts = getDestinationDisplayParts(destination);
                     const isSelected = searchForm.destination === destination;
 
                     return (
@@ -330,10 +331,13 @@ export default function HeroSearch({
                           <Trees size={16} />
                         </span>
                         <span>
-                          <strong>{city}</strong>
-                          <small>{details.join(",").trim() || "Popular destination"}</small>
+                          <strong>{destinationParts.primary}</strong>
+                          <small>{destinationParts.details}</small>
                         </span>
-                        {isSelected ? <Check size={15} /> : null}
+                        <span className="destination-option-meta">
+                          <span>{destinationParts.typeLabel}</span>
+                          {isSelected ? <Check size={15} /> : null}
+                        </span>
                       </button>
                     );
                   })

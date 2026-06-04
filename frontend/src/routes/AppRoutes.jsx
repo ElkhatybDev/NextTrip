@@ -26,6 +26,11 @@ import HowItWorks from "../pages/HowItWorks/HowItWorks";
 import Profile from "../pages/Profile/Profile";
 import MyBookings from "../pages/MyBookings/MyBookings";
 import TripRequestDetails from "../pages/TripRequestDetails/TripRequestDetails";
+import TripRequestSent from "../pages/TripRequestSent/TripRequestSent";
+import TripRequestEdit from "../pages/TripRequestEdit/TripRequestEdit";
+import TripOffers from "../pages/TripOffers/TripOffers";
+import TripBooking from "../pages/TripBooking/TripBooking";
+import AgencyRequestForm from "../pages/AgencyRequestForm/AgencyRequestForm";
 import Services from "../pages/Services/Services";
 import ServiceDetails from "../pages/ServiceDetails/ServiceDetails";
 import WorkspaceEntity from "../pages/WorkspaceEntity/WorkspaceEntity";
@@ -46,6 +51,10 @@ const packageRoutes = [
   { path: "/packages", element: <Packages /> },
   { path: "/packages/:id", element: <PackageDetails /> },
   { path: "/create-trip", element: <CreateTrip /> },
+  { path: "/trip-requests/:requestId/sent", element: <TripRequestSent /> },
+  { path: "/trip-requests/:requestId/edit", element: <TripRequestEdit /> },
+  { path: "/trip-requests/:requestId/offers", element: <TripOffers /> },
+  { path: "/trip-requests/:requestId/booking", element: <TripBooking /> },
   { path: "/checkout", element: <Checkout /> },
   { path: "/checkout/:packageId", element: <Checkout /> },
 ];
@@ -63,6 +72,7 @@ const workspaceRoutes = [
 
 const discoveryRoutes = [
   { path: "/agency", element: <Agency /> },
+  { path: "/agency/requests/:requestId", element: <AgencyRequestForm /> },
   { path: "/agency/:agencyId", element: <AgencyDetails /> },
   { path: "/agencies/:agencyId", element: <AgencyDetails /> },
   { path: "/experience", element: <TravelExperience /> },

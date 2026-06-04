@@ -195,6 +195,18 @@
   transform: translateX(0);
 }
 
+body.nexttrip-modal-open {
+  overflow: hidden;
+}
+
+body.nexttrip-modal-open .site-drawer-backdrop,
+body.nexttrip-modal-open .site-side-drawer {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 .site-drawer-topbar {
   display: flex;
   align-items: center;

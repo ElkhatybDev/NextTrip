@@ -1257,11 +1257,947 @@
   line-height: 1.65;
 }
 
+.request-success-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(230px, auto);
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 28px;
+  border-radius: 30px;
+  background:
+    linear-gradient(135deg, rgba(20, 59, 150, 0.96), rgba(36, 84, 198, 0.94)),
+    #143b96;
+  color: white;
+  box-shadow: 0 24px 56px rgba(20, 59, 150, 0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+.request-success-panel::after {
+  content: "";
+  position: absolute;
+  right: -54px;
+  top: -54px;
+  width: 170px;
+  height: 170px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.request-success-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.request-success-icon {
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  border-radius: 26px;
+  background: #ff8a1d;
+  color: white;
+  box-shadow: 0 18px 34px rgba(255, 138, 29, 0.28);
+}
+
+.request-success-copy .portal-eyebrow {
+  margin-bottom: 8px;
+  color: #ffca9c;
+}
+
+.request-success-copy h1,
+.request-success-copy p,
+.request-success-status span,
+.request-success-status strong,
+.request-success-status small {
+  margin: 0;
+}
+
+.request-success-copy h1 {
+  max-width: 760px;
+  color: white;
+  font-size: clamp(30px, 5vw, 54px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.request-success-copy p {
+  max-width: 680px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.7;
+}
+
+.request-success-status {
+  min-width: 230px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+}
+
+.request-success-status span,
+.request-success-status small {
+  display: block;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.request-success-status strong {
+  display: block;
+  margin: 7px 0;
+  color: white;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.request-action-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.request-action-card {
+  min-height: 104px;
+  padding: 18px;
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-areas:
+    "icon label"
+    "icon value";
+  column-gap: 14px;
+  align-items: center;
+  text-decoration: none;
+  background: white;
+  color: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.request-action-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(20, 59, 150, 0.2);
+  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.1);
+}
+
+.request-action-card svg {
+  grid-area: icon;
+  width: 48px;
+  height: 48px;
+  padding: 13px;
+  border-radius: 18px;
+  background: #edf4ff;
+  color: #143b96;
+}
+
+.request-action-card span,
+.request-action-card strong {
+  display: block;
+  min-width: 0;
+}
+
+.request-action-card span {
+  grid-area: label;
+  color: #ff8a1d;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.request-action-card strong {
+  grid-area: value;
+  margin-top: 4px;
+  color: #0f172a;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.request-action-card.primary {
+  background:
+    radial-gradient(circle at top right, rgba(255, 138, 29, 0.16), transparent 34%),
+    #fff;
+  border-color: rgba(255, 138, 29, 0.28);
+}
+
+.request-sent-grid,
+.agency-request-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 20px;
+  animation: planBoardIn 0.72s ease both;
+}
+
+.request-sent-card,
+.agency-brief-card,
+.agency-offer-card {
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 138, 29, 0.07), transparent 34%),
+    #fff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.request-sent-status-card h2,
+.request-sent-summary-card h2,
+.request-sent-agencies h2,
+.agency-brief-card h2,
+.agency-offer-card h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.12;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.agency-request-hero h1,
+.trip-booking-hero h1,
+.booking-confirm-card h2 {
+  overflow-wrap: anywhere;
+}
+
+.request-sent-summary-card > p,
+.request-sent-agencies .profile-card-head p {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.request-sent-steps {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.request-sent-steps::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: 24px;
+  bottom: 24px;
+  width: 2px;
+  background: linear-gradient(#143b96, #ff8a1d);
+  opacity: 0.22;
+}
+
+.request-sent-steps > div {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.request-sent-steps > div > span {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  background: #edf4ff;
+  color: #143b96;
+  z-index: 1;
+}
+
+.request-sent-steps > div.done > span {
+  background: #ff8a1d;
+  color: white;
+  box-shadow: 0 0 0 8px rgba(255, 138, 29, 0.14);
+}
+
+.request-sent-steps h3,
+.request-sent-steps p {
+  margin: 0;
+}
+
+.request-sent-steps h3 {
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.request-sent-steps p {
+  margin-top: 6px;
+  color: #64748b;
+  line-height: 1.65;
+}
+
+.request-sent-summary-grid {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 20px;
+}
+
+.request-sent-agencies {
+  animation: planBoardIn 0.72s ease 0.08s both;
+}
+
+.request-agency-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.request-agency-card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: #f8fbff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  color: inherit;
+  text-decoration: none;
+}
+
+.request-agency-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.request-agency-card > div {
+  padding: 18px;
+}
+
+.request-agency-card span,
+.agency-brief-traveler span {
+  color: #ff8a1d;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.request-agency-card h3,
+.request-agency-card p,
+.agency-brief-traveler h3,
+.agency-brief-traveler p {
+  margin: 0;
+}
+
+.request-agency-card h3 {
+  margin-top: 8px;
+  color: #0f172a;
+  font-size: 22px;
+  letter-spacing: 0;
+}
+
+.request-agency-card p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  color: #64748b;
+}
+
+.request-agency-card strong {
+  display: block;
+  margin-top: 10px;
+  color: #143b96;
+}
+
+.request-agency-link {
+  width: fit-content;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 7px;
+  background: #143b96;
+  color: white !important;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.agency-request-layout {
+  grid-template-columns: minmax(0, 0.95fr) minmax(380px, 1.05fr);
+}
+
+.agency-brief-traveler {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #f8fbff, #fff7ed);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  margin-bottom: 18px;
+}
+
+.agency-brief-traveler .profile-avatar {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.agency-brief-traveler h3 {
+  margin-top: 6px;
+  color: #0f172a;
+  font-size: 22px;
+  letter-spacing: 0;
+}
+
+.agency-brief-traveler p {
+  margin-top: 4px;
+  color: #64748b;
+}
+
+.agency-brief-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.agency-brief-grid .request-summary-item strong,
+.booking-offer-summary strong,
+.offer-detail-list p {
+  overflow-wrap: anywhere;
+}
+
+.agency-brief-section,
+.agency-brief-notes {
+  margin-top: 20px;
+}
+
+.agency-brief-notes {
+  padding: 18px;
+  border-radius: 22px;
+  background: #f8fbff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.agency-brief-notes p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.75;
+}
+
+.agency-offer-card {
+  position: sticky;
+  top: 96px;
+}
+
+.agency-offer-form .portal-btn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+.agency-offer-success {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #f8fbff 0%, #fff7ed 100%);
+  text-align: center;
+}
+
+.agency-offer-success svg {
+  color: #ff8a1d;
+}
+
+.agency-offer-success h3,
+.agency-offer-success p {
+  margin: 0;
+}
+
+.agency-offer-success h3 {
+  color: #0f172a;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.agency-offer-success p {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.request-detail-card .portal-btn,
+.request-empty-state .portal-btn,
+.booking-confirm-card .portal-btn {
+  width: fit-content;
+}
+
+.request-offers-card {
+  grid-column: 1 / -1;
+}
+
+.request-offer-preview-list,
+.request-edit-summary-list,
+.booking-offer-summary {
+  display: grid;
+  gap: 12px;
+}
+
+.request-offer-preview-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 18px 0;
+}
+
+.request-offer-preview-list div,
+.request-edit-summary-list div,
+.booking-offer-summary div {
+  padding: 16px;
+  border-radius: 20px;
+  background: #f8fbff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.request-offer-preview-list span,
+.request-offer-preview-list strong,
+.request-offer-preview-list p,
+.request-edit-summary-list span,
+.request-edit-summary-list strong,
+.booking-offer-summary span,
+.booking-offer-summary strong {
+  display: block;
+  margin: 0;
+}
+
+.request-offer-preview-list span,
+.request-edit-summary-list span,
+.booking-offer-summary span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.request-offer-preview-list strong,
+.request-edit-summary-list strong,
+.booking-offer-summary strong {
+  margin-top: 7px;
+  color: #143b96;
+  font-size: 18px;
+}
+
+.request-offer-preview-list p {
+  margin-top: 6px;
+  color: #64748b;
+}
+
+.request-edit-layout,
+.trip-booking-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
+  gap: 20px;
+  align-items: start;
+  animation: planBoardIn 0.72s ease both;
+}
+
+.request-edit-form-card,
+.request-edit-form-panel,
+.request-edit-summary-card,
+.booking-confirm-card,
+.booking-side-card,
+.request-empty-state {
+  padding: 26px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 138, 29, 0.07), transparent 34%),
+    #fff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.request-edit-form-panel {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.request-edit-form-panel .trip-form-card {
+  animation: none;
+}
+
+.request-edit-secondary-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 14px;
+}
+
+.request-edit-summary-card,
+.booking-side-card {
+  position: sticky;
+  top: 96px;
+}
+
+.request-edit-summary-card h2,
+.booking-side-card h2,
+.request-empty-state h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.request-edit-summary-card p,
+.booking-side-card p,
+.request-empty-state p {
+  color: #64748b;
+  line-height: 1.75;
+}
+
+.request-edit-summary-list {
+  margin-top: 20px;
+}
+
+.request-edit-summary-list div {
+  display: grid;
+  gap: 6px;
+}
+
+.request-edit-summary-list svg {
+  color: #ff8a1d;
+}
+
+.request-edit-warning {
+  padding: 14px;
+  border-radius: 18px;
+  background: #fff7ed;
+  border: 1px solid rgba(255, 138, 29, 0.2);
+  color: #9a3412 !important;
+  font-weight: 800;
+}
+
+.portal-check-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.portal-check-option {
+  min-height: 46px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #dbe3ef;
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.portal-check-option.active {
+  background: #143b96;
+  border-color: #143b96;
+  color: white;
+}
+
+.request-edit-actions,
+.portal-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.request-edit-actions .portal-btn,
+.portal-confirm-actions .portal-btn,
+.offer-card .portal-btn,
+.booking-confirm-card .portal-btn {
+  border: none;
+  cursor: pointer;
+}
+
+.portal-btn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.portal-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: auto;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+.portal-confirm-modal {
+  width: min(520px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow: auto;
+  margin: auto;
+  padding: 28px;
+  border-radius: 28px;
+  background: white;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.26);
+}
+
+.portal-confirm-modal h2,
+.portal-confirm-modal p {
+  margin: 0;
+}
+
+.portal-confirm-modal h2 {
+  color: #0f172a;
+  font-size: 30px;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.portal-confirm-modal p {
+  margin-top: 12px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.request-empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.request-empty-state > svg {
+  color: #ff8a1d;
+}
+
+.offer-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+  animation: planBoardIn 0.72s ease both;
+}
+
+.offer-card {
+  overflow: hidden;
+  border-radius: 30px;
+  background: white;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.offer-card-selected {
+  border-color: rgba(255, 138, 29, 0.46);
+  box-shadow: 0 20px 48px rgba(255, 138, 29, 0.16);
+}
+
+.offer-card-cover {
+  position: relative;
+  min-height: 190px;
+  background: linear-gradient(135deg, #0f172a, #143b96);
+}
+
+.offer-card-cover img {
+  width: 100%;
+  height: 220px;
+  display: block;
+  object-fit: cover;
+}
+
+.offer-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: #ff8a1d;
+  color: white;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.offer-status.muted {
+  background: #64748b;
+}
+
+.offer-card-body {
+  padding: 24px;
+}
+
+.offer-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.offer-card-head span,
+.offer-itinerary span,
+.offer-message span {
+  color: #ff8a1d;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.offer-card-head h2 {
+  margin: 7px 0 0;
+  color: #0f172a;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.offer-card-head svg {
+  color: #143b96;
+}
+
+.offer-price-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.offer-price-row div {
+  padding: 16px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #f8fbff 0%, #fff7ed 100%);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.offer-price-row span,
+.offer-price-row strong {
+  display: block;
+}
+
+.offer-price-row span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.offer-price-row strong {
+  margin-top: 8px;
+  color: #143b96;
+  font-size: 22px;
+}
+
+.offer-detail-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.offer-detail-list p {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.offer-detail-list svg {
+  color: #ff8a1d;
+  flex: 0 0 auto;
+}
+
+.offer-itinerary,
+.offer-message {
+  padding: 16px;
+  border-radius: 20px;
+  background: #f8fbff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  margin-bottom: 14px;
+}
+
+.offer-itinerary p,
+.offer-message p {
+  margin: 9px 0 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.offer-card .portal-btn {
+  width: 100%;
+}
+
+.offer-card .portal-btn:disabled,
+.portal-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.trip-booking-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.62fr);
+}
+
+.booking-offer-summary {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 18px;
+}
+
+.booking-progress-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+  padding: 16px;
+  border-radius: 24px;
+  background: #f8fbff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.booking-progress-panel div {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  text-align: center;
+}
+
+.booking-progress-panel i {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  box-shadow: 0 0 0 7px rgba(148, 163, 184, 0.12);
+}
+
+.booking-progress-panel .active i {
+  background: #ff8a1d;
+  box-shadow: 0 0 0 7px rgba(255, 138, 29, 0.14);
+}
+
+.booking-progress-panel span {
+  color: #475569;
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .plan-hero,
 .profile-command-center,
 .profile-workspace-grid,
 .booking-board,
-.request-detail-layout {
+.request-detail-layout,
+.request-sent-grid,
+.agency-request-layout {
   will-change: transform, opacity;
 }
 
@@ -1322,7 +2258,16 @@
   .profile-workspace-grid,
   .booking-board,
   .request-detail-layout,
-  .request-summary-grid {
+  .request-summary-grid,
+  .request-sent-grid,
+  .agency-request-layout,
+  .request-agency-grid,
+  .request-success-panel,
+  .request-action-strip,
+  .request-edit-layout,
+  .offer-comparison-grid,
+  .trip-booking-layout,
+  .request-offer-preview-list {
     grid-template-columns: 1fr;
   }
 
@@ -1334,6 +2279,17 @@
   .request-summary-wide,
   .request-timeline-card {
     grid-column: auto;
+  }
+
+  .agency-offer-card {
+    position: relative;
+    top: auto;
+  }
+
+  .request-edit-summary-card,
+  .booking-side-card {
+    position: relative;
+    top: auto;
   }
 }
 
@@ -1362,8 +2318,26 @@
   .profile-detail-grid,
   .profile-preference-grid,
   .booking-feature-summary,
-  .booking-progress {
+  .booking-progress,
+  .request-sent-summary-grid,
+  .agency-brief-grid,
+  .portal-check-grid,
+  .offer-price-row,
+  .booking-offer-summary,
+  .booking-progress-panel {
     grid-template-columns: 1fr;
+  }
+
+  .request-success-panel {
+    align-items: start;
+  }
+
+  .request-success-status {
+    width: 100%;
+  }
+
+  .request-action-card {
+    min-height: auto;
   }
 
   .booking-progress {

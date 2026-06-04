@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  Building2,
   CalendarDays,
   CheckCircle2,
+  Clock3,
   MapPin,
   Send,
-  SlidersHorizontal,
   Sparkles,
   UsersRound,
   WalletCards,
@@ -13,6 +14,8 @@ import {
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import TripForm from "../../components/TripForm/TripForm";
+import RequestLoadingModal from "../../components/RequestLoadingModal/RequestLoadingModal";
+import useModalBodyState from "../../hooks/useModalBodyState";
 import {
   inspirationItems,
   serviceOptions,
@@ -20,11 +23,18 @@ import {
   tripFilterGroups,
 } from "../../data/tripBuilderOptions";
 import { fallbackDestinations } from "../../data/homeContent";
+import {
+  getAgencyMatchesForRequest,
+  profileOverview,
+  saveTripRequest,
+} from "../../data/userWorkspaceContent";
 import { fetchDestinationOptions } from "../../services/destinationsApi";
 import { calculateTripPrice } from "../../utils/tripPricing";
 import "./CreateTrip.css";
 
 export default function CreateTrip() {
+  const navigate = useNavigate();
+  const submitTimerRef = useRef(null);
   const [form, setForm] = useState({
     destination: "",
     departureDate: "",
@@ -49,6 +59,8 @@ export default function CreateTrip() {
     "Excursions",
   ]);
   const [destinationOptions, setDestinationOptions] = useState(fallbackDestinations);
+  const [submittedRequest, setSubmittedRequest] = useState(null);
+  const [isSendingRequest, setIsSendingRequest] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +79,102 @@ export default function CreateTrip() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Trip request submitted successfully.");
+
+    if (submittedRequest || isSendingRequest) {
+      return;
+    }
+
+    const createdAt = new Date();
+    const requestId = `REQ-${createdAt.getFullYear()}-${String(createdAt.getTime()).slice(-6)}`;
+    const datesLabel =
+      form.departureDate && form.returnDate
+        ? `${form.departureDate} to ${form.returnDate}`
+        : form.departureDate || "Flexible dates";
+    const request = {
+      id: requestId,
+      title: form.destination
+        ? `${form.destination.split(",")[0]} custom trip`
+        : `${form.tripType} request`,
+      destination: form.destination || "Not selected yet",
+      dates: datesLabel,
+      travelers: `${form.travelers || 1} traveler(s)`,
+      budget: priceEstimate.totalLabel,
+      status: "Request sent",
+      requestVersion: 1,
+      formFields: form,
+      extras,
+      traveler: {
+        name: profileOverview.name,
+        email: profileOverview.email,
+        phone: profileOverview.phone,
+        homeCity: profileOverview.homeCity,
+        status: profileOverview.status,
+      },
+      mood: form.tripMood,
+      pace: form.pace,
+      accommodation: form.accommodation,
+      preferences: {
+        tripType: form.tripType,
+        travelStyle: form.travelStyle,
+        budgetLevel: form.budgetLevel,
+        mealPlan: form.mealPlan,
+        hotel: form.hotel || "Agency recommendation",
+        transport: form.transport || "Agency recommendation",
+        targetBudget: form.budget || "Not specified",
+      },
+      services: extras.length ? extras : ["Agency recommendation"],
+      notes:
+        form.notes ||
+        "Traveler created a custom trip request and is waiting for tailored agency offers.",
+      timeline: [
+        {
+          label: "Request created",
+          value: createdAt.toLocaleDateString("en", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+        },
+        { label: "Matched by NextTrip", value: "Agencies selected" },
+        { label: "Current step", value: "Waiting for agency offers" },
+      ],
+      priceQuote: {
+        total: priceEstimate.total,
+        perTraveler: priceEstimate.perTraveler,
+        days: priceEstimate.days,
+        season: priceEstimate.season.label,
+        region: priceEstimate.region,
+        breakdown: priceEstimate.breakdown,
+      },
+      createdAt: createdAt.toISOString(),
+    };
+    const agencyMatches = getAgencyMatchesForRequest(request);
+    const routedRequest = {
+      ...request,
+      assignedAgencyIds: agencyMatches.map((agency) => agency.id),
+      agencyDelivery: {
+        status: "Sent to matching agencies",
+        sentAt: createdAt.toISOString(),
+        recipients: agencyMatches.length,
+      },
+      timeline: [
+        request.timeline[0],
+        {
+          label: "Sent to agencies",
+          value: agencyMatches.map((agency) => agency.name).join(", "),
+        },
+        request.timeline[2],
+      ],
+    };
+
+    setIsSendingRequest(true);
+
+    submitTimerRef.current = window.setTimeout(() => {
+      saveTripRequest(routedRequest);
+      setIsSendingRequest(false);
+      setSubmittedRequest(routedRequest);
+      submitTimerRef.current = null;
+    }, 950);
   };
 
   useEffect(() => {
@@ -84,6 +191,35 @@ export default function CreateTrip() {
     return () => controller.abort();
   }, []);
 
+  useModalBodyState(
+    isSendingRequest || Boolean(submittedRequest),
+    submittedRequest ? "trip-request-success-open" : ""
+  );
+
+  useEffect(() => (
+    () => {
+      if (submitTimerRef.current) {
+        window.clearTimeout(submitTimerRef.current);
+      }
+    }
+  ), []);
+
+  const openSubmittedRequest = () => {
+    if (!submittedRequest) {
+      return;
+    }
+
+    navigate(`/trip-requests/${submittedRequest.id}/sent`);
+  };
+
+  const editSubmittedRequest = () => {
+    if (!submittedRequest) {
+      return;
+    }
+
+    navigate(`/trip-requests/${submittedRequest.id}/edit`);
+  };
+
   const priceEstimate = useMemo(() => calculateTripPrice(form, extras), [form, extras]);
 
   const liveBrief = [
@@ -97,7 +233,7 @@ export default function CreateTrip() {
       label: "Dates",
       value:
         form.departureDate && form.returnDate
-          ? `${form.departureDate} -> ${form.returnDate}`
+          ? `${form.departureDate} to ${form.returnDate}`
           : "Choose travel dates",
     },
     {
@@ -107,7 +243,7 @@ export default function CreateTrip() {
     },
     {
       icon: WalletCards,
-      label: "Estimated Price",
+      label: "Estimate",
       value: priceEstimate.totalLabel,
     },
   ];
@@ -120,6 +256,62 @@ export default function CreateTrip() {
     form.tripMood,
     extras.length > 0,
   ].filter(Boolean).length;
+
+  const loadingModal = isSendingRequest ? (
+    <RequestLoadingModal
+      eyebrow="SENDING REQUEST"
+      title="Matching your brief with agencies."
+      description="NextTrip is saving your trip details, finding relevant agencies, and preparing the request workspace."
+      steps={["Save brief", "Match agencies", "Open offers"]}
+    />
+  ) : null;
+
+  const successModal = submittedRequest && !isSendingRequest ? (
+    <div className="trip-success-overlay" role="dialog" aria-modal="true">
+      <div className="trip-success-card">
+        <span className="trip-success-icon">
+          <CheckCircle2 size={34} />
+        </span>
+        <p className="trip-section-label">REQUEST SENT SUCCESSFULLY</p>
+        <h2>Your request was sent.</h2>
+        <p>
+          Reference <strong>{submittedRequest.id}</strong> is saved and sent
+          to matching agencies. Choose what you want to do next.
+        </p>
+        <div className="trip-success-summary">
+          <div>
+            <MapPin size={16} />
+            <span>{submittedRequest.destination}</span>
+          </div>
+          <div>
+            <WalletCards size={16} />
+            <span>{submittedRequest.budget}</span>
+          </div>
+          <div>
+            <Clock3 size={16} />
+            <span>Sent to agencies</span>
+          </div>
+        </div>
+        <div className="trip-success-actions">
+          <button
+            type="button"
+            className="trip-success-primary"
+            onClick={openSubmittedRequest}
+          >
+            View request
+            <Send size={16} />
+          </button>
+          <button
+            type="button"
+            className="trip-success-secondary"
+            onClick={editSubmittedRequest}
+          >
+            Edit request
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div className="create-trip-page">
@@ -135,40 +327,9 @@ export default function CreateTrip() {
             </p>
             <h1>Create a trip brief agencies can answer faster.</h1>
             <p>
-              Choose your destination, mood, budget, travelers, services, and notes.
-              NextTrip turns that into a clean request ready for agencies.
+              Add the details agencies need to send accurate offers.
             </p>
-            <div className="trip-hero-actions">
-              <span>
-                <CheckCircle2 size={16} />
-                Structured request
-              </span>
-              <span>
-                <CheckCircle2 size={16} />
-                Better agency offers
-              </span>
-            </div>
           </div>
-
-          <aside className="trip-hero-panel">
-            <div className="trip-hero-panel-head">
-              <SlidersHorizontal size={22} />
-              <div>
-                <span>Trip builder</span>
-                <strong>4 step request</strong>
-              </div>
-            </div>
-            <div className="trip-flow-list">
-              <p>
-                <Building2 size={16} />
-                Agencies receive your clear brief
-              </p>
-              <p>
-                <Send size={16} />
-                Offers can be compared later
-              </p>
-            </div>
-          </aside>
         </div>
       </section>
 
@@ -183,7 +344,7 @@ export default function CreateTrip() {
                 style={{ "--trip-progress": `${(requestProgress / 6) * 100}%` }}
               >
                 <strong>{requestProgress}/6</strong>
-                <span>fields ready</span>
+                <span>ready</span>
               </div>
               <div className="trip-live-list">
                 {liveBrief.map((item) => {
@@ -205,10 +366,6 @@ export default function CreateTrip() {
                 <span>{form.pace}</span>
                 <span>{form.accommodation}</span>
               </div>
-              <p className="trip-live-note">
-                Agencies receive this as a structured request, so they can reply with
-                cleaner offers instead of asking for missing details.
-              </p>
             </aside>
 
             <TripForm
@@ -230,10 +387,16 @@ export default function CreateTrip() {
                 setForm((prev) => ({ ...prev, destination }))
               }
               onSubmit={handleSubmit}
+              submitDisabled={isSendingRequest}
+              submitLabel={isSendingRequest ? "Sending..." : "Send request"}
+              compact
             />
           </div>
         </div>
       </main>
+
+      {loadingModal ? createPortal(loadingModal, document.body) : null}
+      {successModal ? createPortal(successModal, document.body) : null}
 
       <Footer />
     </div>

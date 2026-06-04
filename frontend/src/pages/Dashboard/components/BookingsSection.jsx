@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { dashboardIcons } from "../icons";
 import SectionTitle from "./SectionTitle";
 import StatusBadge from "./StatusBadge";
@@ -110,13 +111,22 @@ export default function BookingsSection({
                     {item.status}
                   </StatusBadge>
 
-                  <button
-                    type="button"
-                    onClick={() => onSubmitOffer(item.id)}
-                    className="primary-btn"
-                  >
-                    Submit offer
-                  </button>
+                  {item.requestId ? (
+                    <Link
+                      to={`/agency/requests/${item.requestId}`}
+                      className="primary-btn"
+                    >
+                      Open brief
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onSubmitOffer(item.id)}
+                      className="primary-btn"
+                    >
+                      Submit offer
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
