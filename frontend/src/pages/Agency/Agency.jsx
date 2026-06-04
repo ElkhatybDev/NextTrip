@@ -40,7 +40,7 @@ export default function Agency() {
               <p className="agency-eyebrow">For travel agencies</p>
               <h1>Turn traveler interest into organized bookings.</h1>
               <p>
-                NextTrip gives agencies a cleaner way to receive requests, present
+                NextTrip gives agencies a clearer way to receive requests, present
                 packages, and keep communication moving without losing context.
               </p>
               <div className="agency-actions">
@@ -56,7 +56,7 @@ export default function Agency() {
                   state={{ role: "agency", activeTab: "signup" }}
                   className="agency-secondary"
                 >
-                  Create Agency Account
+                  Create agency account
                 </Link>
               </div>
             </div>

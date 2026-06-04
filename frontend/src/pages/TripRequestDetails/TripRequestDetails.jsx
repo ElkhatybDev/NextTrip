@@ -7,7 +7,6 @@ import {
   Clock3,
   MapPin,
   Route,
-  Sparkles,
   UsersRound,
   WalletCards,
 } from "lucide-react";
@@ -43,7 +42,7 @@ export default function TripRequestDetails() {
     { icon: CalendarDays, label: "Dates", value: request.dates },
     { icon: UsersRound, label: "Travelers", value: request.travelers },
     { icon: WalletCards, label: "Budget", value: request.budget },
-    { icon: Sparkles, label: "Mood", value: request.mood },
+    { icon: Route, label: "Mood", value: request.mood },
     { icon: Route, label: "Pace", value: request.pace },
   ];
 
@@ -93,7 +92,7 @@ export default function TripRequestDetails() {
                 );
               })}
               <div className="request-summary-item request-summary-wide">
-                <Sparkles size={17} />
+                <CheckCircle2 size={17} />
                 <span>Stay</span>
                 <strong>{request.accommodation}</strong>
               </div>

@@ -31,7 +31,7 @@ export default function Profile() {
             <h1>{profileOverview.name}</h1>
             <p>
               Manage your profile, preferences, booking history, and trip requests from
-              one clean traveler workspace.
+              one clear traveler workspace.
             </p>
           </div>
           <div className="plan-hero-card">

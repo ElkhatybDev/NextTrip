@@ -1,12 +1,20 @@
-import { packageCatalog } from "../data/packageCatalog";
+import { offerCatalog, packageCatalog } from "../data/packageCatalog";
 
 export function getPackages() {
   return packageCatalog;
 }
 
+export function getOffers() {
+  return offerCatalog;
+}
+
 export function getPackageDetails(id) {
   const normalizedId = Number(id);
-  return packageCatalog.find((item) => item.id === normalizedId) || null;
+  return (
+    packageCatalog.find((item) => item.id === normalizedId) ||
+    offerCatalog.find((item) => item.id === normalizedId) ||
+    null
+  );
 }
 
 export function filterPackages(packages, { search = "", category = "All" }) {

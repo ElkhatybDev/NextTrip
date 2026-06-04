@@ -1,5 +1,6 @@
 import React from "react";
 import { agencySummary, dashboardNavItems } from "../../../data/dashboardContent";
+import nextTripLogo from "../../../Assets/images/NextTrip logo.png";
 import { dashboardIcons } from "../icons";
 
 export default function DashboardSidebar({
@@ -14,18 +15,18 @@ export default function DashboardSidebar({
   return (
     <aside className="dashboard-sidebar">
       <div className="sidebar-brand">
-        <div className="sidebar-brand-mark">NT</div>
+        <img src={nextTripLogo} alt="NextTrip" className="sidebar-brand-logo" />
         <div>
           <h1>
             Next<span>Trip</span>
           </h1>
-          <p>Agency Workspace</p>
+          <p>Agency workspace</p>
         </div>
       </div>
 
       <div className="agency-box">
         <div className="agency-top">
-          <img src={agencySummary.image} alt="Agency" />
+          <img src={agencySummary.image} alt={agencySummary.name} decoding="async" />
           <div>
             <h3>{agencySummary.name}</h3>
             <p>{agencySummary.status}</p>
@@ -35,6 +36,19 @@ export default function DashboardSidebar({
         <div className="agency-rating">
           <StarIcon size={16} fill="white" />
           {agencySummary.rating}
+        </div>
+
+        <div className="agency-info-list">
+          <span>{agencySummary.location}</span>
+          <span>Manager: {agencySummary.manager}</span>
+          <span>License: {agencySummary.license}</span>
+          <span>{agencySummary.responseTime}</span>
+        </div>
+
+        <div className="agency-specialties">
+          {agencySummary.specialties.map((specialty) => (
+            <span key={specialty}>{specialty}</span>
+          ))}
         </div>
       </div>
 

@@ -15,7 +15,6 @@ import {
   Palette,
   Search,
   Tags,
-  Trees,
   UserRound,
   Users,
   UsersRound,
@@ -25,6 +24,7 @@ import {
   buildCalendarDays,
   formatMonthTitle,
   formatTravelDate,
+  getWeekdayLabels,
   getMonthStart,
   getTodayDate,
   parseDateValue,
@@ -42,8 +42,6 @@ const tripTypeIcons = {
   Luxury: Gem,
   Cultural: Landmark,
 };
-
-const weekdayLabels = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 export default function HeroSearch({
   searchForm,
@@ -74,6 +72,7 @@ export default function HeroSearch({
   const todayValue = getTodayDate();
   const calendarDays = buildCalendarDays(visibleMonth);
   const visibleMonthLabel = formatMonthTitle(visibleMonth);
+  const weekdayLabels = getWeekdayLabels();
   const filteredDestinations = useMemo(() => {
     const query = searchForm.destination.trim().toLowerCase();
     const matches = query
@@ -326,9 +325,6 @@ export default function HeroSearch({
                         className={isSelected ? "destination-option active" : "destination-option"}
                         onClick={() => selectDestination(destination)}
                       >
-                        <span className="destination-option-icon">
-                          <Trees size={16} />
-                        </span>
                         <span>
                           <strong>{city}</strong>
                           <small>{details.join(",").trim() || "Popular destination"}</small>

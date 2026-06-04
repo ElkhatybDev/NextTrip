@@ -26,41 +26,40 @@ import {
   buildCalendarDays,
   formatMonthTitle,
   formatTravelDate,
+  getWeekdayLabels,
   getMonthStart,
   getTodayDate,
   parseDateValue,
 } from "../../utils/travelSearch";
 
-const weekdayLabels = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-
 const tripTypeOptions = [
   { value: "Custom Trip", label: "Custom Trip", description: "Build your route", icon: Route },
   { value: "Luxury Trip", label: "Luxury Trip", description: "Premium hotels and comfort", icon: Tags },
   { value: "Family Trip", label: "Family Trip", description: "Easy flow for families", icon: UsersRound },
-  { value: "Adventure Trip", label: "Adventure Trip", description: "Activities and movement", icon: Mountain },
+  { value: "Adventure Trip", label: "Adventure Trip", description: "Activities and active days", icon: Mountain },
   { value: "Honeymoon", label: "Honeymoon", description: "Romantic and calm", icon: Heart },
 ];
 
 const mealPlanOptions = [
-  { value: "Breakfast Included", label: "Breakfast Included", description: "Simple morning plan", icon: Coffee },
+  { value: "Breakfast Included", label: "Breakfast Included", description: "Simple breakfast plan", icon: Coffee },
   { value: "Half Board", label: "Half Board", description: "Breakfast and dinner", icon: Coffee },
-  { value: "Full Board", label: "Full Board", description: "All main meals", icon: Coffee },
-  { value: "No Meal Plan", label: "No Meal Plan", description: "Keep meals flexible", icon: Coffee },
+  { value: "Full Board", label: "Full Board", description: "All main meals included", icon: Coffee },
+  { value: "No Meal Plan", label: "No meal plan", description: "Keep meals flexible", icon: Coffee },
 ];
 
 const hotelOptions = [
-  { value: "3 Stars", label: "3 Stars", description: "Good budget comfort", icon: Bed },
+  { value: "3 Stars", label: "3 Stars", description: "Good comfort on a budget", icon: Bed },
   { value: "4 Stars", label: "4 Stars", description: "Balanced comfort", icon: Bed },
   { value: "5 Stars", label: "5 Stars", description: "Premium stay", icon: Bed },
   { value: "Luxury Riad", label: "Luxury Riad", description: "Local boutique stay", icon: Bed },
-  { value: "Villa", label: "Villa", description: "Private group stay", icon: Bed },
+  { value: "Villa", label: "Villa", description: "Private stay for groups", icon: Bed },
 ];
 
 const transportOptions = [
-  { value: "Flight", label: "Flight", description: "Fast long-distance option", icon: Plane },
+  { value: "Flight", label: "Flight", description: "Fast option for long distances", icon: Plane },
   { value: "Train", label: "Train", description: "Comfortable city transfer", icon: Train },
   { value: "Private Car", label: "Private Car", description: "Flexible door-to-door", icon: Car },
-  { value: "Bus", label: "Bus", description: "Simple budget movement", icon: Bus },
+  { value: "Bus", label: "Bus", description: "Simple budget transport", icon: Bus },
 ];
 
 function CustomSelect({
@@ -91,7 +90,7 @@ function CustomSelect({
         </span>
         <span className="trip-select-copy">
           <strong>{selectedOption?.label || placeholder}</strong>
-          <small>{selectedOption?.description || "Choose one option"}</small>
+          <small>{selectedOption?.description || "Choose an option"}</small>
         </span>
         <ChevronDown size={18} />
       </button>
@@ -143,6 +142,7 @@ function DatePickerField({
 }) {
   const days = buildCalendarDays(visibleMonth);
   const visibleMonthLabel = formatMonthTitle(visibleMonth);
+  const weekdayLabels = getWeekdayLabels();
 
   return (
     <div className={`trip-field trip-date-picker-field ${isOpen ? "trip-field-open" : ""}`} data-trip-picker>
@@ -383,18 +383,18 @@ export default function TripForm({
 
   const summaryItems = [
     ["Destination", form.destination || "Not selected"],
-    ["Trip Type", form.tripType],
+    ["Trip type", form.tripType],
     ["Mood", form.tripMood],
-    ["Budget Level", form.budgetLevel],
+    ["Budget level", form.budgetLevel],
     ["Pace", form.pace],
     ["Stay", form.accommodation],
-    ["Travel Style", form.travelStyle],
+    ["Travel style", form.travelStyle],
     ["Travelers", form.travelers],
-    ["Meal Plan", form.mealPlan],
+    ["Meal plan", form.mealPlan],
     ["Season", priceEstimate?.season?.label || "Auto"],
-    ["Estimated Price", priceEstimate?.totalLabel || "Calculating"],
-    ["Per Traveler", priceEstimate?.perTravelerLabel || "-"],
-    ["Target Budget", form.budget || "Not set"],
+    ["Estimated price", priceEstimate?.totalLabel || "Calculating"],
+    ["Per traveler", priceEstimate?.perTravelerLabel || "-"],
+    ["Target budget", form.budget || "Not set"],
     ["Extras", extras.length > 0 ? extras.join(", ") : "None"],
   ];
 
@@ -403,7 +403,7 @@ export default function TripForm({
       <div className="trip-steps">
         <div className="trip-step">
           <p>STEP 1</p>
-          <h4>Trip Basics</h4>
+          <h4>Trip basics</h4>
         </div>
         <div className="trip-step">
           <p>STEP 2</p>
@@ -415,7 +415,7 @@ export default function TripForm({
         </div>
         <div className="trip-step">
           <p>STEP 4</p>
-          <h4>Submit Request</h4>
+          <h4>Submit request</h4>
         </div>
       </div>
 
@@ -431,7 +431,7 @@ export default function TripForm({
           <h2>Plan your trip</h2>
         </div>
         <p className="trip-form-text">
-          Choose destination, dates, travelers, and preferences. Agencies can
+          Choose a destination, dates, travelers, and preferences. Agencies can
           reply with clear offers.
         </p>
       </div>
@@ -496,7 +496,7 @@ export default function TripForm({
 
         <CustomSelect
           name="tripType"
-          label="Trip Type"
+          label="Trip type"
           value={form.tripType}
           placeholder="Select trip type"
           options={tripTypeOptions}
@@ -507,7 +507,7 @@ export default function TripForm({
 
         <DatePickerField
           name="departureDate"
-          label="Departure Date"
+          label="Departure date"
           value={form.departureDate}
           visibleMonth={visibleMonths.departureDate}
           todayValue={todayValue}
@@ -521,7 +521,7 @@ export default function TripForm({
 
         <DatePickerField
           name="returnDate"
-          label="Return Date"
+          label="Return date"
           value={form.returnDate}
           visibleMonth={visibleMonths.returnDate}
           todayValue={todayValue}
@@ -557,7 +557,7 @@ export default function TripForm({
 
         <CustomSelect
           name="mealPlan"
-          label="Meal Plan"
+          label="Meal plan"
           value={form.mealPlan}
           placeholder="Select meal plan"
           options={mealPlanOptions}
@@ -568,7 +568,7 @@ export default function TripForm({
 
         <CustomSelect
           name="hotel"
-          label="Hotel Preference"
+          label="Hotel preference"
           value={form.hotel}
           placeholder="Select hotel category"
           options={hotelOptions}
@@ -579,7 +579,7 @@ export default function TripForm({
 
         <CustomSelect
           name="transport"
-          label="Transport Preference"
+          label="Transport preference"
           value={form.transport}
           placeholder="Select transport type"
           options={transportOptions}
@@ -589,7 +589,7 @@ export default function TripForm({
         />
 
         <div className="trip-field trip-field-full">
-          <label>Travel Style</label>
+          <label>Travel style</label>
           <div className="trip-style-wrap">
             {travelStyles.map((style) => (
               <button
@@ -605,7 +605,7 @@ export default function TripForm({
         </div>
 
         <div className="trip-field trip-field-full">
-          <label>Extra Services</label>
+          <label>Extra services</label>
           <div className="trip-services-grid">
             {serviceOptions.map((item) => (
               <button
@@ -622,7 +622,7 @@ export default function TripForm({
 
         <div className="trip-double-block trip-field-full">
           <div className="trip-field">
-            <label>Additional Details</label>
+            <label>Additional details</label>
             <textarea
               name="notes"
               value={form.notes}
@@ -635,7 +635,7 @@ export default function TripForm({
           <div className="trip-info-box">
             <h3>Why agencies love clear briefs</h3>
             <div className="trip-info-list">
-              <p>- Faster replies with better tailored offers</p>
+              <p>- Faster replies with better-tailored offers</p>
               <p>- More accurate pricing based on your needs</p>
               <p>- Easier comparison between agencies</p>
               <p>- Better hotel and activity suggestions</p>
@@ -657,9 +657,9 @@ export default function TripForm({
             <div className="trip-price-head">
               <span>
                 <Tags size={16} />
-                Auto estimate
+                Automatic estimate
               </span>
-              <strong>{priceEstimate?.season?.label || "Season auto"}</strong>
+              <strong>{priceEstimate?.season?.label || "Automatic season"}</strong>
             </div>
             <h3>Trip price preview</h3>
             <p className="trip-price-total">{priceEstimate?.totalLabel || "Calculating"}</p>
@@ -695,7 +695,7 @@ export default function TripForm({
                 className="trip-inspiration-card"
                 onClick={() => onDestinationPick(item.name)}
               >
-                <img src={item.image} alt={item.name} />
+                <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
                 <div className="trip-inspiration-content">
                   <p>{item.name}</p>
                   <span>Click to use this destination</span>

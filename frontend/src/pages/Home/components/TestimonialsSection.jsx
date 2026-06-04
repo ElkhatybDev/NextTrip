@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Star } from "lucide-react";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 
 export default function TestimonialsSection({ testimonials }) {
-  const carouselItems = [...testimonials, ...testimonials];
+  const carouselItems = useMemo(() => [...testimonials, ...testimonials], [testimonials]);
 
   return (
     <section id="reviews" className="testimonials-section">
@@ -19,7 +19,7 @@ export default function TestimonialsSection({ testimonials }) {
           {carouselItems.map((item, index) => (
             <article key={`${item.name}-${index}`} className="testimonial-card">
               <div className="testimonial-profile">
-                <img src={item.avatar} alt={item.name} />
+                <img src={item.avatar} alt={item.name} loading="lazy" decoding="async" />
                 <div>
                   <h3>{item.name}</h3>
                   <p>{item.role} | {item.location}</p>

@@ -308,6 +308,7 @@ export default function AuthForm({
           <img
             src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
             alt="Google"
+            decoding="async"
           />
           Google
         </button>
@@ -316,6 +317,7 @@ export default function AuthForm({
           <img
             src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"
             alt="Facebook"
+            decoding="async"
           />
           Facebook
         </button>

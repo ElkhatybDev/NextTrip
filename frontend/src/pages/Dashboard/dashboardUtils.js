@@ -4,9 +4,14 @@ export function filterBookings(bookings, query, filter) {
   return bookings.filter((booking) => {
     const matchesQuery =
       !normalizedQuery ||
-      [booking.client, booking.destination, booking.interest, booking.tier].some((value) =>
-        value.toLowerCase().includes(normalizedQuery)
-      );
+      [
+        booking.client,
+        booking.destination,
+        booking.interest,
+        booking.tier,
+        booking.requestId,
+        booking.travelers,
+      ].some((value) => value.toLowerCase().includes(normalizedQuery));
 
     const matchesFilter = filter === "all" ? true : booking.status === filter;
 
@@ -20,9 +25,13 @@ export function filterPackages(packages, query) {
   return packages.filter(
     (travelPackage) =>
       !normalizedQuery ||
-      [travelPackage.title, travelPackage.place, travelPackage.status].some((value) =>
-        value.toLowerCase().includes(normalizedQuery)
-      )
+      [
+        travelPackage.title,
+        travelPackage.place,
+        travelPackage.status,
+        travelPackage.category,
+        travelPackage.duration,
+      ].some((value) => value.toLowerCase().includes(normalizedQuery))
   );
 }
 

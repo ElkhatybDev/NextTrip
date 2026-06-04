@@ -14,7 +14,7 @@ const helpCards = [
   {
     icon: MessageCircle,
     title: "Agency contact",
-    text: "Get routed to the right agency conversation with the destination and package context included.",
+    text: "Get directed to the right agency conversation with the destination and package context included.",
   },
   {
     icon: Clock,
@@ -75,7 +75,7 @@ export default function Support() {
         <section className="site-shell support-faq">
           <div>
             <p className="support-eyebrow">Quick questions</p>
-            <h2>Common things travelers ask.</h2>
+            <h2>Common questions travelers ask.</h2>
           </div>
           <div className="support-question-list">
             {faqItems.map((item) => (

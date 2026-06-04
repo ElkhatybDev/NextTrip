@@ -1,6 +1,3 @@
-const REST_COUNTRIES_PREFERENCES_URL =
-  "https://restcountries.com/v3.1/all?fields=name,cca2,currencies,languages";
-
 function countryCodeToFlag(countryCode) {
   if (!countryCode || countryCode.length !== 2) {
     return "";
@@ -14,6 +11,33 @@ function countryCodeToFlag(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
+function svgToDataUri(svg) {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+const languageLogos = {
+  eng: svgToDataUri(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="4"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="2"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="6"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="3.2"/></svg>'
+  ),
+  fra: svgToDataUri(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg>'
+  ),
+  ara: svgToDataUri(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16"><rect width="24" height="16" fill="#c1272d"/><path d="M12 3.2l1.08 3.32h3.49l-2.82 2.05 1.08 3.32L12 9.84l-2.83 2.05 1.08-3.32-2.82-2.05h3.49z" fill="none" stroke="#006233" stroke-width="1.1" stroke-linejoin="round"/></svg>'
+  ),
+};
+
+const currencyLogos = {
+  GBP: languageLogos.eng,
+  USD: svgToDataUri(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16"><rect width="24" height="16" fill="#b22234"/><path d="M0 2h24M0 4.5h24M0 7h24M0 9.5h24M0 12h24M0 14.5h24" stroke="#fff" stroke-width="1.15"/><rect width="10.6" height="8.6" fill="#3c3b6e"/><g fill="#fff"><circle cx="1.5" cy="1.3" r=".35"/><circle cx="3.2" cy="1.3" r=".35"/><circle cx="4.9" cy="1.3" r=".35"/><circle cx="6.6" cy="1.3" r=".35"/><circle cx="8.3" cy="1.3" r=".35"/><circle cx="2.35" cy="2.65" r=".35"/><circle cx="4.05" cy="2.65" r=".35"/><circle cx="5.75" cy="2.65" r=".35"/><circle cx="7.45" cy="2.65" r=".35"/><circle cx="1.5" cy="4" r=".35"/><circle cx="3.2" cy="4" r=".35"/><circle cx="4.9" cy="4" r=".35"/><circle cx="6.6" cy="4" r=".35"/><circle cx="8.3" cy="4" r=".35"/><circle cx="2.35" cy="5.35" r=".35"/><circle cx="4.05" cy="5.35" r=".35"/><circle cx="5.75" cy="5.35" r=".35"/><circle cx="7.45" cy="5.35" r=".35"/><circle cx="1.5" cy="6.7" r=".35"/><circle cx="3.2" cy="6.7" r=".35"/><circle cx="4.9" cy="6.7" r=".35"/><circle cx="6.6" cy="6.7" r=".35"/><circle cx="8.3" cy="6.7" r=".35"/></g></svg>'
+  ),
+  EUR: svgToDataUri(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16"><rect width="24" height="16" fill="#003399"/><g fill="#ffcc00"><circle cx="12" cy="3" r=".55"/><circle cx="14.5" cy="3.65" r=".55"/><circle cx="16.35" cy="5.5" r=".55"/><circle cx="17" cy="8" r=".55"/><circle cx="16.35" cy="10.5" r=".55"/><circle cx="14.5" cy="12.35" r=".55"/><circle cx="12" cy="13" r=".55"/><circle cx="9.5" cy="12.35" r=".55"/><circle cx="7.65" cy="10.5" r=".55"/><circle cx="7" cy="8" r=".55"/><circle cx="7.65" cy="5.5" r=".55"/><circle cx="9.5" cy="3.65" r=".55"/></g></svg>'
+  ),
+  MAD: languageLogos.ara,
+};
+
 function withFlag(item) {
   return {
     ...item,
@@ -23,18 +47,12 @@ function withFlag(item) {
 
 export const fallbackCurrencies = [
   {
-    code: "MAD",
-    label: "Moroccan dirham",
-    symbol: "MAD",
-    countryCode: "MA",
-    country: "Morocco",
-  },
-  {
-    code: "EUR",
-    label: "Euro",
-    symbol: "EUR",
-    countryCode: "EU",
-    country: "Europe",
+    code: "GBP",
+    label: "British pound",
+    symbol: "GBP",
+    countryCode: "GB",
+    country: "United Kingdom",
+    logo: currencyLogos.GBP,
   },
   {
     code: "USD",
@@ -42,13 +60,23 @@ export const fallbackCurrencies = [
     symbol: "USD",
     countryCode: "US",
     country: "United States",
+    logo: currencyLogos.USD,
   },
   {
-    code: "GBP",
-    label: "British pound",
-    symbol: "GBP",
-    countryCode: "GB",
-    country: "United Kingdom",
+    code: "EUR",
+    label: "Euro",
+    symbol: "EUR",
+    countryCode: "EU",
+    country: "Europe",
+    logo: currencyLogos.EUR,
+  },
+  {
+    code: "MAD",
+    label: "Moroccan dirham",
+    symbol: "MAD",
+    countryCode: "MA",
+    country: "Morocco",
+    logo: currencyLogos.MAD,
   },
 ].map(withFlag);
 
@@ -59,6 +87,7 @@ export const fallbackLanguages = [
     label: "English",
     countryCode: "GB",
     country: "United Kingdom",
+    logo: languageLogos.eng,
   },
   {
     code: "fra",
@@ -66,6 +95,7 @@ export const fallbackLanguages = [
     label: "French",
     countryCode: "FR",
     country: "France",
+    logo: languageLogos.fra,
   },
   {
     code: "ara",
@@ -73,135 +103,13 @@ export const fallbackLanguages = [
     label: "Arabic",
     countryCode: "MA",
     country: "Morocco",
-  },
-  {
-    code: "spa",
-    short: "ES",
-    label: "Spanish",
-    countryCode: "ES",
-    country: "Spain",
+    logo: languageLogos.ara,
   },
 ].map(withFlag);
 
-const preferredCurrencyOrder = ["MAD", "EUR", "USD", "GBP", "AED", "SAR", "JPY"];
-const preferredLanguageOrder = ["eng", "fra", "ara", "spa", "deu", "ita", "por"];
-
-const languageShortCodes = {
-  ara: "AR",
-  deu: "DE",
-  eng: "EN",
-  fra: "FR",
-  ita: "IT",
-  jpn: "JA",
-  kor: "KO",
-  por: "PT",
-  spa: "ES",
-  tur: "TR",
-  zho: "ZH",
-};
-
-const preferredCurrencyMeta = {
-  AED: { countryCode: "AE", country: "United Arab Emirates" },
-  EUR: { countryCode: "EU", country: "Europe" },
-  GBP: { countryCode: "GB", country: "United Kingdom" },
-  JPY: { countryCode: "JP", country: "Japan" },
-  MAD: { countryCode: "MA", country: "Morocco" },
-  SAR: { countryCode: "SA", country: "Saudi Arabia" },
-  USD: { countryCode: "US", country: "United States" },
-};
-
-const preferredLanguageMeta = {
-  ara: { countryCode: "MA", country: "Morocco" },
-  deu: { countryCode: "DE", country: "Germany" },
-  eng: { countryCode: "GB", country: "United Kingdom" },
-  fra: { countryCode: "FR", country: "France" },
-  ita: { countryCode: "IT", country: "Italy" },
-  jpn: { countryCode: "JP", country: "Japan" },
-  kor: { countryCode: "KR", country: "South Korea" },
-  por: { countryCode: "PT", country: "Portugal" },
-  spa: { countryCode: "ES", country: "Spain" },
-  tur: { countryCode: "TR", country: "Turkiye" },
-  zho: { countryCode: "CN", country: "China" },
-};
-
-function sortWithPreferredOrder(items, preferredOrder) {
-  return [...items].sort((first, second) => {
-    const firstIndex = preferredOrder.indexOf(first.code);
-    const secondIndex = preferredOrder.indexOf(second.code);
-
-    if (firstIndex !== -1 || secondIndex !== -1) {
-      return (firstIndex === -1 ? 999 : firstIndex) - (secondIndex === -1 ? 999 : secondIndex);
-    }
-
-    return first.label.localeCompare(second.label);
-  });
-}
-
-function uniqueByCode(items) {
-  return Array.from(
-    items.reduce((map, item) => {
-      if (!map.has(item.code)) {
-        map.set(item.code, item);
-      }
-
-      return map;
-    }, new Map()).values()
-  );
-}
-
-export async function fetchTravelPreferences(signal) {
-  const response = await fetch(REST_COUNTRIES_PREFERENCES_URL, { signal });
-
-  if (!response.ok) {
-    throw new Error("Unable to load travel preferences");
-  }
-
-  const countries = await response.json();
-
-  const currencies = uniqueByCode(
-    countries.flatMap((country) => {
-      const countryName = country.name?.common || "";
-      const countryCode = country.cca2 || "";
-
-      return Object.entries(country.currencies || {}).map(([code, currency]) => {
-        const preferredMeta = preferredCurrencyMeta[code] || {};
-        const displayCountryCode = preferredMeta.countryCode || countryCode;
-
-        return {
-          code,
-          label: currency?.name || code,
-          symbol: currency?.symbol || code,
-          countryCode: displayCountryCode,
-          flag: countryCodeToFlag(displayCountryCode),
-          country: preferredMeta.country || countryName,
-        };
-      });
-    })
-  );
-
-  const languages = uniqueByCode(
-    countries.flatMap((country) => {
-      const countryName = country.name?.common || "";
-      const countryCode = country.cca2 || "";
-
-      return Object.entries(country.languages || {}).map(([code, label]) => {
-        const preferredMeta = preferredLanguageMeta[code] || {};
-        const displayCountryCode = preferredMeta.countryCode || countryCode;
-
-        return {
-          code,
-          short: languageShortCodes[code] || code.slice(0, 2).toUpperCase(),
-          label,
-          countryCode: displayCountryCode,
-          flag: countryCodeToFlag(displayCountryCode),
-          country: preferredMeta.country || countryName,
-        };
-      });
-    })
-  );
-
+export async function fetchTravelPreferences() {
   return {
-    currencies: sortWithPreferredOrder(currencies, preferredCurrencyOrder),
-    languages: sortWithPreferredOrder(languages, preferredLanguageOrder),
+    currencies: fallbackCurrencies,
+    languages: fallbackLanguages,
   };
 }

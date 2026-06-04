@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { reasonIcons } from "../icons";
 
 export default function WhySection({ image, reasons }) {
@@ -9,7 +9,6 @@ export default function WhySection({ image, reasons }) {
     <section id="why" className="why-section">
       <div className="why-content">
         <div className="why-copy">
-          <span className="why-badge">Why choose NextTrip?</span>
           <h2 className="why-title">Clear trips before you book.</h2>
           <p className="why-text">
             Compare ready packages, personal requests, agency replies, and
@@ -47,16 +46,12 @@ export default function WhySection({ image, reasons }) {
       </div>
 
       <div className="why-visual-wrap">
-        <img src={image} alt="Travel agency team planning a trip" />
-        <div className="why-floating-card">
-          <span>Comparison ready</span>
-          <strong>3 offers</strong>
-          <p>Same request, cleaner choices.</p>
-        </div>
-        <span className="why-visual-action">
-          See how it feels
-          <ArrowRight size={16} />
-        </span>
+        <img
+          src={image}
+          alt="Travel agency team planning a trip"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
     </section>
   );

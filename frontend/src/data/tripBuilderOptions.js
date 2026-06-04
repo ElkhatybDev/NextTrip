@@ -48,7 +48,7 @@ export const inspirationItems = [
   {
     name: "Bali",
     image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Kyoto",

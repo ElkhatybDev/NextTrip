@@ -24,7 +24,13 @@ export default function Footer({
       <div className="site-shell site-footer-grid">
         <div>
           <Link to="/" className="site-footer-brand" aria-label="NextTrip home">
-            <img src={logo} alt="NextTrip" className="site-footer-logo" />
+            <img
+              src={logo}
+              alt="NextTrip"
+              className="site-footer-logo"
+              loading="lazy"
+              decoding="async"
+            />
           </Link>
           <p className="site-footer-brand-text">
             Curated travel planning with direct agency support and smoother booking flows.

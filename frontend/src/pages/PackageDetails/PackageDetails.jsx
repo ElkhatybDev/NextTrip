@@ -35,6 +35,9 @@ function DetailList({ title, items, tone = "default" }) {
 export default function PackageDetails() {
   const { id } = useParams();
   const travelPackage = getPackageDetails(id);
+  const isOfferDetails = Number(travelPackage?.id) >= 100;
+  const backLink = isOfferDetails ? "/offers" : "/packages";
+  const backLabel = isOfferDetails ? "Back to offers" : "Back to packages";
 
   if (!travelPackage) {
     return (
@@ -56,12 +59,12 @@ export default function PackageDetails() {
 
       <main>
         <section className="package-detail-hero">
-          <img src={travelPackage.image} alt={travelPackage.title} />
+          <img src={travelPackage.image} alt={travelPackage.title} decoding="async" />
           <div className="package-detail-overlay" />
           <div className="site-shell package-detail-hero-content">
-            <Link to="/packages" className="package-detail-back">
+            <Link to={backLink} className="package-detail-back">
               <ArrowLeft size={16} />
-              Back to packages
+              {backLabel}
             </Link>
             <p className="package-detail-eyebrow">{travelPackage.dealTag}</p>
             <h1>{travelPackage.title}</h1>
@@ -150,8 +153,8 @@ export default function PackageDetails() {
                 {travelPackage.nextDeparture}
               </p>
             </div>
-            <Link to="/packages" className="package-detail-primary">
-              Book from packages
+            <Link to={backLink} className="package-detail-primary">
+              {isOfferDetails ? "Book from offers" : "Book from packages"}
             </Link>
             <Link to="/contact" className="package-detail-secondary">
               Ask about this deal

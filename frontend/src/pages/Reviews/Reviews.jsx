@@ -7,7 +7,7 @@ const sections = [
     items: [
       {
         title: "Fast planning",
-        text: "Travelers consistently prefer flows where they can compare packages and ask agencies direct questions without friction.",
+        text: "Travelers consistently prefer flows where they can compare packages and ask agencies direct questions easily.",
       },
       {
         title: "Clear communication",
@@ -33,20 +33,20 @@ export default function Reviews() {
   return (
     <InfoPageLayout
       eyebrow="Reviews"
-      title="Reviews matter because travelers trust real experience more than polished promises."
+      title="Reviews matter because travelers trust real experiences more than polished promises."
       description="This page focuses on the role reviews play in choosing destinations, judging agency responsiveness, and giving future travelers more confidence."
       sections={sections}
       asideTitle="Reviews snapshot"
       asideItems={[
         { label: "Main value", value: "Trust and clarity" },
-        { label: "Best paired with", value: "Packages and support" },
+        { label: "Works best with", value: "Packages and support" },
         { label: "Traveler outcome", value: "Better decisions" },
         { label: "Agency outcome", value: "Better service signals" },
       ]}
       ctaTitle="Ready to explore with context?"
       ctaText="Use reviews as guidance, then move to live packages and real agency contact."
       ctaPrimary={{ label: "See Packages", to: "/packages" }}
-      ctaSecondary={{ label: "Open Experience", to: "/experience" }}
+      ctaSecondary={{ label: "Open Experiences", to: "/experience" }}
     />
   );
 }

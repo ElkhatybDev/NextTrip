@@ -1,4 +1,17 @@
+import { getSavedLanguageCode } from "../i18n/siteLanguage";
+
 const DEFAULT_TRIP_DAYS = 4;
+const languageLocales = {
+  eng: "en",
+  fra: "fr",
+  ara: "ar",
+};
+
+function getCurrentPriceLocale() {
+  const code = typeof window === "undefined" ? "eng" : getSavedLanguageCode();
+
+  return languageLocales[code] || languageLocales.eng;
+}
 
 const budgetDailyRates = {
   Smart: 850,
@@ -220,7 +233,7 @@ function roundToNearest(value, step = 50) {
 }
 
 export function formatTripPrice(value) {
-  return new Intl.NumberFormat("en", {
+  return new Intl.NumberFormat(getCurrentPriceLocale(), {
     maximumFractionDigits: 0,
   }).format(value);
 }

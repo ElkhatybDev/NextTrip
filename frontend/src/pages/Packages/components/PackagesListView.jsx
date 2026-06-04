@@ -13,7 +13,12 @@ export default function PackagesListView({
   onClearFilters,
   onViewDetails,
   onBookNow,
+  title = "Available packages",
+  countLabel = "packages found",
+  variant = "packages",
 }) {
+  const isOffersView = variant === "offers";
+
   return (
     <main className="packages-main">
       <PackageFilter
@@ -35,8 +40,10 @@ export default function PackagesListView({
       ) : null}
       <section className="packages-head">
         <div>
-          <h3>Available Packages</h3>
-          <p>{packages.length} package(s) found</p>
+          <h3>{title}</h3>
+          <p>
+            {packages.length} {countLabel}
+          </p>
         </div>
       </section>
       {packages.length ? (
@@ -47,18 +54,19 @@ export default function PackagesListView({
               item={item}
               onViewDetails={() => onViewDetails(item)}
               onBookNow={() => onBookNow(item)}
+              showOfferBadge={isOffersView}
             />
           ))}
         </section>
       ) : (
         <section className="packages-empty">
-          <h3>No exact package found yet.</h3>
+          <h3>No exact match found yet.</h3>
           <p>
             Try another destination, choose a broader category, or clear filters
             to see every available package.
           </p>
           <button type="button" onClick={onClearFilters}>
-            Show all packages
+            Show all results
           </button>
         </section>
       )}

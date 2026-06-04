@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { Compass, MessageCircleMore, ShieldCheck, Sparkles } from "lucide-react";
+import React, { useState } from "react";
+import { Compass, MessageCircleMore, ShieldCheck } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import AuthForm from "../../components/AuthForm/AuthForm";
@@ -57,17 +57,6 @@ export default function Auth() {
 
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
-
-  const navItems = useMemo(
-    () => [
-      { label: "Home", onClick: () => navigate("/", { state: { scrollTo: "home" } }) },
-      { label: "Packages", onClick: () => navigate("/", { state: { scrollTo: "packages" } }) },
-      { label: "Why NextTrip", onClick: () => navigate("/", { state: { scrollTo: "why" } }) },
-      { label: "About", onClick: () => navigate("/", { state: { scrollTo: "about" } }) },
-      { label: "Support", to: "/support" },
-    ],
-    [navigate]
-  );
 
   const clearFeedback = () => {
     setMessage("");
@@ -173,22 +162,12 @@ export default function Auth() {
 
   return (
     <div className="auth-page">
-      <Navbar
-        navItems={navItems}
-        signInLabel="Browse Packages"
-        onSignIn={() => navigate("/packages")}
-        showProfile={false}
-      />
+      <Navbar />
 
       <main className="auth-shell">
         <section className="auth-container">
           <div className="auth-left">
             <div className="auth-left-copy">
-              <div className="auth-eyebrow">
-                <Sparkles size={16} />
-                <span>Travel access for modern planners</span>
-              </div>
-
               <div className="auth-heading-block">
                 <h1>Step back into your next journey.</h1>
                 <p className="auth-lead">

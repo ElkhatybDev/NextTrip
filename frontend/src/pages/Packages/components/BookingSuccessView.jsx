@@ -29,10 +29,10 @@ function buildReceiptText({
     `Travelers: ${travelersCount}`,
     `Rating: ${selectedPackage.rating}`,
     "",
-    `Package Price: ${pricing.tripPrice.toLocaleString()} MAD`,
-    `Taxes and Fees: ${pricing.taxes.toLocaleString()} MAD`,
-    `Travel Insurance: ${pricing.insurance.toLocaleString()} MAD`,
-    `Total Paid: ${pricing.total.toLocaleString()} MAD`,
+    `Package price: ${pricing.tripPrice.toLocaleString()} MAD`,
+    `Taxes and fees: ${pricing.taxes.toLocaleString()} MAD`,
+    `Travel insurance: ${pricing.insurance.toLocaleString()} MAD`,
+    `Total paid: ${pricing.total.toLocaleString()} MAD`,
   ].join("\n");
 }
 
@@ -66,7 +66,7 @@ export default function BookingSuccessView({
         <div className="packages-hero-overlay" />
         <div className="trip-container packages-hero-content">
           <p className="packages-badge">BOOKING CONFIRMED</p>
-          <h1>Booking Success</h1>
+          <h1>Booking successful</h1>
           <p>Your package was booked successfully. Here is your detailed receipt.</p>
         </div>
       </section>
@@ -92,7 +92,7 @@ export default function BookingSuccessView({
           <div className="success-grid">
             <div className="success-left">
               <div className="success-info-card">
-                <h3>Package Details</h3>
+                <h3>Package details</h3>
                 <div className="success-info-grid">
                   <p>
                     <span>Package:</span> {selectedPackage.title}
@@ -115,10 +115,10 @@ export default function BookingSuccessView({
                 </div>
               </div>
               <div className="success-info-card">
-                <h3>Traveler Information</h3>
+                <h3>Traveler information</h3>
                 <div className="success-info-grid">
                   <p>
-                    <span>Full Name:</span> {bookingForm.fullName || "Not provided"}
+                    <span>Full name:</span> {bookingForm.fullName || "Not provided"}
                   </p>
                   <p>
                     <span>Email:</span> {bookingForm.email || "Not provided"}
@@ -132,22 +132,22 @@ export default function BookingSuccessView({
                 </div>
               </div>
               <div className="success-info-card">
-                <h3>Payment Breakdown</h3>
+                <h3>Payment breakdown</h3>
                 <div className="payment-lines">
                   <div>
-                    <span>Package Price</span>
+                    <span>Package price</span>
                     <strong>{pricing.tripPrice.toLocaleString()} MAD</strong>
                   </div>
                   <div>
-                    <span>Taxes and Fees</span>
+                    <span>Taxes and fees</span>
                     <strong>{pricing.taxes.toLocaleString()} MAD</strong>
                   </div>
                   <div>
-                    <span>Travel Insurance</span>
+                    <span>Travel insurance</span>
                     <strong>{pricing.insurance.toLocaleString()} MAD</strong>
                   </div>
                   <div className="payment-total">
-                    <span>Total Paid</span>
+                    <span>Total paid</span>
                     <strong>{pricing.total.toLocaleString()} MAD</strong>
                   </div>
                 </div>
@@ -155,40 +155,40 @@ export default function BookingSuccessView({
             </div>
             <div className="success-right">
               <div className="success-image-card">
-                <img src={selectedPackage.image} alt={selectedPackage.title} />
+                <img src={selectedPackage.image} alt={selectedPackage.title} decoding="async" />
                 <div className="success-image-content">
                   <h3>{selectedPackage.title}</h3>
                   <p>Your booking is secured and the receipt is ready below.</p>
                 </div>
               </div>
               <div className="success-actions-card">
-                <h3>Receipt Actions</h3>
+                <h3>Receipt actions</h3>
                 <div className="success-actions">
                   <button
                     type="button"
                     className="primary-btn"
                     onClick={() => setShowReceiptPanel(true)}
                   >
-                    Download Receipt
+                    Download receipt
                   </button>
                   <button
                     type="button"
                     className="secondary-btn"
                     onClick={() => setShowEmailPanel(true)}
                   >
-                    Send by Email
+                    Send by email
                   </button>
                   <button type="button" className="secondary-btn" onClick={onBackToBooking}>
-                    Back to Booking
+                    Back to booking
                   </button>
                   <button type="button" className="secondary-btn" onClick={onBackToPackages}>
-                    Back to Packages
+                    Back to packages
                   </button>
                 </div>
                 {showReceiptPanel ? (
                   <div className="receipt-panel">
                     <div className="panel-head">
-                      <h4>Receipt Ready</h4>
+                      <h4>Receipt ready</h4>
                       <button type="button" onClick={() => setShowReceiptPanel(false)}>
                         Close
                       </button>
@@ -203,7 +203,7 @@ export default function BookingSuccessView({
                 {showEmailPanel ? (
                   <div className="receipt-panel">
                     <div className="panel-head">
-                      <h4>Email Draft Ready</h4>
+                      <h4>Email draft ready</h4>
                       <button type="button" onClick={() => setShowEmailPanel(false)}>
                         Close
                       </button>

@@ -5,7 +5,7 @@ export const workspacePages = {
     eyebrow: "Access model",
     title: "User workspace for clients, agencies, and admins.",
     description:
-      "A clean view for roles, account status, verification, and the actions each user type can access.",
+      "A clear view of roles, account status, verification, and the actions each user type can access.",
     heroMetric: "3 roles",
     heroLabel: "Client, agent, admin",
     status: "Identity ready",
@@ -352,7 +352,7 @@ export const workspacePages = {
       "Central place to preview booking alerts, quote updates, message notifications, and admin warnings.",
     heroMetric: "91 alerts",
     heroLabel: "Last 24 hours",
-    status: "Realtime ready",
+    status: "Real-time ready",
     stats: [
       { label: "Unread", value: "17" },
       { label: "Booking alerts", value: "42" },
@@ -433,7 +433,7 @@ export const workspacePages = {
     slug: "conversations",
     icon: "messages",
     eyebrow: "Chat model",
-    title: "Conversation and message center.",
+    title: "Conversation and messaging center.",
     description:
       "A simple chat view for traveler, agency, and admin conversations connected to bookings and trip requests.",
     heroMetric: "38 threads",

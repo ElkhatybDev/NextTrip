@@ -13,7 +13,7 @@ export const packageCatalog = [
     nextDeparture: "2026-06-18",
     agency: "Aegean Blue Travel",
     image:
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/16511639/pexels-photo-16511639.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "White cliffside houses, sea views, boutique stays, and unforgettable sunset moments.",
     details:
@@ -52,7 +52,7 @@ export const packageCatalog = [
     nextDeparture: "2026-07-04",
     agency: "Sakura Routes",
     image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/1673978/pexels-photo-1673978.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Traditional temples, quiet streets, gardens, and a calm cultural atmosphere.",
     details:
@@ -91,7 +91,7 @@ export const packageCatalog = [
     nextDeparture: "2026-12-10",
     agency: "Alpine Signature",
     image:
-      "https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/27436132/pexels-photo-27436132.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Snowy peaks, premium chalets, scenic train rides, and peaceful alpine comfort.",
     details:
@@ -130,7 +130,7 @@ export const packageCatalog = [
     nextDeparture: "2026-06-02",
     agency: "Gulf City Escapes",
     image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/21765772/pexels-photo-21765772.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Modern luxury, iconic towers, premium shopping, and an energetic city break.",
     details:
@@ -169,7 +169,7 @@ export const packageCatalog = [
     nextDeparture: "2026-08-15",
     agency: "Island Calm Studio",
     image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Tropical greenery, peaceful villas, spa moments, and serene island energy.",
     details:
@@ -208,7 +208,7 @@ export const packageCatalog = [
     nextDeparture: "2026-09-09",
     agency: "Mediterraneo Trips",
     image:
-      "https://images.unsplash.com/photo-1612698093158-e07ac200d44e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/10436112/pexels-photo-10436112.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Colorful coastal towns, cliffside roads, sea views, and elegant Italian charm.",
     details:
@@ -247,7 +247,7 @@ export const packageCatalog = [
     nextDeparture: "2026-06-22",
     agency: "Atlas Gate Travel",
     image:
-      "https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/32013475/pexels-photo-32013475.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Riads, souks, guided city moments, and a warm Moroccan cultural route.",
     details:
@@ -286,7 +286,7 @@ export const packageCatalog = [
     nextDeparture: "2026-07-12",
     agency: "Summit Path Agency",
     image:
-      "https://images.unsplash.com/photo-1517821366952-67edb011a8ca?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/34100469/pexels-photo-34100469.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "Mountain villages, scenic valleys, light trekking, and active outdoor days.",
     details:
@@ -325,11 +325,11 @@ export const packageCatalog = [
     nextDeparture: "2026-09-20",
     agency: "Noor Journey Travel",
     image:
-      "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=1200&q=80",
+      "https://images.pexels.com/photos/28209449/pexels-photo-28209449.jpeg?auto=compress&cs=tinysrgb&w=1200",
     description:
       "A calm religious travel package with hotel planning and organized support.",
     details:
-      "Plan a religious trip with hotel options near key areas, transfer support, schedule guidance, and a cleaner travel flow for individuals, couples, or families.",
+      "Plan a religious trip with hotel options near key areas, transfer support, schedule guidance, and a clearer travel flow for individuals, couples, or families.",
     highlights: [
       "Religion category works with the Home trip-type filter.",
       "Designed for calm pacing and clear travel organization.",
@@ -345,6 +345,315 @@ export const packageCatalog = [
       { title: "Day 1", text: "Arrival, hotel check-in, and rest." },
       { title: "Day 2", text: "Organized religious schedule with agency support." },
       { title: "Day 3", text: "Flexible timing for family comfort and personal needs." },
+    ],
+    notIncluded: ["Visa fees", "Flights if not selected", "Personal meals"],
+    availableAddOns: ["Flight support", "Premium hotel upgrade", "Private transfer"],
+    requirements: ["Valid passport", "Required travel documents"],
+  },
+];
+
+export const offerCatalog = [
+  {
+    id: 101,
+    title: "Marrakech Flash Escape",
+    location: "Marrakech, Morocco",
+    category: "Culture",
+    duration: "4 Days / 3 Nights",
+    price: 5200,
+    rating: 4.7,
+    dealTag: "Limited Offer",
+    difficulty: "Easy",
+    groupSize: "2-6 travelers",
+    nextDeparture: "2026-06-14",
+    agency: "Red City Deals",
+    image:
+      "https://images.pexels.com/photos/32013475/pexels-photo-32013475.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "A short riad stay with medina walks, airport pickup, and a clear city plan.",
+    details:
+      "This Marrakech offer is made for travelers who want a quick cultural escape with a riad stay, guided medina moments, airport pickup, and simple agency support from arrival to checkout.",
+    highlights: [
+      "Discounted riad stay close to the medina.",
+      "Good for a quick Morocco city break.",
+      "Includes a simple guided route for first-time visitors.",
+    ],
+    includes: ["Riad stay for 3 nights", "Airport pickup", "Medina walking plan", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, transfer to riad, and relaxed evening near Jemaa el-Fnaa." },
+      { title: "Day 2", text: "Medina walk, souk route, and local food stops." },
+      { title: "Day 3", text: "Gardens, optional hammam, and free evening." },
+    ],
+    notIncluded: ["Flights", "Lunches", "Personal shopping"],
+    availableAddOns: ["Agafay dinner", "Hammam session", "Private city guide"],
+    requirements: ["Valid ID or passport", "Comfortable shoes"],
+  },
+  {
+    id: 102,
+    title: "Istanbul Weekend Deal",
+    location: "Istanbul, Turkey",
+    category: "City",
+    duration: "4 Days / 3 Nights",
+    price: 6900,
+    rating: 4.6,
+    dealTag: "Weekend Deal",
+    difficulty: "Easy",
+    groupSize: "1-6 travelers",
+    nextDeparture: "2026-06-21",
+    agency: "Bosphorus Trip Hub",
+    image:
+      "https://images.pexels.com/photos/12298253/pexels-photo-12298253.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Hotel, airport transfer, old city highlights, and a practical short-stay route.",
+    details:
+      "A focused Istanbul weekend offer with central hotel options, transfer support, old city planning, Bosphorus timing suggestions, and agency help for a smooth city stay.",
+    highlights: [
+      "Central location for easier city movement.",
+      "Short route covering the main old city landmarks.",
+      "Flexible add-ons for cruise or food experiences.",
+    ],
+    includes: ["Hotel stay for 3 nights", "Airport transfer guidance", "Old city route", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, hotel setup, and first evening walk." },
+      { title: "Day 2", text: "Old city highlights and local dining suggestions." },
+      { title: "Day 3", text: "Bosphorus area, shopping time, and optional cruise." },
+    ],
+    notIncluded: ["Flights", "Museum tickets", "Meals not listed"],
+    availableAddOns: ["Bosphorus cruise", "Food tour", "Private transfer"],
+    requirements: ["Valid passport", "Comfortable walking shoes"],
+  },
+  {
+    id: 103,
+    title: "Dubai Family Saver",
+    location: "Dubai, UAE",
+    category: "City",
+    duration: "5 Days / 4 Nights",
+    price: 11200,
+    rating: 4.8,
+    dealTag: "Family Offer",
+    difficulty: "Easy",
+    groupSize: "2-8 travelers",
+    nextDeparture: "2026-07-02",
+    agency: "Palm Deals Travel",
+    image:
+      "https://images.pexels.com/photos/21765772/pexels-photo-21765772.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Family-friendly hotel, transfers, skyline stops, and optional desert evening.",
+    details:
+      "This Dubai offer focuses on families and small groups with comfortable hotel options, transfer coordination, skyline planning, mall time, and a well-structured optional desert evening.",
+    highlights: [
+      "Family-friendly pacing with flexible free time.",
+      "Useful for skyline, shopping, and desert add-ons.",
+      "Clear agency support for transfers and timing.",
+    ],
+    includes: ["Hotel stay for 4 nights", "Transfer coordination", "City route suggestions", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, hotel check-in, and relaxed evening." },
+      { title: "Day 2", text: "Skyline stops, mall time, and optional attraction booking." },
+      { title: "Day 3", text: "Beach or desert add-on with flexible timing." },
+    ],
+    notIncluded: ["Flights", "Attraction tickets", "Personal shopping"],
+    availableAddOns: ["Desert safari", "Burj Khalifa ticket", "Theme park day"],
+    requirements: ["Valid passport", "Respect local dress codes"],
+  },
+  {
+    id: 104,
+    title: "Paris Spring Promo",
+    location: "Paris, France",
+    category: "Romantic",
+    duration: "5 Days / 4 Nights",
+    price: 9800,
+    rating: 4.7,
+    dealTag: "Spring Promo",
+    difficulty: "Easy",
+    groupSize: "2-4 travelers",
+    nextDeparture: "2026-06-28",
+    agency: "Seine Select",
+    image:
+      "https://images.pexels.com/photos/2082103/pexels-photo-2082103.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "A compact Paris stay with hotel, transfer help, viewpoints, and café routes.",
+    details:
+      "A romantic Paris offer with comfortable hotel planning, transfer guidance, viewpoint routes, café suggestions, and enough free time to keep the trip simple and easy.",
+    highlights: [
+      "Good value for couples and calm city stays.",
+      "Balanced between landmarks and free time.",
+      "Easy add-ons for museums or dinner reservations.",
+    ],
+    includes: ["Hotel stay for 4 nights", "Transfer guidance", "Viewpoint route", "Agency planning notes"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, hotel check-in, and evening walk." },
+      { title: "Day 2", text: "Classic landmarks and cafe stops." },
+      { title: "Day 3", text: "Museum or neighborhood day with free time." },
+    ],
+    notIncluded: ["Flights", "Museum tickets", "City taxes"],
+    availableAddOns: ["Dinner reservation", "Museum pass", "Private photo walk"],
+    requirements: ["Valid passport", "Comfortable shoes"],
+  },
+  {
+    id: 105,
+    title: "Bali Calm Offer",
+    location: "Ubud, Bali",
+    category: "Relax",
+    duration: "7 Days / 6 Nights",
+    price: 8900,
+    rating: 4.8,
+    dealTag: "Wellness Offer",
+    difficulty: "Easy",
+    groupSize: "1-4 travelers",
+    nextDeparture: "2026-08-06",
+    agency: "Lotus Stay Deals",
+    image:
+      "https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Villa-style stay, greenery, spa suggestions, and relaxed island planning.",
+    details:
+      "A calm Bali offer for travelers who want a soft reset with villa-style stays, greenery-focused plans, spa suggestions, waterfall options, and flexible daily pacing.",
+    highlights: [
+      "Strong fit for wellness and quiet travel.",
+      "Flexible days instead of a rushed itinerary.",
+      "Optional spa, yoga, and waterfall add-ons.",
+    ],
+    includes: ["Villa-style stay", "Airport coordination", "Wellness route notes", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, check-in, and calm evening." },
+      { title: "Day 2", text: "Wellness day with spa or yoga suggestions." },
+      { title: "Day 3", text: "Green landscapes, cafés, and free time." },
+    ],
+    notIncluded: ["Flights", "Extra spa treatments", "Scooter rental"],
+    availableAddOns: ["Yoga package", "Waterfall tour", "Cooking class"],
+    requirements: ["Valid passport", "Light clothing"],
+  },
+  {
+    id: 106,
+    title: "Lisbon Light Deal",
+    location: "Lisbon, Portugal",
+    category: "Seaside",
+    duration: "5 Days / 4 Nights",
+    price: 7600,
+    rating: 4.6,
+    dealTag: "City + Sea",
+    difficulty: "Easy",
+    groupSize: "1-6 travelers",
+    nextDeparture: "2026-07-18",
+    agency: "Atlantic Offer Desk",
+    image:
+      "https://images.pexels.com/photos/27517994/pexels-photo-27517994.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Sunny streets, viewpoints, coastal day options, and simple hotel planning.",
+    details:
+      "This Lisbon offer blends sunny city routes with coastal day options, hotel planning, viewpoint suggestions, and enough free space for food stops and relaxed exploration.",
+    highlights: [
+      "Good balance between city and seaside mood.",
+      "Easy route for solo travelers or couples.",
+      "Optional day trip to Sintra or Cascais.",
+    ],
+    includes: ["Hotel stay for 4 nights", "City route suggestions", "Coastal day planning", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival and easy neighborhood walk." },
+      { title: "Day 2", text: "Viewpoints, historic streets, and food stops." },
+      { title: "Day 3", text: "Optional coast or Sintra day." },
+    ],
+    notIncluded: ["Flights", "Train tickets", "Meals not listed"],
+    availableAddOns: ["Sintra day trip", "Food tour", "Private transfer"],
+    requirements: ["Valid passport", "Comfortable shoes"],
+  },
+  {
+    id: 107,
+    title: "Atlas Group Discount",
+    location: "Imlil, Morocco",
+    category: "Adventure",
+    duration: "3 Days / 2 Nights",
+    price: 3400,
+    rating: 4.7,
+    dealTag: "Group Discount",
+    difficulty: "Moderate",
+    groupSize: "4-12 travelers",
+    nextDeparture: "2026-06-19",
+    agency: "Atlas Weekend Deals",
+    image:
+      "https://images.pexels.com/photos/34100469/pexels-photo-34100469.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Mountain weekend with guesthouse stay, local guide, and light trekking.",
+    details:
+      "A short Atlas offer for groups who want nature without a long trip: guesthouse stay, local guide coordination, light trekking, village lunch options, and simple transport support.",
+    highlights: [
+      "Made for groups and weekend movement.",
+      "Light adventure without advanced trekking requirements.",
+      "Local guide and guesthouse support included.",
+    ],
+    includes: ["Guesthouse stay", "Local guide", "Light trekking route", "Transfer coordination"],
+    itinerary: [
+      { title: "Day 1", text: "Transfer to the mountains and guesthouse check-in." },
+      { title: "Day 2", text: "Guided valley walk and local lunch option." },
+      { title: "Day 3", text: "Morning viewpoint and return planning." },
+    ],
+    notIncluded: ["Flights", "Advanced gear", "Personal snacks"],
+    availableAddOns: ["Private transport", "Mountain bike route", "Extra guide"],
+    requirements: ["Walking shoes", "Warm layer"],
+  },
+  {
+    id: 108,
+    title: "Rome Heritage Special",
+    location: "Rome, Italy",
+    category: "Culture",
+    duration: "5 Days / 4 Nights",
+    price: 9300,
+    rating: 4.8,
+    dealTag: "Heritage Special",
+    difficulty: "Easy",
+    groupSize: "1-6 travelers",
+    nextDeparture: "2026-09-03",
+    agency: "Viva Roma Offers",
+    image:
+      "https://images.pexels.com/photos/13540894/pexels-photo-13540894.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Classic Rome stay with hotel planning, old city walks, and food-route tips.",
+    details:
+      "A culture-first Rome offer with hotel planning, historic walking routes, food suggestions, and optional ticket support for travelers who want a clear heritage city plan.",
+    highlights: [
+      "Strong culture route for first-time Rome visitors.",
+      "Food and old city timing suggestions included.",
+      "Optional guided landmark add-ons.",
+    ],
+    includes: ["Hotel stay for 4 nights", "Historic walking plan", "Food-route notes", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, hotel setup, and evening old city walk." },
+      { title: "Day 2", text: "Historic landmarks and local food stops." },
+      { title: "Day 3", text: "Flexible museum or neighborhood day." },
+    ],
+    notIncluded: ["Flights", "Entry tickets", "City taxes"],
+    availableAddOns: ["Guided landmark tour", "Cooking class", "Museum tickets"],
+    requirements: ["Valid passport", "Comfortable shoes"],
+  },
+  {
+    id: 109,
+    title: "Umrah Early Saver",
+    location: "Makkah, Saudi Arabia",
+    category: "Religion",
+    duration: "9 Days / 8 Nights",
+    price: 12900,
+    rating: 4.9,
+    dealTag: "Early Saver",
+    difficulty: "Easy",
+    groupSize: "1-10 travelers",
+    nextDeparture: "2026-10-12",
+    agency: "Noor Saver Trips",
+    image:
+      "https://images.pexels.com/photos/33372679/pexels-photo-33372679.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    description:
+      "Organized religious stay with hotel planning, transfer support, and clear timing.",
+    details:
+      "An early saver religious travel offer with hotel planning, transfer support, schedule guidance, and agency coordination for individuals, couples, or families.",
+    highlights: [
+      "Early booking value for religious travel.",
+      "Clear hotel and transfer coordination.",
+      "Useful for families needing organized timing.",
+    ],
+    includes: ["Hotel stay planning", "Transfer coordination", "Basic schedule guidance", "Agency support"],
+    itinerary: [
+      { title: "Day 1", text: "Arrival, transfer, and hotel check-in." },
+      { title: "Day 2", text: "Organized religious schedule with agency support." },
+      { title: "Day 3", text: "Flexible personal timing and rest." },
     ],
     notIncluded: ["Visa fees", "Flights if not selected", "Personal meals"],
     availableAddOns: ["Flight support", "Premium hotel upgrade", "Private transfer"],

@@ -103,7 +103,7 @@ export default function Dashboard() {
     );
     setPage("bookings");
     setBookingFilter("review");
-    notify("Offer submitted successfully.");
+    notify("Agency offer sent to traveler.");
   };
 
   const markRead = (id) => {
@@ -130,7 +130,7 @@ export default function Dashboard() {
 
   const createPackage = () => {
     if (!packageForm.title || !packageForm.place || !packageForm.price) {
-      notify("Fill package title, place and price.");
+      notify("Fill package title, place, and price.");
       return;
     }
 
@@ -156,7 +156,7 @@ export default function Dashboard() {
     setPackageFile(null);
     setShowPackageModal(false);
     setPage("packages");
-    notify("Package created.");
+    notify("Agency package created.");
   };
 
   const sendMessage = () => {
@@ -179,7 +179,7 @@ export default function Dashboard() {
     setMessageForm(emptyMessageForm);
     setShowMessageModal(false);
     setPage("messages");
-    notify("Message sent.");
+    notify("Traveler message sent.");
   };
 
   return (
@@ -232,7 +232,7 @@ export default function Dashboard() {
                 bookingStats={bookingStats}
                 onBookingFilterChange={setBookingFilter}
                 onSubmitOffer={submitOffer}
-                onExport={() => notify("Bookings exported.")}
+                onExport={() => notify("Traveler requests exported.")}
               />
             )}
 
@@ -240,7 +240,7 @@ export default function Dashboard() {
               <PackagesSection
                 packages={filteredPackages}
                 onCreatePackage={() => setShowPackageModal(true)}
-                onViewDetails={(item) => notify(`${item.title} opened.`)}
+                onViewDetails={(item) => notify(`${item.title} ready for agency edits.`)}
               />
             )}
 

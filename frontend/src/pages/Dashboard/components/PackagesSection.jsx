@@ -10,12 +10,12 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
   return (
     <section className="dashboard-section">
       <SectionTitle
-        title="Featured packages"
-        subtitle="Curated travel products ready to sell"
+        title="Agency packages"
+        subtitle="Ready travel packages published by your agency"
         action={
           <button type="button" onClick={onCreatePackage} className="primary-btn">
             <PlusIcon size={16} />
-            Add package
+            Add agency package
           </button>
         }
       />
@@ -23,7 +23,13 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
       <div className="packages-grid">
         {packages.map((item) => (
           <div key={item.id} className="package-card">
-            <img src={item.image} alt={item.title} className="package-image" />
+            <img
+              src={item.image}
+              alt={item.title}
+              className="package-image"
+              loading="lazy"
+              decoding="async"
+            />
 
             <div className="package-content">
               <div className="package-top">
@@ -36,6 +42,12 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
                 </StatusBadge>
               </div>
 
+              <div className="package-meta-row">
+                <span>{item.category}</span>
+                <span>{item.duration}</span>
+                <span>{item.requests} matching requests</span>
+              </div>
+
               <div className="package-bottom">
                 <strong>{item.price}</strong>
                 <button
@@ -43,7 +55,7 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
                   onClick={() => onViewDetails(item)}
                   className="secondary-btn"
                 >
-                  View details
+                  Manage package
                   <ChevronIcon size={16} />
                 </button>
               </div>

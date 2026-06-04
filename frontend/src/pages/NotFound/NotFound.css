@@ -1,9 +1,13 @@
-.notfound-page {
+.notfound-shell {
   min-height: 100vh;
+  background: linear-gradient(to bottom right, #eef2ff, #f8fafc);
+}
+
+.notfound-page {
+  min-height: calc(100vh - 74px);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom right, #eef2ff, #f8fafc);
   padding: 24px;
 }
 

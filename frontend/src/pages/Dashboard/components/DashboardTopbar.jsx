@@ -1,5 +1,5 @@
 import React from "react";
-import { dashboardPageTitles } from "../../../data/dashboardContent";
+import { agencySummary, dashboardPageTitles } from "../../../data/dashboardContent";
 import { dashboardIcons } from "../icons";
 
 export default function DashboardTopbar({
@@ -32,8 +32,17 @@ export default function DashboardTopbar({
   return (
     <div className="dashboard-topbar">
       <div>
+        <span className="topbar-agency-label">{agencySummary.type}</span>
         <h2>{dashboardPageTitles[page]}</h2>
-        <p>Monitor requests, manage offers, and keep your agency workflow organized.</p>
+        <p>
+          {agencySummary.name} manages traveler requests, ready packages, and
+          agency replies from one clean workspace.
+        </p>
+        <div className="topbar-agency-meta">
+          <span>{agencySummary.location}</span>
+          <span>{agencySummary.phone}</span>
+          <span>{agencySummary.email}</span>
+        </div>
       </div>
 
       <div className="topbar-actions">
@@ -42,7 +51,7 @@ export default function DashboardTopbar({
           <input
             value={search}
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search anything..."
+            placeholder="Search traveler, package, or destination..."
           />
         </div>
 
@@ -63,30 +72,30 @@ export default function DashboardTopbar({
             <div className="dropdown-menu filter-menu">
               <button
                 type="button"
-                onClick={() => selectBookingFilter("all", "All bookings selected.")}
+                onClick={() => selectBookingFilter("all", "All traveler requests selected.")}
                 className={`dropdown-item ${
                   bookingFilter === "all" ? "dropdown-item-active-blue" : ""
                 }`}
               >
-                All bookings
+                All requests
               </button>
               <button
                 type="button"
-                onClick={() => selectBookingFilter("pending", "Pending bookings selected.")}
+                onClick={() => selectBookingFilter("pending", "Pending traveler requests selected.")}
                 className={`dropdown-item ${
                   bookingFilter === "pending" ? "dropdown-item-active-orange" : ""
                 }`}
               >
-                Pending bookings
+                Pending requests
               </button>
               <button
                 type="button"
-                onClick={() => selectBookingFilter("review", "Review bookings selected.")}
+                onClick={() => selectBookingFilter("review", "Requests in review selected.")}
                 className={`dropdown-item ${
                   bookingFilter === "review" ? "dropdown-item-active-review" : ""
                 }`}
               >
-                Review bookings
+                In review
               </button>
             </div>
           ) : null}
@@ -127,7 +136,7 @@ export default function DashboardTopbar({
                   }}
                   className="notification-item"
                 >
-                  <p>{pendingBookings} pending booking request(s)</p>
+                  <p>{pendingBookings} pending traveler request(s)</p>
                   <small>Review and send offers</small>
                 </button>
 
@@ -139,8 +148,8 @@ export default function DashboardTopbar({
                   }}
                   className="notification-item"
                 >
-                  <p>{activePackages} active package(s)</p>
-                  <small>Check your package library</small>
+                  <p>{activePackages} active packages</p>
+                  <small>Check your agency package library</small>
                 </button>
               </div>
 

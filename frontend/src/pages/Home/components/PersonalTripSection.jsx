@@ -2,9 +2,6 @@ import React from "react";
 import {
   ArrowRight,
   CalendarDays,
-  FileText,
-  Hotel,
-  MapPinned,
   SlidersHorizontal,
   UsersRound,
 } from "lucide-react";
@@ -26,12 +23,6 @@ export default function PersonalTripSection({ onCreateTrip }) {
       title: "Compare replies",
       text: "Agencies answer with organized offers so you can choose without confusion.",
     },
-  ];
-
-  const requestItems = [
-    { icon: <MapPinned size={15} />, text: "Destination" },
-    { icon: <CalendarDays size={15} />, text: "Dates" },
-    { icon: <Hotel size={15} />, text: "Hotel level" },
   ];
 
   return (
@@ -60,34 +51,13 @@ export default function PersonalTripSection({ onCreateTrip }) {
               </article>
             ))}
           </div>
-        </div>
 
-        <div className="personal-trip-preview">
-          <div className="personal-trip-preview-top">
-            <span>
-              <FileText size={18} />
-            </span>
-            <div>
-              <p>Custom request</p>
-              <strong>Plan your trip your way.</strong>
-            </div>
-          </div>
-
-          <p className="personal-trip-preview-text">
-            Add the basics and send one clear request to agencies.
-          </p>
-
-          <div className="personal-trip-preview-grid">
-            {requestItems.map((item) => (
-              <div key={item.text}>
-                <span>{item.icon}</span>
-                <strong>{item.text}</strong>
-              </div>
-            ))}
-          </div>
-
-          <button type="button" className="personal-trip-action" onClick={onCreateTrip}>
-            Start custom trip
+          <button
+            type="button"
+            className="personal-trip-action personal-trip-content-action"
+            onClick={onCreateTrip}
+          >
+            Create Trip
             <ArrowRight size={18} />
           </button>
         </div>

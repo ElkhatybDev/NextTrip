@@ -1,3 +1,29 @@
+import { getSavedLanguageCode } from "../i18n/siteLanguage";
+
+const languageLocales = {
+  eng: "en",
+  fra: "fr",
+  ara: "ar",
+};
+
+const weekdayLabelsByLanguage = {
+  eng: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+  fra: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+  ara: ["ح", "ن", "ث", "ر", "خ", "ج", "س"],
+};
+
+function getCurrentLanguageCode() {
+  return typeof window === "undefined" ? "eng" : getSavedLanguageCode();
+}
+
+export function getCurrentTravelLocale() {
+  return languageLocales[getCurrentLanguageCode()] || languageLocales.eng;
+}
+
+export function getWeekdayLabels() {
+  return weekdayLabelsByLanguage[getCurrentLanguageCode()] || weekdayLabelsByLanguage.eng;
+}
+
 export function getTodayDate() {
   return toDateValue(new Date());
 }
@@ -61,6 +87,16 @@ export function buildCalendarDays(monthDate) {
 
 export function formatTravelDate(dateValue) {
   if (!dateValue) {
+    const code = getCurrentLanguageCode();
+
+    if (code === "fra") {
+      return "Choisir une date";
+    }
+
+    if (code === "ara") {
+      return "اختر تاريخا";
+    }
+
     return "Pick a date";
   }
 
@@ -70,7 +106,7 @@ export function formatTravelDate(dateValue) {
     return dateValue;
   }
 
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(getCurrentTravelLocale(), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -78,24 +114,49 @@ export function formatTravelDate(dateValue) {
 }
 
 export function formatMonthTitle(date) {
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(getCurrentTravelLocale(), {
     month: "long",
     year: "numeric",
   }).format(date);
 }
 
 export function formatGuestSummary(guestCounts) {
+  const code = getCurrentLanguageCode();
   const guests = guestCounts.adults + guestCounts.children + guestCounts.infants;
   const pets = guestCounts.pets;
   const parts = [];
 
   if (guests > 0) {
-    parts.push(`${guests} ${guests === 1 ? "guest" : "guests"}`);
+    if (code === "fra") {
+      parts.push(`${guests} ${guests === 1 ? "invité" : "invités"}`);
+    } else if (code === "ara") {
+      parts.push(`${guests} ${guests === 1 ? "ضيف" : "ضيوف"}`);
+    } else {
+      parts.push(`${guests} ${guests === 1 ? "guest" : "guests"}`);
+    }
   }
 
   if (pets > 0) {
-    parts.push(`${pets} ${pets === 1 ? "pet" : "pets"}`);
+    if (code === "fra") {
+      parts.push(`${pets} ${pets === 1 ? "animal" : "animaux"}`);
+    } else if (code === "ara") {
+      parts.push(`${pets} ${pets === 1 ? "حيوان أليف" : "حيوانات أليفة"}`);
+    } else {
+      parts.push(`${pets} ${pets === 1 ? "pet" : "pets"}`);
+    }
   }
 
-  return parts.length ? parts.join(", ") : "Add guests";
+  if (parts.length) {
+    return parts.join(", ");
+  }
+
+  if (code === "fra") {
+    return "Ajouter des voyageurs";
+  }
+
+  if (code === "ara") {
+    return "أضف مسافرين";
+  }
+
+  return "Add guests";
 }

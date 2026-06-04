@@ -16,12 +16,12 @@ export default function MessagesSection({
   return (
     <section className="dashboard-section">
       <SectionTitle
-        title="Latest messages"
-        subtitle="Stay close to your travelers and answer faster"
+        title="Traveler messages"
+        subtitle="Keep every traveler conversation close to the agency workflow"
         action={
           <button type="button" onClick={onCreateMessage} className="primary-btn">
             <SendIcon size={16} />
-            New message
+            Reply to traveler
           </button>
         }
       />

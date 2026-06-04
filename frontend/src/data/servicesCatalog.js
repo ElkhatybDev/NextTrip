@@ -36,7 +36,7 @@ export const serviceCatalog = [
     eyebrow: "Trip confidence",
     summary:
       "Keep booking details, receipts, support steps, and follow-ups in one place.",
-    bestFor: "Travelers who want clean booking tracking.",
+    bestFor: "Travelers who want clear booking tracking.",
     includes: [
       "Booking status overview",
       "Payment and receipt summary",
@@ -51,7 +51,7 @@ export const serviceCatalog = [
     eyebrow: "Agency workspace",
     summary:
       "Help agencies organize offers, requests, messages, and package performance from the dashboard.",
-    bestFor: "Agencies that need a cleaner travel workspace.",
+    bestFor: "Agencies that need a clearer travel workspace.",
     includes: [
       "Package publishing flow",
       "Request management",

@@ -16,7 +16,13 @@ export default function ExperiencePostCard({
         <div className="post-top">
           <div className="post-user">
             {post.avatar ? (
-              <img src={post.avatar} alt={post.user} className="user-avatar" />
+              <img
+                src={post.avatar}
+                alt={post.user}
+                className="user-avatar"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               <div className="unknown-avatar" aria-hidden="true">
                 <User size={16} />
@@ -40,7 +46,13 @@ export default function ExperiencePostCard({
 
         <div className="post-media-box">
           {post.image ? (
-            <img src={post.image} alt={post.tripTitle} className="post-image" />
+            <img
+              src={post.image}
+              alt={post.tripTitle}
+              className="post-image"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="post-placeholder">
               <div>

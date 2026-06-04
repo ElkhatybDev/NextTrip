@@ -6,7 +6,6 @@ import {
   MapPin,
   Send,
   SlidersHorizontal,
-  Sparkles,
   UsersRound,
   WalletCards,
 } from "lucide-react";
@@ -107,7 +106,7 @@ export default function CreateTrip() {
     },
     {
       icon: WalletCards,
-      label: "Estimated Price",
+      label: "Estimated price",
       value: priceEstimate.totalLabel,
     },
   ];
@@ -129,14 +128,10 @@ export default function CreateTrip() {
         <div className="trip-hero-overlay" />
         <div className="trip-container trip-hero-content trip-hero-grid">
           <div>
-            <p className="trip-hero-badge">
-              <Sparkles size={14} />
-              PERSONALIZED TRAVEL REQUEST
-            </p>
             <h1>Create a trip brief agencies can answer faster.</h1>
             <p>
               Choose your destination, mood, budget, travelers, services, and notes.
-              NextTrip turns that into a clean request ready for agencies.
+              NextTrip turns that into a clear request ready for agencies.
             </p>
             <div className="trip-hero-actions">
               <span>
@@ -155,7 +150,7 @@ export default function CreateTrip() {
               <SlidersHorizontal size={22} />
               <div>
                 <span>Trip builder</span>
-                <strong>4 step request</strong>
+                <strong>4-step request</strong>
               </div>
             </div>
             <div className="trip-flow-list">
@@ -207,7 +202,7 @@ export default function CreateTrip() {
               </div>
               <p className="trip-live-note">
                 Agencies receive this as a structured request, so they can reply with
-                cleaner offers instead of asking for missing details.
+                clearer offers instead of asking for missing details.
               </p>
             </aside>
 

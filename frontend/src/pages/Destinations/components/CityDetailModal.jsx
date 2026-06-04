@@ -1,7 +1,24 @@
-import React from "react";
-import { CalendarDays, Clock3, MapPin, Sparkles, X } from "lucide-react";
+import React, { useEffect, useRef } from "react";
+import { CalendarDays, Clock3, MapPin, X } from "lucide-react";
 
 export default function CityDetailModal({ city, onClose }) {
+  const modalRef = useRef(null);
+  const mediaRef = useRef(null);
+
+  useEffect(() => {
+    if (!city) {
+      return undefined;
+    }
+
+    modalRef.current?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+    const frameId = window.requestAnimationFrame(() => {
+      mediaRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [city]);
+
   if (!city) {
     return null;
   }
@@ -9,6 +26,7 @@ export default function CityDetailModal({ city, onClose }) {
   return (
     <div className="city-modal-backdrop" role="presentation" onClick={onClose}>
       <section
+        ref={modalRef}
         className="city-modal"
         role="dialog"
         aria-modal="true"
@@ -19,12 +37,18 @@ export default function CityDetailModal({ city, onClose }) {
           <X size={20} />
         </button>
 
-        <div className="city-modal-media">
-          <video src={city.video} poster={city.image} controls muted loop playsInline preload="metadata" />
-          <span>
-            <Sparkles size={15} />
-            Video preview
-          </span>
+        <div className="city-modal-media" ref={mediaRef}>
+          <video
+            key={city.name}
+            src={city.video}
+            poster={city.image}
+            controls
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          />
         </div>
 
         <div className="city-modal-content">
