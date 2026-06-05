@@ -14,6 +14,13 @@
   justify-items: end;
   gap: 12px;
   pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 0.18s ease,
+    visibility 0.18s ease,
+    transform 0.2s ease;
 }
 
 .nt-chatbot-root * {
@@ -23,6 +30,13 @@
 .nt-chatbot-window,
 .nt-chatbot-toggle {
   pointer-events: auto;
+}
+
+body.nexttrip-side-menu-open .nt-chatbot-root {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) scale(0.94);
 }
 
 .nt-chatbot-window {

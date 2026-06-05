@@ -400,6 +400,7 @@ export default function Navbar({
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("nexttrip-side-menu-open");
 
     const closeOnEscape = (event) => {
       if (event.key === "Escape") {
@@ -411,6 +412,7 @@ export default function Navbar({
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("nexttrip-side-menu-open");
       document.removeEventListener("keydown", closeOnEscape);
     };
   }, [isMenuOpen]);
