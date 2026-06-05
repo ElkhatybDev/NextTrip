@@ -33,6 +33,11 @@ const HowItWorks = lazy(() => import("../pages/HowItWorks/HowItWorks"));
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const MyBookings = lazy(() => import("../pages/MyBookings/MyBookings"));
 const TripRequestDetails = lazy(() => import("../pages/TripRequestDetails/TripRequestDetails"));
+const TripRequestSent = lazy(() => import("../pages/TripRequestSent/TripRequestSent"));
+const TripRequestEdit = lazy(() => import("../pages/TripRequestEdit/TripRequestEdit"));
+const TripOffers = lazy(() => import("../pages/TripOffers/TripOffers"));
+const TripBooking = lazy(() => import("../pages/TripBooking/TripBooking"));
+const AgencyRequestForm = lazy(() => import("../pages/AgencyRequestForm/AgencyRequestForm"));
 const Services = lazy(() => import("../pages/Services/Services"));
 const ServiceDetails = lazy(() => import("../pages/ServiceDetails/ServiceDetails"));
 const WorkspaceEntity = lazy(() => import("../pages/WorkspaceEntity/WorkspaceEntity"));
@@ -54,6 +59,10 @@ const packageRoutes = [
   { path: "/offers", element: <Packages variant="offers" /> },
   { path: "/packages/:id", element: <PackageDetails /> },
   { path: "/create-trip", element: <CreateTrip /> },
+  { path: "/trip-requests/:requestId/sent", element: <TripRequestSent /> },
+  { path: "/trip-requests/:requestId/edit", element: <TripRequestEdit /> },
+  { path: "/trip-requests/:requestId/offers", element: <TripOffers /> },
+  { path: "/trip-requests/:requestId/booking", element: <TripBooking /> },
   { path: "/checkout", element: <Checkout /> },
   { path: "/checkout/:packageId", element: <Checkout /> },
 ];
@@ -71,6 +80,7 @@ const workspaceRoutes = [
 
 const discoveryRoutes = [
   { path: "/agency", element: <Agency /> },
+  { path: "/agency/requests/:requestId", element: <AgencyRequestForm /> },
   { path: "/agency/:agencyId", element: <AgencyDetails /> },
   { path: "/agencies/:agencyId", element: <AgencyDetails /> },
   { path: "/experience", element: <TravelExperience /> },

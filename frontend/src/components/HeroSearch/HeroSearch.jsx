@@ -15,6 +15,7 @@ import {
   Palette,
   Search,
   Tags,
+  Trees,
   UserRound,
   Users,
   UsersRound,
@@ -24,11 +25,11 @@ import {
   buildCalendarDays,
   formatMonthTitle,
   formatTravelDate,
-  getWeekdayLabels,
   getMonthStart,
   getTodayDate,
   parseDateValue,
 } from "../../utils/travelSearch";
+import { getDestinationDisplayParts } from "../../utils/destinationLabels";
 import "./HeroSearch.css";
 
 const tripTypeIcons = {
@@ -42,6 +43,8 @@ const tripTypeIcons = {
   Luxury: Gem,
   Cultural: Landmark,
 };
+
+const weekdayLabels = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 export default function HeroSearch({
   searchForm,
@@ -72,14 +75,13 @@ export default function HeroSearch({
   const todayValue = getTodayDate();
   const calendarDays = buildCalendarDays(visibleMonth);
   const visibleMonthLabel = formatMonthTitle(visibleMonth);
-  const weekdayLabels = getWeekdayLabels();
   const filteredDestinations = useMemo(() => {
     const query = searchForm.destination.trim().toLowerCase();
     const matches = query
       ? destinationOptions.filter((destination) => destination.toLowerCase().includes(query))
       : destinationOptions;
 
-    return matches.slice(0, 8);
+    return matches.slice(0, 14);
   }, [destinationOptions, searchForm.destination]);
 
   const updateSearchForm = (field, value) => {
@@ -313,7 +315,7 @@ export default function HeroSearch({
               <div className="destination-menu" role="listbox" aria-label="Destination options">
                 {filteredDestinations.length ? (
                   filteredDestinations.map((destination) => {
-                    const [city, ...details] = destination.split(",");
+                    const destinationParts = getDestinationDisplayParts(destination);
                     const isSelected = searchForm.destination === destination;
 
                     return (
@@ -325,11 +327,17 @@ export default function HeroSearch({
                         className={isSelected ? "destination-option active" : "destination-option"}
                         onClick={() => selectDestination(destination)}
                       >
-                        <span>
-                          <strong>{city}</strong>
-                          <small>{details.join(",").trim() || "Popular destination"}</small>
+                        <span className="destination-option-icon">
+                          <Trees size={16} />
                         </span>
-                        {isSelected ? <Check size={15} /> : null}
+                        <span>
+                          <strong>{destinationParts.primary}</strong>
+                          <small>{destinationParts.details}</small>
+                        </span>
+                        <span className="destination-option-meta">
+                          <span>{destinationParts.typeLabel}</span>
+                          {isSelected ? <Check size={15} /> : null}
+                        </span>
                       </button>
                     );
                   })
