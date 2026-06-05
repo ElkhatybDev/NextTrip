@@ -47,6 +47,14 @@ function withFlag(item) {
 
 export const fallbackCurrencies = [
   {
+    code: "EUR",
+    label: "Euro",
+    symbol: "EUR",
+    countryCode: "EU",
+    country: "Europe",
+    logo: currencyLogos.EUR,
+  },
+  {
     code: "GBP",
     label: "British pound",
     symbol: "GBP",
@@ -63,14 +71,6 @@ export const fallbackCurrencies = [
     logo: currencyLogos.USD,
   },
   {
-    code: "EUR",
-    label: "Euro",
-    symbol: "EUR",
-    countryCode: "EU",
-    country: "Europe",
-    logo: currencyLogos.EUR,
-  },
-  {
     code: "MAD",
     label: "Moroccan dirham",
     symbol: "MAD",
@@ -82,20 +82,20 @@ export const fallbackCurrencies = [
 
 export const fallbackLanguages = [
   {
-    code: "eng",
-    short: "EN",
-    label: "English",
-    countryCode: "GB",
-    country: "United Kingdom",
-    logo: languageLogos.eng,
-  },
-  {
     code: "fra",
     short: "FR",
     label: "French",
     countryCode: "FR",
     country: "France",
     logo: languageLogos.fra,
+  },
+  {
+    code: "eng",
+    short: "EN",
+    label: "English",
+    countryCode: "GB",
+    country: "United Kingdom",
+    logo: languageLogos.eng,
   },
   {
     code: "ara",

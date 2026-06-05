@@ -1,17 +1,58 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CreditCard, Landmark, ShieldCheck } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { calculatePackagePricing, getPackageDetails } from "../../services/packagesService";
+import BookingSuccessView from "../Packages/components/BookingSuccessView";
 import "../../styles/portalPages.css";
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const { packageId } = useParams();
   const travelPackage = getPackageDetails(packageId || 1) || getPackageDetails(1);
   const [travelers, setTravelers] = useState(2);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [bookingForm, setBookingForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    specialRequest: "",
+  });
   const pricing = calculatePackagePricing(travelPackage, travelers);
   const paymentCards = ["VISA", "Mastercard", "Bank Card"];
+
+  const handleBookingChange = (event) => {
+    const { name, value } = event.target;
+
+    setBookingForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }));
+  };
+
+  const confirmBooking = (event) => {
+    event.preventDefault();
+    setIsConfirmed(true);
+
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  };
+
+  if (isConfirmed) {
+    return (
+      <BookingSuccessView
+        selectedPackage={travelPackage}
+        bookingForm={bookingForm}
+        travelersCount={travelers}
+        pricing={pricing}
+        saveCard
+        onBackToBooking={() => setIsConfirmed(false)}
+        onBackToPackages={() => navigate("/packages")}
+      />
+    );
+  }
 
   return (
     <div className="portal-page checkout-page">
@@ -34,14 +75,35 @@ export default function Checkout() {
         <section className="portal-grid portal-grid-two">
           <article className="portal-card">
             <h2>Traveler information</h2>
-            <form className="portal-form-grid">
+            <form className="portal-form-grid" onSubmit={confirmBooking}>
               <div className="portal-field">
                 <label>Full name</label>
-                <input placeholder="Traveler full name" />
+                <input
+                  name="fullName"
+                  value={bookingForm.fullName}
+                  onChange={handleBookingChange}
+                  placeholder="Traveler full name"
+                />
               </div>
               <div className="portal-field">
                 <label>Email</label>
-                <input type="email" placeholder="email@example.com" />
+                <input
+                  type="email"
+                  name="email"
+                  value={bookingForm.email}
+                  onChange={handleBookingChange}
+                  placeholder="email@example.com"
+                />
+              </div>
+              <div className="portal-field">
+                <label>Phone number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={bookingForm.phone}
+                  onChange={handleBookingChange}
+                  placeholder="Phone number"
+                />
               </div>
               <div className="portal-field">
                 <label>Travelers</label>
@@ -79,7 +141,20 @@ export default function Checkout() {
               </div>
               <div className="portal-field portal-field-full">
                 <label>Special request</label>
-                <textarea placeholder="Pickup, room preference, food request..." />
+                <textarea
+                  name="specialRequest"
+                  value={bookingForm.specialRequest}
+                  onChange={handleBookingChange}
+                  placeholder="Pickup, room preference, food request..."
+                />
+              </div>
+              <div className="portal-inline-actions portal-field-full">
+                <button type="submit" className="portal-btn portal-btn-primary">
+                  Confirm booking
+                </button>
+                <Link to={`/packages/${travelPackage.id}`} className="portal-btn portal-btn-secondary">
+                  Back to package
+                </Link>
               </div>
             </form>
           </article>
@@ -107,9 +182,9 @@ export default function Checkout() {
               </div>
             </div>
             <div className="portal-inline-actions">
-              <Link to="/my-bookings" className="portal-btn portal-btn-secondary">
-                Save checkout
-              </Link>
+              <button type="button" className="portal-btn portal-btn-primary" onClick={confirmBooking}>
+                Confirm booking
+              </button>
               <Link to="/support" className="portal-btn portal-btn-secondary">
                 Need help?
               </Link>
