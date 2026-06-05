@@ -2,22 +2,30 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
+  ArrowRight,
   CalendarDays,
   CheckCircle2,
   Clock3,
+  Edit3,
   MapPin,
   Route,
+  Sparkles,
   UsersRound,
   WalletCards,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { getTripRequestById } from "../../data/userWorkspaceContent";
+import {
+  getRequestOffers,
+  getTripRequestById,
+} from "../../data/userWorkspaceContent";
 import "../../styles/portalPages.css";
 
 export default function TripRequestDetails() {
   const { requestId } = useParams();
   const request = getTripRequestById(requestId);
+  const offers = getRequestOffers(requestId);
+  const activeOffers = offers.filter((offer) => offer.status !== "Needs update");
 
   if (!request) {
     return (
@@ -42,7 +50,7 @@ export default function TripRequestDetails() {
     { icon: CalendarDays, label: "Dates", value: request.dates },
     { icon: UsersRound, label: "Travelers", value: request.travelers },
     { icon: WalletCards, label: "Budget", value: request.budget },
-    { icon: Route, label: "Mood", value: request.mood },
+    { icon: Sparkles, label: "Mood", value: request.mood },
     { icon: Route, label: "Pace", value: request.pace },
   ];
 
@@ -64,10 +72,26 @@ export default function TripRequestDetails() {
             <span>Current status</span>
             <strong>{request.status}</strong>
           </div>
-          <Link to="/profile" className="portal-btn portal-btn-ghost">
-            <ArrowLeft size={16} />
-            Back to profile
-          </Link>
+          <div className="portal-actions plan-hero-actions">
+            <Link to="/profile" className="portal-btn portal-btn-ghost">
+              <ArrowLeft size={16} />
+              Back
+            </Link>
+            <Link
+              to={`/trip-requests/${request.id}/edit`}
+              className="portal-btn portal-btn-primary"
+            >
+              <Edit3 size={16} />
+              Edit request
+            </Link>
+            <Link
+              to={`/trip-requests/${request.id}/offers`}
+              className="portal-btn portal-btn-ghost"
+            >
+              Offers ({activeOffers.length})
+              <ArrowRight size={16} />
+            </Link>
+          </div>
         </section>
 
         <section className="request-detail-layout">
@@ -92,7 +116,7 @@ export default function TripRequestDetails() {
                 );
               })}
               <div className="request-summary-item request-summary-wide">
-                <CheckCircle2 size={17} />
+                <Sparkles size={17} />
                 <span>Stay</span>
                 <strong>{request.accommodation}</strong>
               </div>
@@ -134,6 +158,43 @@ export default function TripRequestDetails() {
                 </div>
               ))}
             </div>
+          </article>
+
+          <article className="request-detail-card request-offers-card">
+            <div className="profile-card-head">
+              <div>
+                <span className="portal-status">Agency offers</span>
+                <h2>
+                  {activeOffers.length
+                    ? `${activeOffers.length} active offer(s) ready to compare`
+                    : "Waiting for agency proposals"}
+                </h2>
+              </div>
+              <WalletCards size={28} />
+            </div>
+            {offers.length ? (
+              <div className="request-offer-preview-list">
+                {offers.slice(0, 3).map((offer) => (
+                  <div key={offer.id}>
+                    <span>{offer.agencyName}</span>
+                    <strong>{offer.totalPrice}</strong>
+                    <p>{offer.status}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>
+                Agencies will appear here once they send price, itinerary, and
+                service proposals for this request.
+              </p>
+            )}
+            <Link
+              to={`/trip-requests/${request.id}/offers`}
+              className="portal-btn portal-btn-secondary"
+            >
+              Compare offers
+              <ArrowRight size={16} />
+            </Link>
           </article>
         </section>
       </main>
