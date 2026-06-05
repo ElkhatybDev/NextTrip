@@ -153,8 +153,8 @@ export default function PackageDetails() {
                 {travelPackage.nextDeparture}
               </p>
             </div>
-            <Link to={backLink} className="package-detail-primary">
-              {isOfferDetails ? "Book from offers" : "Book from packages"}
+            <Link to={`/checkout/${travelPackage.id}`} className="package-detail-primary">
+              Book now
             </Link>
             <Link to="/contact" className="package-detail-secondary">
               Ask about this deal
