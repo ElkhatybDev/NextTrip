@@ -99,6 +99,7 @@ export const homeFaqs = [
 export const homeOfferPackages = [
   {
     title: "Morocco Magic",
+    agency: "Atlas Gate Travel",
     price: "9,900 MAD",
     tag: "Popular",
     meta: "6 Days | 4 Adults",
@@ -111,6 +112,7 @@ export const homeOfferPackages = [
   },
   {
     title: "Amalfi Coast",
+    agency: "Mediterraneo Trips",
     price: "24,500 MAD",
     tag: "Luxury",
     meta: "10 Days | 2 Adults",
@@ -123,6 +125,7 @@ export const homeOfferPackages = [
   },
   {
     title: "Kyoto Zen",
+    agency: "Sakura Routes",
     price: "18,500 MAD",
     tag: "Cultural",
     meta: "8 Days | 1 Adult",
@@ -135,6 +138,7 @@ export const homeOfferPackages = [
   },
   {
     title: "Bali Retreat",
+    agency: "Island Calm Studio",
     price: "12,990 MAD",
     tag: "Escape",
     meta: "7 Days | 2 Adults",
@@ -150,6 +154,7 @@ export const homeOfferPackages = [
 export const homeNormalPackages = [
   {
     title: "Paris City Break",
+    agency: "Seine Select",
     price: "13,800 MAD",
     tag: "Classic",
     meta: "5 Days | 2 Adults",
@@ -162,6 +167,7 @@ export const homeNormalPackages = [
   },
   {
     title: "Dubai Easy Escape",
+    agency: "Gulf City Escapes",
     price: "11,600 MAD",
     tag: "Easy",
     meta: "4 Days | 2 Adults",
@@ -174,6 +180,7 @@ export const homeNormalPackages = [
   },
   {
     title: "Istanbul Weekend",
+    agency: "Bosphorus Trip Hub",
     price: "8,400 MAD",
     tag: "Value",
     meta: "4 Days | 2 Adults",
@@ -186,6 +193,7 @@ export const homeNormalPackages = [
   },
   {
     title: "Lisbon Light Trip",
+    agency: "Atlantic Offer Desk",
     price: "10,900 MAD",
     tag: "Calm",
     meta: "5 Days | 1 Adult",

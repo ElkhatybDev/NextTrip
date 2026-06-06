@@ -35,8 +35,8 @@ export default function TripRequestDetails() {
           <section className="portal-card">
             <h1>Trip request not found</h1>
             <p>This request may have been removed or the link is incorrect.</p>
-            <Link to="/profile" className="portal-btn portal-btn-secondary">
-              Back to profile
+            <Link to="/create-trip" className="portal-btn portal-btn-secondary">
+              Back to create trip
             </Link>
           </section>
         </main>
@@ -73,7 +73,7 @@ export default function TripRequestDetails() {
             <strong>{request.status}</strong>
           </div>
           <div className="portal-actions plan-hero-actions">
-            <Link to="/profile" className="portal-btn portal-btn-ghost">
+            <Link to="/create-trip" className="portal-btn portal-btn-ghost">
               <ArrowLeft size={16} />
               Back
             </Link>

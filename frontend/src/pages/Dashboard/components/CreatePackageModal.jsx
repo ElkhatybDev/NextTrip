@@ -14,7 +14,7 @@ export default function CreatePackageModal({
     <div className="modal-overlay">
       <div className="modal-box">
         <div className="modal-header">
-          <h3>Create agency package</h3>
+          <h3>Créer un forfait agence</h3>
           <button type="button" onClick={onClose} className="close-btn">
             <CloseIcon size={20} />
           </button>
@@ -24,24 +24,24 @@ export default function CreatePackageModal({
           <input
             value={form.title}
             onChange={(event) => onFormChange("title", event.target.value)}
-            placeholder="Agency package title"
+            placeholder="Titre du forfait agence"
             className="modal-input"
           />
           <input
             value={form.place}
             onChange={(event) => onFormChange("place", event.target.value)}
-            placeholder="Destination or city"
+            placeholder="Destination ou ville"
             className="modal-input"
           />
           <input
             value={form.price}
             onChange={(event) => onFormChange("price", event.target.value)}
-            placeholder="Price"
+            placeholder="Prix"
             className="modal-input"
           />
 
           <div className="upload-box">
-            <label>Upload agency package image</label>
+            <label>Ajouter une image du forfait</label>
             <input
               type="file"
               accept="image/*"
@@ -52,10 +52,10 @@ export default function CreatePackageModal({
 
         <div className="modal-footer">
           <button type="button" onClick={onClose} className="secondary-btn">
-            Cancel
+            Annuler
           </button>
           <button type="button" onClick={onSubmit} className="primary-btn">
-            Save agency package
+            Enregistrer le forfait
           </button>
         </div>
       </div>

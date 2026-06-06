@@ -9,12 +9,12 @@ export default function StatsGrid({ pendingBookings, activePackages, unreadCount
   return (
     <section className="stats-grid">
       <button type="button" onClick={() => onPageChange("bookings")} className="stat-card">
-        <p>Pending traveler requests</p>
+        <p>Demandes clients en attente</p>
         <div className="stat-card-row">
           <h3>{pendingBookings}</h3>
           <BookingIcon size={32} />
         </div>
-        <small>Ready for agency offers</small>
+        <small>Prêtes pour une offre agence</small>
       </button>
 
       <button
@@ -22,21 +22,21 @@ export default function StatsGrid({ pendingBookings, activePackages, unreadCount
         onClick={() => onPageChange("packages")}
         className="stat-card stat-card-orange"
       >
-        <p>Active agency packages</p>
+        <p>Forfaits agence actifs</p>
         <div className="stat-card-row">
           <h3>{activePackages}</h3>
           <PackageIcon size={32} />
         </div>
-        <small>Published for travelers</small>
+        <small>Publiés pour les voyageurs</small>
       </button>
 
       <button type="button" onClick={() => onPageChange("messages")} className="stat-card">
-        <p>Unread messages</p>
+        <p>Messages non lus</p>
         <div className="stat-card-row">
           <h3>{unreadCount}</h3>
           <MessageIcon size={32} />
         </div>
-        <small>Fast agency replies improve conversions</small>
+        <small>Les réponses rapides améliorent les conversions</small>
       </button>
     </section>
   );

@@ -84,7 +84,7 @@ export default function AgencyRequestForm() {
           <section className="portal-card">
             <h1>Agency request not found</h1>
             <p>This request may have been removed or the link is incorrect.</p>
-            <Link to="/dashboard" className="portal-btn portal-btn-secondary">
+            <Link to="/agency-dashboard" className="portal-btn portal-btn-secondary">
               Back to dashboard
             </Link>
           </section>

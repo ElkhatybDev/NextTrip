@@ -26,9 +26,9 @@ export default function RefundPolicy() {
         },
       ]}
       ctaTitle="Questions about payment?"
-      ctaText="Contact support or review your bookings."
+      ctaText="Contact support if you need help with payment or refund tracking."
       ctaPrimary={{ label: "Support", to: "/support" }}
-      ctaSecondary={{ label: "My bookings", to: "/my-bookings" }}
+      ctaSecondary={{ label: "Contact", to: "/contact" }}
     />
   );
 }

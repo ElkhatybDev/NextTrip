@@ -1,5 +1,8 @@
 .shared-package-card {
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 24px;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
@@ -19,6 +22,7 @@
 
 .shared-package-image-wrap {
   position: relative;
+  flex: 0 0 auto;
   height: 230px;
   overflow: hidden;
   background: #e8eef7;
@@ -105,7 +109,11 @@
 }
 
 .shared-package-content {
+  flex: 1;
+  min-width: 0;
   padding: 22px;
+  display: flex;
+  flex-direction: column;
 }
 
 .shared-package-top,
@@ -121,10 +129,15 @@
   margin-bottom: 12px;
 }
 
+.shared-package-top > div {
+  min-width: 0;
+}
+
 .shared-package-top h4 {
   margin: 0 0 6px;
   font-size: 1.12rem;
   line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 .shared-package-location,
@@ -136,10 +149,16 @@
 .shared-package-description {
   line-height: 1.8;
   margin-bottom: 14px;
+  display: -webkit-box;
+  min-height: 76px;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .shared-package-agency-profile {
   position: relative;
+  margin-top: auto;
   margin-bottom: 14px;
   padding: 12px;
   border-radius: 18px;
@@ -258,6 +277,8 @@
   color: #ea580c;
   font-weight: 800;
   font-size: 1rem;
+  max-width: 124px;
+  text-align: right;
   white-space: nowrap;
 }
 

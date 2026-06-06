@@ -46,7 +46,7 @@ export default function Agency() {
               <div className="agency-actions">
                 <Link
                   to="/auth"
-                  state={{ role: "agency", from: "/dashboard" }}
+                  state={{ role: "agency", from: "/agency-dashboard" }}
                   className="agency-primary"
                 >
                   Sign in as agency

@@ -10,12 +10,12 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
   return (
     <section className="dashboard-section">
       <SectionTitle
-        title="Agency packages"
-        subtitle="Ready travel packages published by your agency"
+        title="Forfaits agence"
+        subtitle="Forfaits de voyage publiés par votre agence"
         action={
           <button type="button" onClick={onCreatePackage} className="primary-btn">
             <PlusIcon size={16} />
-            Add agency package
+            Ajouter un forfait
           </button>
         }
       />
@@ -37,7 +37,7 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
                   <h4>{item.title}</h4>
                   <p>{item.place}</p>
                 </div>
-                <StatusBadge tone={item.status === "Active" ? "green" : "blue"}>
+                <StatusBadge tone={item.status === "Actif" ? "green" : "blue"}>
                   {item.status}
                 </StatusBadge>
               </div>
@@ -45,7 +45,7 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
               <div className="package-meta-row">
                 <span>{item.category}</span>
                 <span>{item.duration}</span>
-                <span>{item.requests} matching requests</span>
+                <span>{item.requests} demandes liées</span>
               </div>
 
               <div className="package-bottom">
@@ -55,7 +55,7 @@ export default function PackagesSection({ packages, onCreatePackage, onViewDetai
                   onClick={() => onViewDetails(item)}
                   className="secondary-btn"
                 >
-                  Manage package
+                  Gérer le forfait
                   <ChevronIcon size={16} />
                 </button>
               </div>

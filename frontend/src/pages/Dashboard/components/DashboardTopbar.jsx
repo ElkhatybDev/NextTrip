@@ -35,8 +35,8 @@ export default function DashboardTopbar({
         <span className="topbar-agency-label">{agencySummary.type}</span>
         <h2>{dashboardPageTitles[page]}</h2>
         <p>
-          {agencySummary.name} manages traveler requests, ready packages, and
-          agency replies from one clean workspace.
+          {agencySummary.name} gère les demandes clients, les forfaits prêts
+          et les réponses agence depuis un espace clair.
         </p>
         <div className="topbar-agency-meta">
           <span>{agencySummary.location}</span>
@@ -51,7 +51,7 @@ export default function DashboardTopbar({
           <input
             value={search}
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search traveler, package, or destination..."
+            placeholder="Rechercher un client, un forfait ou une destination..."
           />
         </div>
 
@@ -65,37 +65,37 @@ export default function DashboardTopbar({
             className="secondary-btn topbar-btn"
           >
             <FilterIcon size={16} />
-            Filter
+            Filtrer
           </button>
 
           {showFilterMenu ? (
             <div className="dropdown-menu filter-menu">
               <button
                 type="button"
-                onClick={() => selectBookingFilter("all", "All traveler requests selected.")}
+                onClick={() => selectBookingFilter("all", "Toutes les demandes sont affichées.")}
                 className={`dropdown-item ${
                   bookingFilter === "all" ? "dropdown-item-active-blue" : ""
                 }`}
               >
-                All requests
+                Toutes les demandes
               </button>
               <button
                 type="button"
-                onClick={() => selectBookingFilter("pending", "Pending traveler requests selected.")}
+                onClick={() => selectBookingFilter("pending", "Demandes en attente affichées.")}
                 className={`dropdown-item ${
                   bookingFilter === "pending" ? "dropdown-item-active-orange" : ""
                 }`}
               >
-                Pending requests
+                Demandes en attente
               </button>
               <button
                 type="button"
-                onClick={() => selectBookingFilter("review", "Requests in review selected.")}
+                onClick={() => selectBookingFilter("review", "Demandes en cours de traitement affichées.")}
                 className={`dropdown-item ${
                   bookingFilter === "review" ? "dropdown-item-active-review" : ""
                 }`}
               >
-                In review
+                En cours
               </button>
             </div>
           ) : null}
@@ -111,7 +111,7 @@ export default function DashboardTopbar({
             <div className="dropdown-menu notifications-menu">
               <div className="dropdown-header">
                 <h4>Notifications</h4>
-                <p>Recent activity in your workspace</p>
+                <p>Activité récente de votre espace</p>
               </div>
 
               <div className="dropdown-body">
@@ -123,8 +123,8 @@ export default function DashboardTopbar({
                   }}
                   className="notification-item"
                 >
-                  <p>You have {unreadCount} unread message(s)</p>
-                  <small>Open inbox and reply faster</small>
+                  <p>{unreadCount} message(s) non lu(s)</p>
+                  <small>Ouvrir la boîte de réception</small>
                 </button>
 
                 <button
@@ -136,8 +136,8 @@ export default function DashboardTopbar({
                   }}
                   className="notification-item"
                 >
-                  <p>{pendingBookings} pending traveler request(s)</p>
-                  <small>Review and send offers</small>
+                  <p>{pendingBookings} demande(s) client en attente</p>
+                  <small>Consulter et envoyer des offres</small>
                 </button>
 
                 <button
@@ -148,14 +148,14 @@ export default function DashboardTopbar({
                   }}
                   className="notification-item"
                 >
-                  <p>{activePackages} active packages</p>
-                  <small>Check your agency package library</small>
+                  <p>{activePackages} forfait(s) actif(s)</p>
+                  <small>Consulter la bibliothèque agence</small>
                 </button>
               </div>
 
               <div className="dropdown-footer">
                 <button type="button" onClick={onCloseNotifications} className="primary-btn full-btn">
-                  Close notifications
+                  Fermer les notifications
                 </button>
               </div>
             </div>

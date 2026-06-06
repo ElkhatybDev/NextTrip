@@ -167,6 +167,31 @@ function SideMenuDrawer({ isOpen, onClose, onSignIn, pathname }) {
     drawerRef.current?.scrollTo({ top: 0, behavior: "auto" });
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const closeOnOutsidePointerDown = (event) => {
+      const target = event.target;
+
+      if (
+        drawerRef.current?.contains(target) ||
+        target?.closest?.(".site-menu-toggle")
+      ) {
+        return;
+      }
+
+      onClose();
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsidePointerDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointerDown);
+    };
+  }, [isOpen, onClose]);
+
   return (
     <>
       <button
@@ -206,7 +231,7 @@ function SideMenuDrawer({ isOpen, onClose, onSignIn, pathname }) {
         </div>
 
         <section className="site-drawer-preferences">
-          <HeaderPreferences />
+          <HeaderPreferences onPreferenceSelected={onClose} />
         </section>
 
         <div className="site-drawer-sections">
@@ -318,7 +343,7 @@ function DrawerPreferenceRow({ title, selectedItem, options, isOpen, onToggle, o
   );
 }
 
-function HeaderPreferences() {
+function HeaderPreferences({ onPreferenceSelected }) {
   const currencies = supportedCurrencies;
   const languages = supportedLanguages;
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState(getSavedCurrencyCode);
@@ -341,6 +366,7 @@ function HeaderPreferences() {
         onSelect={(code) => {
           setSelectedLanguageCode(changeSiteLanguage(code));
           setOpenPicker(null);
+          onPreferenceSelected?.();
         }}
       />
 
@@ -353,6 +379,7 @@ function HeaderPreferences() {
         onSelect={(code) => {
           setSelectedCurrencyCode(changeSiteCurrency(code));
           setOpenPicker(null);
+          onPreferenceSelected?.();
         }}
       />
     </div>
@@ -447,7 +474,7 @@ export default function Navbar({
                 {signInLabel}
               </button>
               {showProfile && profileImageSrc ? (
-                <Link to="/profile" className="site-profile-avatar" onClick={closeMenu}>
+                <Link to="/agency-dashboard" className="site-profile-avatar" onClick={closeMenu}>
                   <img src={profileImageSrc} alt={profileAlt} decoding="async" />
                 </Link>
               ) : null}

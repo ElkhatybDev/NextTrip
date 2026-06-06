@@ -15,8 +15,8 @@ export default function AnalyticsSection() {
 
       <div className="analytics-chart-card">
         <SectionTitle
-          title="Agency monthly performance"
-          subtitle="A simple visual overview of requests, offers, and package activity"
+          title="Performance mensuelle de l’agence"
+          subtitle="Vue simple des demandes, offres et activités de forfaits"
         />
         <div className="analytics-chart">
           {monthlyPerformance.map((height, index) => (

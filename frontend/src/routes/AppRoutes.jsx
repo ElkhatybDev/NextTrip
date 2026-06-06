@@ -4,7 +4,11 @@ import { ArrowUp } from "lucide-react";
 
 import Chatbot from "../components/Chatbot/Chatbot";
 import ProtectedRoute from "./ProtectedRoute";
-import { startSiteLanguageRuntime } from "../i18n/siteLanguage";
+import {
+  getSavedLanguageCode,
+  LANGUAGE_CHANGE_EVENT,
+  startSiteLanguageRuntime,
+} from "../i18n/siteLanguage";
 
 const Home = lazy(() => import("../pages/Home/Home"));
 const Auth = lazy(() => import("../pages/Auth/Auth"));
@@ -14,6 +18,7 @@ const CreateTrip = lazy(() => import("../pages/CreateTrip/CreateTrip"));
 const Checkout = lazy(() => import("../pages/Checkout/Checkout"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
 const AdminDashboard = lazy(() => import("../pages/AdminDashboard/AdminDashboard"));
+const TravelerDashboard = lazy(() => import("../pages/TravelerDashboard/TravelerDashboard"));
 const Agency = lazy(() => import("../pages/Agency/Agency"));
 const AgencyDetails = lazy(() => import("../pages/AgencyDetails/AgencyDetails"));
 const TravelExperience = lazy(() => import("../pages/TravelExperience/TravelExperience"));
@@ -30,8 +35,6 @@ const TravelStyle = lazy(() => import("../pages/TravelStyle/TravelStyle"));
 const Destinations = lazy(() => import("../pages/Destinations/Destinations"));
 const Reviews = lazy(() => import("../pages/Reviews/Reviews"));
 const HowItWorks = lazy(() => import("../pages/HowItWorks/HowItWorks"));
-const Profile = lazy(() => import("../pages/Profile/Profile"));
-const MyBookings = lazy(() => import("../pages/MyBookings/MyBookings"));
 const TripRequestDetails = lazy(() => import("../pages/TripRequestDetails/TripRequestDetails"));
 const TripRequestSent = lazy(() => import("../pages/TripRequestSent/TripRequestSent"));
 const TripRequestEdit = lazy(() => import("../pages/TripRequestEdit/TripRequestEdit"));
@@ -40,7 +43,6 @@ const TripBooking = lazy(() => import("../pages/TripBooking/TripBooking"));
 const AgencyRequestForm = lazy(() => import("../pages/AgencyRequestForm/AgencyRequestForm"));
 const Services = lazy(() => import("../pages/Services/Services"));
 const ServiceDetails = lazy(() => import("../pages/ServiceDetails/ServiceDetails"));
-const WorkspaceEntity = lazy(() => import("../pages/WorkspaceEntity/WorkspaceEntity"));
 const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 
 function protect(element) {
@@ -50,7 +52,7 @@ function protect(element) {
 const mainRoutes = [
   { path: "/", element: <Home /> },
   { path: "/auth", element: <Auth /> },
-  { path: "/dashboard", element: protect(<Dashboard />) },
+  { path: "/agency-dashboard", element: protect(<Dashboard />) },
   { path: "/nexttrip-dashboard", element: protect(<AdminDashboard />) },
 ];
 
@@ -68,14 +70,8 @@ const packageRoutes = [
 ];
 
 const travelerRoutes = [
-  { path: "/profile", element: protect(<Profile />) },
-  { path: "/my-bookings", element: protect(<MyBookings />) },
+  { path: "/traveler-dashboard", element: protect(<TravelerDashboard />) },
   { path: "/trip-requests/:requestId", element: protect(<TripRequestDetails />) },
-];
-
-const workspaceRoutes = [
-  { path: "/workspace", element: protect(<WorkspaceEntity forcedSlug="users" />) },
-  { path: "/workspace/:workspaceSlug", element: protect(<WorkspaceEntity />) },
 ];
 
 const discoveryRoutes = [
@@ -108,32 +104,16 @@ const infoRoutes = [
 const legacyRedirects = [
   { path: "/about-us", to: "/about" },
   { path: "/help", to: "/support" },
-  { path: "/admin", to: "/nexttrip-dashboard" },
-  { path: "/admin-dashboard", to: "/nexttrip-dashboard" },
-  { path: "/nexttrip-admin", to: "/nexttrip-dashboard" },
   { path: "/experiences", to: "/experience" },
   { path: "/travel-experience", to: "/experience" },
   { path: "/agencies", to: "/agency" },
   { path: "/booking", to: "/packages" },
   { path: "/success", to: "/packages" },
   { path: "/booking-details", to: "/checkout" },
-  { path: "/booking-success", to: "/my-bookings" },
+  { path: "/booking-success", to: "/packages" },
   { path: "/trip-builder", to: "/create-trip" },
-  { path: "/account", to: "/profile" },
-  { path: "/bookings", to: "/my-bookings" },
-  { path: "/users", to: "/workspace/users" },
-  { path: "/offer-options", to: "/workspace/offer-options" },
-  { path: "/inventory", to: "/workspace/availability" },
-  { path: "/availability", to: "/workspace/availability" },
-  { path: "/trip-drafts", to: "/workspace/trip-drafts" },
-  { path: "/admin-bookings", to: "/workspace/bookings" },
-  { path: "/booking-items", to: "/workspace/booking-items" },
-  { path: "/price-quotes", to: "/workspace/price-quotes" },
-  { path: "/notifications", to: "/workspace/notifications" },
-  { path: "/audit-logs", to: "/workspace/audit-logs" },
-  { path: "/conversations", to: "/workspace/conversations" },
-  { path: "/messages", to: "/workspace/conversations" },
-  { path: "/chat", to: "/workspace/conversations" },
+  { path: "/account", to: "/auth" },
+  { path: "/bookings", to: "/packages" },
   { path: "/payment", to: "/checkout" },
 ];
 
@@ -159,10 +139,22 @@ function LanguageRuntime() {
   return null;
 }
 
+const backToTopLabels = {
+  fra: "Retour en haut",
+  eng: "Back to top",
+  ara: "العودة للأعلى",
+};
+
+function getBackToTopLabel(languageCode) {
+  return backToTopLabels[languageCode] || backToTopLabels.fra;
+}
+
 function BackToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const [languageCode, setLanguageCode] = useState(() => getSavedLanguageCode());
   const isVisibleRef = useRef(false);
   const frameRef = useRef(0);
+  const label = getBackToTopLabel(languageCode);
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -197,15 +189,25 @@ function BackToTopButton() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleLanguageChange = (event) => {
+      setLanguageCode(event.detail?.code || getSavedLanguageCode());
+    };
+
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
+
+    return () => window.removeEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
+  }, []);
+
   return (
     <button
       type="button"
       className={`back-to-top ${isVisible ? "back-to-top-visible" : ""}`}
-      aria-label="Back to top"
+      aria-label={label}
       onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "smooth" })}
     >
       <ArrowUp size={20} />
-      <span>Back to top</span>
+      <span>{label}</span>
     </button>
   );
 }
@@ -228,7 +230,6 @@ function RouteViews() {
           {renderRoutes(mainRoutes)}
           {renderRoutes(packageRoutes)}
           {renderRoutes(travelerRoutes)}
-          {renderRoutes(workspaceRoutes)}
           {renderRoutes(discoveryRoutes)}
           {renderRoutes(infoRoutes)}
 

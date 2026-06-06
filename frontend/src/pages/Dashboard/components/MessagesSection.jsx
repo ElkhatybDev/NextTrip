@@ -16,12 +16,12 @@ export default function MessagesSection({
   return (
     <section className="dashboard-section">
       <SectionTitle
-        title="Traveler messages"
-        subtitle="Keep every traveler conversation close to the agency workflow"
+        title="Messages clients"
+        subtitle="Gardez chaque conversation proche du suivi agence"
         action={
           <button type="button" onClick={onCreateMessage} className="primary-btn">
             <SendIcon size={16} />
-            Reply to traveler
+            Répondre au client
           </button>
         }
       />
@@ -33,9 +33,9 @@ export default function MessagesSection({
               <div className="message-head">
                 <h4>{item.from}</h4>
                 {item.unread ? (
-                  <StatusBadge tone="blue">Unread</StatusBadge>
+                  <StatusBadge tone="blue">Non lu</StatusBadge>
                 ) : (
-                  <StatusBadge tone="green">Read</StatusBadge>
+                  <StatusBadge tone="green">Lu</StatusBadge>
                 )}
               </div>
               <p className="message-subject">{item.subject}</p>
@@ -49,7 +49,7 @@ export default function MessagesSection({
                 className="secondary-btn"
               >
                 <CheckIcon size={16} />
-                Mark read
+                Marquer comme lu
               </button>
               <button
                 type="button"
@@ -57,7 +57,7 @@ export default function MessagesSection({
                 className="secondary-btn"
               >
                 <ArchiveIcon size={16} />
-                Archive
+                Archiver
               </button>
             </div>
           </div>

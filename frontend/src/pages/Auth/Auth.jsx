@@ -94,7 +94,7 @@ export default function Auth() {
     saveAuthSession({ email: loginData.email, role });
     setMessage(`Login success for ${loginData.email}`);
     setErrors({});
-    navigate(location.state?.from || (role === "agency" ? "/dashboard" : "/profile"), {
+    navigate(location.state?.from || (role === "agency" ? "/agency-dashboard" : "/"), {
       replace: true,
     });
   };
@@ -147,7 +147,7 @@ export default function Auth() {
         password: "",
         confirmPassword: "",
       });
-      navigate(role === "agency" ? "/dashboard" : "/profile", { replace: true });
+      navigate(role === "agency" ? "/agency-dashboard" : "/", { replace: true });
     } else {
       setMessage("");
     }
@@ -155,7 +155,7 @@ export default function Auth() {
 
   const handleSocialLogin = (provider) => {
     saveAuthSession({ email: `${provider}@nexttrip.local`, role });
-    navigate(location.state?.from || (role === "agency" ? "/dashboard" : "/profile"), {
+    navigate(location.state?.from || (role === "agency" ? "/agency-dashboard" : "/"), {
       replace: true,
     });
   };

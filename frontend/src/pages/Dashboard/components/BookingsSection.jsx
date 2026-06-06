@@ -15,12 +15,16 @@ export default function BookingsSection({
   const DollarIcon = dashboardIcons.dollar;
   const DownloadIcon = dashboardIcons.download;
   const MapPinIcon = dashboardIcons.mapPin;
+  const statusLabels = {
+    pending: "En attente",
+    review: "En cours",
+  };
 
   return (
     <section className="dashboard-section">
       <SectionTitle
-        title="Traveler requests"
-        subtitle="New trip briefs from travelers waiting for your agency offer"
+        title="Demandes clients"
+        subtitle="Nouveaux briefs de voyage en attente d’une offre de votre agence"
         action={
           <div className="booking-actions">
             <button
@@ -30,7 +34,7 @@ export default function BookingsSection({
                 bookingFilter === "all" ? "filter-pill-active-blue" : ""
               }`}
             >
-              All ({bookingStats.all})
+              Toutes ({bookingStats.all})
             </button>
             <button
               type="button"
@@ -39,7 +43,7 @@ export default function BookingsSection({
                 bookingFilter === "pending" ? "filter-pill-active-orange" : ""
               }`}
             >
-              Pending ({bookingStats.pending})
+              En attente ({bookingStats.pending})
             </button>
             <button
               type="button"
@@ -48,11 +52,11 @@ export default function BookingsSection({
                 bookingFilter === "review" ? "filter-pill-active-review" : ""
               }`}
             >
-              In review ({bookingStats.review})
+              En cours ({bookingStats.review})
             </button>
             <button type="button" onClick={onExport} className="secondary-btn">
               <DownloadIcon size={16} />
-              Export requests
+              Exporter les demandes
             </button>
           </div>
         }
@@ -60,7 +64,7 @@ export default function BookingsSection({
 
       <div className="booking-list">
         {bookings.length === 0 ? (
-          <div className="empty-box">No traveler requests found for this filter.</div>
+          <div className="empty-box">Aucune demande client trouvée pour ce filtre.</div>
         ) : (
           bookings.map((item) => (
             <div key={item.id} className="booking-card">
@@ -95,11 +99,11 @@ export default function BookingsSection({
                   <div>
                     <span>Dates</span>
                     <p className="booking-main-text no-icon">{item.dates}</p>
-                    <small>Submitted {item.submitted}</small>
+                    <small>Envoyée : {item.submitted}</small>
                   </div>
 
                   <div>
-                    <span>Travelers</span>
+                    <span>Voyageurs</span>
                     <p className="booking-main-text">
                       <ClockIcon size={16} className="icon-blue" />
                       {item.travelers}
@@ -110,7 +114,7 @@ export default function BookingsSection({
 
                 <div className="booking-right">
                   <StatusBadge tone={item.status === "pending" ? "orange" : "blue"}>
-                    {item.status}
+                    {statusLabels[item.status] || item.status}
                   </StatusBadge>
 
                   <button
@@ -118,7 +122,7 @@ export default function BookingsSection({
                     onClick={() => onSubmitOffer(item.id)}
                     className="primary-btn"
                   >
-                    Send agency offer
+                    Envoyer une offre
                   </button>
                 </div>
               </div>

@@ -37,8 +37,8 @@ export default function TripOffers() {
           <section className="portal-card">
             <h1>Trip request not found</h1>
             <p>This request may have been removed or the link is incorrect.</p>
-            <Link to="/profile" className="portal-btn portal-btn-secondary">
-              Back to profile
+            <Link to="/create-trip" className="portal-btn portal-btn-secondary">
+              Back to create trip
             </Link>
           </section>
         </main>

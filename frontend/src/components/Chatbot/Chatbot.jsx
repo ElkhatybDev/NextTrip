@@ -1,20 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageCircle, MoreHorizontal, Send, X } from "lucide-react";
-import nextTripLogo from "../../Assets/images/NextTrip logo.png";
+import { ArrowLeft, BotMessageSquare, RotateCcw, Send, X } from "lucide-react";
 import { chatbotQuickActions, chatbotUiText } from "../../data/chatbotKnowledgeBase";
 import { getSavedLanguageCode, LANGUAGE_CHANGE_EVENT } from "../../i18n/siteLanguage";
-import { getChatbotReply } from "../../services/chatbotService";
+import { getChatbotReply, getNextChatbotContext } from "../../services/chatbotService";
 import ChatMessage from "./ChatMessage";
 import "./Chatbot.css";
 
 const hiddenPathPrefixes = [
-  "/dashboard",
+  "/agency-dashboard",
   "/nexttrip-dashboard",
-  "/workspace",
-  "/profile",
-  "/my-bookings",
-  "/trip-requests",
 ];
 
 function createMessage(role, text, actions = []) {
@@ -38,18 +33,29 @@ function getChatbotUiText(languageCode) {
   return chatbotUiText[languageCode] || chatbotUiText.fra;
 }
 
+function createInitialMessages(languageCode) {
+  const uiText = getChatbotUiText(languageCode);
+
+  return [uiText.welcome, uiText.guide]
+    .filter(Boolean)
+    .map((messageText) => createMessage("assistant", messageText));
+}
+
 export default function Chatbot() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const rootRef = useRef(null);
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  const responseTimerRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isBotTyping, setIsBotTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [languageCode, setLanguageCode] = useState(() => getSavedLanguageCode());
-  const [messages, setMessages] = useState(() => [
-    createMessage("assistant", getChatbotUiText(getSavedLanguageCode()).welcome),
-  ]);
+  const [messages, setMessages] = useState(() => createInitialMessages(getSavedLanguageCode()));
+  const [conversationContext, setConversationContext] = useState({});
   const uiText = getChatbotUiText(languageCode);
+  const hasInputValue = inputValue.trim().length > 0;
 
   const shouldHide = useMemo(
     () => hiddenPathPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)),
@@ -60,8 +66,11 @@ export default function Chatbot() {
     const handleLanguageChange = (event) => {
       const nextLanguageCode = event.detail?.code || getSavedLanguageCode();
 
+      window.clearTimeout(responseTimerRef.current);
+      setIsBotTyping(false);
       setLanguageCode(nextLanguageCode);
-      setMessages([createMessage("assistant", getChatbotUiText(nextLanguageCode).welcome)]);
+      setMessages(createInitialMessages(nextLanguageCode));
+      setConversationContext({});
     };
 
     window.addEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange);
@@ -86,12 +95,25 @@ export default function Chatbot() {
       top: listRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [isOpen, messages]);
+  }, [isOpen, messages, isBotTyping]);
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(responseTimerRef.current);
+    },
+    []
+  );
 
   useEffect(() => {
     if (!isOpen) {
       return undefined;
     }
+
+    const handlePointerDown = (event) => {
+      if (!rootRef.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -99,17 +121,42 @@ export default function Chatbot() {
       }
     };
 
+    document.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("keydown", handleKeyDown);
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen]);
 
+  const resetConversation = () => {
+    window.clearTimeout(responseTimerRef.current);
+    setMessages(createInitialMessages(languageCode));
+    setConversationContext({});
+    setIsBotTyping(false);
+    setInputValue("");
+    inputRef.current?.focus();
+  };
+
   const appendConversation = (userText, reply) => {
+    window.clearTimeout(responseTimerRef.current);
+    setIsBotTyping(true);
     setMessages((currentMessages) => [
       ...currentMessages,
       createMessage("user", userText),
-      createMessage("assistant", reply.answer, reply.actions),
     ]);
+
+    responseTimerRef.current = window.setTimeout(() => {
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        createMessage("assistant", reply.answer, reply.actions),
+      ]);
+      setConversationContext((currentContext) =>
+        getNextChatbotContext(currentContext, userText, reply)
+      );
+      setIsBotTyping(false);
+    }, 420);
   };
 
   const handleSubmit = (event) => {
@@ -117,27 +164,45 @@ export default function Chatbot() {
 
     const userText = inputValue.trim();
 
-    if (!userText) {
+    if (!userText || isBotTyping) {
       return;
     }
 
-    const reply = getChatbotReply(userText, null, languageCode);
+    const reply = getChatbotReply(userText, null, languageCode, conversationContext);
     appendConversation(userText, reply);
     setInputValue("");
   };
 
   const handleQuickAction = (action) => {
-    const reply = getChatbotReply(action.prompt, action.topicId, languageCode);
-    appendConversation(getLocalizedValue(action.label, languageCode), reply);
-  };
-
-  const handleNavigate = (route) => {
-    if (!route) {
+    if (isBotTyping) {
       return;
     }
 
-    navigate(route);
-    setIsOpen(false);
+    const reply = getChatbotReply(action.prompt, action.topicId, languageCode, conversationContext);
+    appendConversation(getLocalizedValue(action.label, languageCode), reply);
+  };
+
+  const handleMessageAction = (action) => {
+    if (!action || isBotTyping) {
+      return;
+    }
+
+    if (typeof action === "string") {
+      navigate(action);
+      setIsOpen(false);
+      return;
+    }
+
+    if (action.topicId) {
+      const reply = getChatbotReply(action.label, action.topicId, languageCode, conversationContext);
+      appendConversation(action.label, reply);
+      return;
+    }
+
+    if (action.route) {
+      navigate(action.route);
+      setIsOpen(false);
+    }
   };
 
   if (shouldHide) {
@@ -145,7 +210,7 @@ export default function Chatbot() {
   }
 
   return (
-    <div className={`nt-chatbot-root ${isOpen ? "nt-chatbot-open" : ""}`}>
+    <div ref={rootRef} className={`nt-chatbot-root ${isOpen ? "nt-chatbot-open" : ""}`}>
       {isOpen ? (
         <section
           className="nt-chatbot-window"
@@ -164,12 +229,9 @@ export default function Chatbot() {
             </button>
 
             <div className="nt-chatbot-brand">
-              <span className="nt-chatbot-header-icon" aria-hidden="true">
-                <img src={nextTripLogo} alt="" decoding="async" />
-              </span>
               <div>
                 <strong>{uiText.title}</strong>
-                <p>{uiText.subtitle}</p>
+                {uiText.subtitle ? <p>{uiText.subtitle}</p> : null}
               </div>
             </div>
 
@@ -177,10 +239,10 @@ export default function Chatbot() {
               <button
                 type="button"
                 className="nt-chatbot-more"
-                aria-label={uiText.quickActionsLabel}
-                onClick={() => inputRef.current?.focus()}
+                aria-label={uiText.clearLabel}
+                onClick={resetConversation}
               >
-                <MoreHorizontal size={21} />
+                <RotateCcw size={19} />
               </button>
               <button
                 type="button"
@@ -198,9 +260,17 @@ export default function Chatbot() {
               <ChatMessage
                 key={message.id}
                 message={message}
-                onAction={handleNavigate}
+                onAction={handleMessageAction}
               />
             ))}
+
+            {isBotTyping ? (
+              <div className="nt-chat-typing" role="status" aria-label={uiText.typingLabel}>
+                <span />
+                <span />
+                <span />
+              </div>
+            ) : null}
           </div>
 
           <div className="nt-chatbot-quick-actions" aria-label={uiText.quickActionsLabel}>
@@ -208,6 +278,7 @@ export default function Chatbot() {
               <button
                 type="button"
                 key={action.topicId}
+                disabled={isBotTyping}
                 onClick={() => handleQuickAction(action)}
               >
                 {getLocalizedValue(action.label, languageCode)}
@@ -215,7 +286,7 @@ export default function Chatbot() {
             ))}
           </div>
 
-          <form className="nt-chatbot-form" onSubmit={handleSubmit}>
+          <form className="nt-chatbot-form" onSubmit={handleSubmit} aria-busy={isBotTyping}>
             <label>
               <span className="nt-chatbot-sr-only">{uiText.inputLabel}</span>
               <input
@@ -225,7 +296,7 @@ export default function Chatbot() {
                 placeholder={uiText.inputPlaceholder}
               />
             </label>
-            <button type="submit" aria-label={uiText.sendLabel}>
+            <button type="submit" aria-label={uiText.sendLabel} disabled={!hasInputValue || isBotTyping}>
               <Send size={18} />
             </button>
           </form>
@@ -239,7 +310,7 @@ export default function Chatbot() {
         aria-expanded={isOpen}
         onClick={() => setIsOpen((currentValue) => !currentValue)}
       >
-        <MessageCircle size={23} />
+        <BotMessageSquare size={23} />
         <span>{uiText.closedLabel}</span>
       </button>
     </div>

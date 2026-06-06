@@ -1,6 +1,5 @@
 import React from "react";
 import { UserRound } from "lucide-react";
-import nextTripLogo from "../../Assets/images/NextTrip logo.png";
 
 export default function ChatMessage({ message, onAction }) {
   const isAssistant = message.role === "assistant";
@@ -13,7 +12,7 @@ export default function ChatMessage({ message, onAction }) {
     >
       <span className="nt-chat-message-avatar" aria-hidden="true">
         {isAssistant ? (
-          <img src={nextTripLogo} alt="" decoding="async" />
+          <img src="/favicon.svg" alt="" decoding="async" />
         ) : (
           <UserRound size={16} />
         )}
@@ -25,11 +24,11 @@ export default function ChatMessage({ message, onAction }) {
 
         {isAssistant && message.actions?.length ? (
           <div className="nt-chat-message-actions">
-            {message.actions.map((action) => (
+            {message.actions.map((action, index) => (
               <button
                 type="button"
-                key={`${message.id}-${action.label}`}
-                onClick={() => onAction(action.route)}
+                key={`${message.id}-${action.label}-${index}`}
+                onClick={() => onAction(action)}
               >
                 {action.label}
               </button>

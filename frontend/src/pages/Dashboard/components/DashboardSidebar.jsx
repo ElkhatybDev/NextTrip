@@ -20,7 +20,7 @@ export default function DashboardSidebar({
           <h1>
             Next<span>Trip</span>
           </h1>
-          <p>Agency workspace</p>
+          <p>Espace agence</p>
         </div>
       </div>
 
@@ -40,8 +40,8 @@ export default function DashboardSidebar({
 
         <div className="agency-info-list">
           <span>{agencySummary.location}</span>
-          <span>Manager: {agencySummary.manager}</span>
-          <span>License: {agencySummary.license}</span>
+          <span>Responsable : {agencySummary.manager}</span>
+          <span>Licence : {agencySummary.license}</span>
           <span>{agencySummary.responseTime}</span>
         </div>
 
@@ -80,7 +80,7 @@ export default function DashboardSidebar({
       <div className="sidebar-footer">
         <button type="button" onClick={onCreatePackage} className="primary-btn full-btn">
           <PlusIcon size={16} />
-          Create package
+          Créer un forfait
         </button>
       </div>
     </aside>

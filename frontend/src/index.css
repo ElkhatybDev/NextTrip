@@ -338,7 +338,7 @@ h6 {
 .back-to-top {
   position: fixed;
   right: 22px;
-  bottom: 22px;
+  bottom: 86px;
   z-index: 180;
   width: 52px;
   max-width: 52px;
@@ -418,18 +418,20 @@ h6 {
 }
 
 html[dir="rtl"] .back-to-top {
-  right: auto;
-  left: 22px;
-  flex-direction: row-reverse;
+  right: 22px;
+  left: auto;
+  direction: ltr;
+  flex-direction: row;
 }
 
 html[dir="rtl"] .back-to-top:hover,
 html[dir="rtl"] .back-to-top:focus-visible {
-  padding-inline: 18px 15px;
+  padding-inline: 15px 18px;
 }
 
 html[dir="rtl"] .back-to-top span {
-  transform: translateX(-6px);
+  direction: rtl;
+  transform: translateX(6px);
 }
 
 html[dir="rtl"] .back-to-top:hover span,
@@ -495,7 +497,7 @@ html[dir="rtl"] .back-to-top:focus-visible span {
 
   .back-to-top {
     right: 16px;
-    bottom: 16px;
+    bottom: 72px;
     width: 46px;
     max-width: 46px;
     height: 46px;
@@ -508,7 +510,8 @@ html[dir="rtl"] .back-to-top:focus-visible span {
   }
 
   html[dir="rtl"] .back-to-top {
-    left: 16px;
+    right: 16px;
+    left: auto;
   }
 }
 

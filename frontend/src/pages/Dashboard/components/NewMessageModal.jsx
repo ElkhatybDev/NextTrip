@@ -8,7 +8,7 @@ export default function NewMessageModal({ form, onFormChange, onClose, onSubmit 
     <div className="modal-overlay">
       <div className="modal-box">
         <div className="modal-header">
-          <h3>Reply to traveler</h3>
+          <h3>Répondre au client</h3>
           <button type="button" onClick={onClose} className="close-btn">
             <CloseIcon size={20} />
           </button>
@@ -18,13 +18,13 @@ export default function NewMessageModal({ form, onFormChange, onClose, onSubmit 
           <input
             value={form.subject}
             onChange={(event) => onFormChange("subject", event.target.value)}
-            placeholder="Subject"
+            placeholder="Sujet"
             className="modal-input"
           />
           <textarea
             value={form.body}
             onChange={(event) => onFormChange("body", event.target.value)}
-            placeholder="Write your agency reply..."
+            placeholder="Écrivez la réponse de votre agence..."
             rows={6}
             className="modal-input modal-textarea"
           />
@@ -32,10 +32,10 @@ export default function NewMessageModal({ form, onFormChange, onClose, onSubmit 
 
         <div className="modal-footer">
           <button type="button" onClick={onClose} className="secondary-btn">
-            Cancel
+            Annuler
           </button>
           <button type="button" onClick={onSubmit} className="primary-btn">
-            Send reply
+            Envoyer la réponse
           </button>
         </div>
       </div>
