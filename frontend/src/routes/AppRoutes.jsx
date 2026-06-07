@@ -16,6 +16,7 @@ const Packages = lazy(() => import("../pages/Packages/Packages"));
 const PackageDetails = lazy(() => import("../pages/PackageDetails/PackageDetails"));
 const CreateTrip = lazy(() => import("../pages/CreateTrip/CreateTrip"));
 const Checkout = lazy(() => import("../pages/Checkout/Checkout"));
+const BookingSuccess = lazy(() => import("../pages/BookingSuccess/BookingSuccess"));
 const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
 const AdminDashboard = lazy(() => import("../pages/AdminDashboard/AdminDashboard"));
 const TravelerDashboard = lazy(() => import("../pages/TravelerDashboard/TravelerDashboard"));
@@ -52,7 +53,7 @@ function protect(element, allowedRoles) {
 const mainRoutes = [
   { path: "/", element: <Home /> },
   { path: "/auth", element: <Auth /> },
-  { path: "/agency-dashboard", element: protect(<Dashboard />) },
+  { path: "/agency-dashboard", element: protect(<Dashboard />, ["agency"]) },
   { path: "/nexttrip-dashboard", element: protect(<AdminDashboard />) },
 ];
 
@@ -67,10 +68,14 @@ const packageRoutes = [
   { path: "/trip-requests/:requestId/booking", element: <TripBooking /> },
   { path: "/checkout", element: <Checkout /> },
   { path: "/checkout/:packageId", element: <Checkout /> },
+  { path: "/booking-success", element: <BookingSuccess /> },
+  { path: "/booking-success/:packageId", element: <BookingSuccess /> },
 ];
 
 const travelerRoutes = [
-  { path: "/traveler-dashboard", element: protect(<TravelerDashboard />) },
+  { path: "/traveler-dashboard", element: protect(<TravelerDashboard />, ["traveler"]) },
+  { path: "/profile", element: protect(<TravelerDashboard initialSection="profile" />, ["traveler"]) },
+  { path: "/my-bookings", element: protect(<TravelerDashboard initialSection="reservations" />, ["traveler"]) },
   { path: "/trip-requests/:requestId", element: protect(<TripRequestDetails />) },
 ];
 
@@ -107,13 +112,13 @@ const legacyRedirects = [
   { path: "/experiences", to: "/experience" },
   { path: "/travel-experience", to: "/experience" },
   { path: "/agencies", to: "/agency" },
+  { path: "/dashboard", to: "/agency-dashboard" },
   { path: "/booking", to: "/packages" },
-  { path: "/success", to: "/packages" },
+  { path: "/success", to: "/booking-success" },
   { path: "/booking-details", to: "/checkout" },
-  { path: "/booking-success", to: "/packages" },
   { path: "/trip-builder", to: "/create-trip" },
-  { path: "/account", to: "/auth" },
-  { path: "/bookings", to: "/packages" },
+  { path: "/account", to: "/profile" },
+  { path: "/bookings", to: "/my-bookings" },
   { path: "/payment", to: "/checkout" },
 ];
 

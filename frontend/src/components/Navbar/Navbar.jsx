@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   BookOpen,
+  CalendarCheck,
   Check,
   ChevronDown,
   ChevronRight,
@@ -119,6 +120,7 @@ const drawerSections = [
       { label: "Create Trip", to: "/create-trip", icon: Route },
       { label: "Packages", to: "/packages", icon: Gift },
       { label: "Offers", to: "/offers", icon: Percent },
+      { label: "My Bookings", to: "/my-bookings", icon: CalendarCheck },
     ],
   },
   {

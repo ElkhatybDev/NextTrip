@@ -10,6 +10,9 @@ import "./Chatbot.css";
 const hiddenPathPrefixes = [
   "/agency-dashboard",
   "/nexttrip-dashboard",
+  "/traveler-dashboard",
+  "/profile",
+  "/my-bookings",
 ];
 
 function createMessage(role, text, actions = []) {

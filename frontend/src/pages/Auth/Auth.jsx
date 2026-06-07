@@ -31,6 +31,10 @@ const trustStats = [
   { value: "24/7", label: "support coverage" },
 ];
 
+function getRoleHomePath(role) {
+  return role === "agency" ? "/agency-dashboard" : "/traveler-dashboard";
+}
+
 export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -95,7 +99,7 @@ export default function Auth() {
     saveAuthSession({ email: loginData.email, role });
     setMessage(`Login success for ${loginData.email}`);
     setErrors({});
-    navigate(location.state?.from || (role === "agency" ? "/agency-dashboard" : "/"), {
+    navigate(location.state?.from || getRoleHomePath(role), {
       replace: true,
     });
   };
@@ -148,7 +152,7 @@ export default function Auth() {
         password: "",
         confirmPassword: "",
       });
-      navigate(role === "agency" ? "/agency-dashboard" : "/", { replace: true });
+      navigate(getRoleHomePath(role), { replace: true });
     } else {
       setMessage("");
     }
@@ -156,7 +160,7 @@ export default function Auth() {
 
   const handleSocialLogin = (provider) => {
     saveAuthSession({ email: `${provider}@nexttrip.local`, role });
-    navigate(location.state?.from || (role === "agency" ? "/agency-dashboard" : "/"), {
+    navigate(location.state?.from || getRoleHomePath(role), {
       replace: true,
     });
   };

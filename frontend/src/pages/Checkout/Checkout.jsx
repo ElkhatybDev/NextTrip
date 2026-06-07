@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { calculatePackagePricing, getPackageDetails } from "../../services/packagesService";
-import BookingSuccessView from "../Packages/components/BookingSuccessView";
 import BookingView from "../Packages/components/BookingView";
 import "../Packages/Packages.css";
 
@@ -21,11 +20,14 @@ const checkoutInitialState = {
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { packageId } = useParams();
   const travelPackage = getPackageDetails(packageId || 1) || getPackageDetails(1);
-  const [bookingForm, setBookingForm] = useState(checkoutInitialState);
-  const [saveCard, setSaveCard] = useState(true);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [bookingForm, setBookingForm] = useState(() => ({
+    ...checkoutInitialState,
+    ...(location.state?.bookingForm || {}),
+  }));
+  const [saveCard, setSaveCard] = useState(location.state?.saveCard ?? true);
 
   const travelersCount = Math.max(1, parseInt(bookingForm.travelers || "1", 10) || 1);
   const pricing = useMemo(
@@ -41,33 +43,17 @@ export default function Checkout() {
     }));
   };
 
-  const scrollTopSafe = () => {
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    }
-  };
-
   const confirmBooking = () => {
-    setIsConfirmed(true);
-    scrollTopSafe();
+    navigate(`/booking-success/${travelPackage.id}`, {
+      state: {
+        selectedPackage: travelPackage,
+        bookingForm,
+        travelersCount,
+        pricing,
+        saveCard,
+      },
+    });
   };
-
-  if (isConfirmed) {
-    return (
-      <BookingSuccessView
-        selectedPackage={travelPackage}
-        bookingForm={bookingForm}
-        travelersCount={travelersCount}
-        pricing={pricing}
-        saveCard={saveCard}
-        onBackToBooking={() => {
-          setIsConfirmed(false);
-          scrollTopSafe();
-        }}
-        onBackToPackages={() => navigate("/packages")}
-      />
-    );
-  }
 
   return (
     <div className="packages-page checkout-page">

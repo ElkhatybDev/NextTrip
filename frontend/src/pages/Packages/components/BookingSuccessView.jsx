@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Download, FileText, Mail } from "lucide-react";
+import { ArrowLeft, CalendarCheck, Download, FileText, Mail } from "lucide-react";
 import Navbar from "../../../components/Navbar/Navbar";
 import Footer from "../../../components/Footer/Footer";
 import "./BookingSuccessView.css";
@@ -431,6 +431,26 @@ export default function BookingSuccessView({
                     <Mail size={16} />
                     Envoyer par email
                   </button>
+                  {onBackToBooking ? (
+                    <button
+                      type="button"
+                      className="secondary-btn"
+                      onClick={onBackToBooking}
+                    >
+                      <ArrowLeft size={16} />
+                      Modifier la réservation
+                    </button>
+                  ) : null}
+                  {onBackToPackages ? (
+                    <button
+                      type="button"
+                      className="secondary-btn"
+                      onClick={onBackToPackages}
+                    >
+                      <CalendarCheck size={16} />
+                      Mes réservations
+                    </button>
+                  ) : null}
                 </div>
                 {showReceiptPanel ? (
                   <div className="receipt-panel">

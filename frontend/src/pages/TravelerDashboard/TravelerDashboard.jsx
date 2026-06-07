@@ -53,6 +53,12 @@ const sidebarItems = [
   { key: "settings", label: "Paramètres", icon: Settings },
 ];
 
+const sidebarSectionKeys = new Set(sidebarItems.map((item) => item.key));
+
+function getInitialSection(section) {
+  return sidebarSectionKeys.has(section) ? section : "overview";
+}
+
 const pageCopy = {
   overview: {
     eyebrow: "Espace voyageur",
@@ -322,9 +328,9 @@ function makeReceiptText(receipt, profile) {
   ].join("\n");
 }
 
-export default function TravelerDashboard() {
+export default function TravelerDashboard({ initialSection = "overview" }) {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState("overview");
+  const [activeSection, setActiveSection] = useState(() => getInitialSection(initialSection));
   const [query, setQuery] = useState("");
   const [filterState, setFilterState] = useState(initialFilterState);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -340,6 +346,11 @@ export default function TravelerDashboard() {
   const [notifications, setNotifications] = useState(notificationData);
   const [profile, setProfile] = useState(travelerProfileData);
   const [settings, setSettings] = useState(travelerSettings);
+
+  useEffect(() => {
+    setActiveSection(getInitialSection(initialSection));
+    setQuery("");
+  }, [initialSection]);
 
   const currentCopy = pageCopy[activeSection] || pageCopy.overview;
   const unreadCount = notifications.filter((item) => item.status === "Non lu").length;
