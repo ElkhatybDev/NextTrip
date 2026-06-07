@@ -101,7 +101,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #143b96;
+  color: #1E3A8A;
   font-weight: 900;
 }
 
@@ -152,7 +152,7 @@
   padding: 16px;
   border-radius: 18px;
   background: #f8fbff;
-  color: #143b96;
+  color: #1E3A8A;
   font-weight: 800;
   line-height: 1.55;
 }
@@ -170,7 +170,7 @@
 }
 
 .package-itinerary span {
-  color: #ff7a1a;
+  color: #F97316;
   font-weight: 900;
 }
 
@@ -220,7 +220,7 @@
 }
 
 .package-booking-panel h2 {
-  color: #143b96;
+  color: #1E3A8A;
 }
 
 .package-booking-panel > span {
@@ -256,7 +256,7 @@
 }
 
 .package-detail-primary {
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
 }
 
@@ -271,7 +271,7 @@
 }
 
 .package-detail-empty a {
-  color: #143b96;
+  color: #1E3A8A;
   font-weight: 900;
 }
 

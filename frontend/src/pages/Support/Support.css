@@ -1,13 +1,14 @@
 .support-page {
   min-height: 100vh;
-  background: #f8fafc;
+  background: #f5f7fb;
   color: #0f172a;
 }
 
 .support-hero {
-  padding: 54px 0;
+  padding: 64px 0;
   background:
-    linear-gradient(135deg, rgba(20, 59, 150, 0.92), rgba(13, 43, 134, 0.96)),
+    radial-gradient(circle at 82% 16%, rgba(249, 115, 22, 0.32), transparent 30%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(30, 58, 138, 0.94)),
     url("https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=80") center/cover;
   color: white;
 }
@@ -57,14 +58,14 @@
   width: min(100%, 340px);
   text-align: center;
   padding: 28px;
-  border-radius: 30px;
+  border-radius: 22px;
   background: white;
   color: #0f172a;
   box-shadow: 0 30px 70px rgba(2, 6, 23, 0.22);
 }
 
 .support-contact-card svg {
-  color: #ff7a1a;
+  color: #F97316;
 }
 
 .support-contact-card h2 {
@@ -82,10 +83,11 @@
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  background: #143b96;
+  background: linear-gradient(135deg, #F97316, #ea580c);
   color: white;
   text-decoration: none;
   font-weight: 900;
+  box-shadow: 0 14px 28px rgba(249, 115, 22, 0.24);
 }
 
 .support-cards {
@@ -98,14 +100,20 @@
 .support-card {
   text-align: center;
   padding: 26px;
-  border-radius: 28px;
+  border-radius: 20px;
   background: white;
   border: 1px solid rgba(148, 163, 184, 0.14);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.support-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 46px rgba(15, 23, 42, 0.09);
 }
 
 .support-card svg {
-  color: #143b96;
+  color: #1E3A8A;
 }
 
 .support-card h3 {
@@ -139,12 +147,20 @@
 
 .support-question-list a {
   padding: 18px 20px;
-  border-radius: 18px;
+  border-radius: 16px;
   background: white;
-  color: #143b96;
+  color: #1E3A8A;
   text-decoration: none;
   font-weight: 900;
   border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.support-question-list a:hover {
+  transform: translateY(-2px);
+  border-color: rgba(30, 58, 138, 0.18);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
 }
 
 @media (max-width: 900px) {

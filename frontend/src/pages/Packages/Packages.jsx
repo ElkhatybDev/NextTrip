@@ -149,15 +149,21 @@ export default function Packages({ variant = "packages" }) {
         <div className="trip-container packages-hero-content">
           <p className="packages-badge">
             {page === "booking"
-              ? "SECURE BOOKING"
+              ? "PAIEMENT SÉCURISÉ"
               : isOffersPage
                 ? "AGENCY OFFERS"
                 : "CURATED TRAVEL PACKAGES"}
           </p>
-          <h1>{page === "booking" ? "Booking details" : isOffersPage ? "Offers" : "Packages"}</h1>
+          <h1>
+            {page === "booking"
+              ? "Vérifiez et confirmez votre voyage"
+              : isOffersPage
+                ? "Offers"
+                : "Packages"}
+          </h1>
           <p>
             {page === "booking"
-              ? `Complete your booking for ${activePackage.title} and review your total before checkout.`
+              ? `Vérifiez les informations voyageur, les détails de paiement et le total pour ${activePackage.title}.`
               : isOffersPage
                 ? "Compare highlighted agency offers with clear prices, trip styles, and booking details."
                 : "Discover handpicked packages designed for romance, adventure, culture, and unforgettable escapes."}

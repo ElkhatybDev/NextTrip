@@ -55,6 +55,7 @@ export default function Home() {
   const [destinationOptions, setDestinationOptions] = useState(fallbackDestinations);
   const [searchMessage, setSearchMessage] = useState("");
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   const handleMenuClick = (label, id) => {
     setActiveMenu(label);
@@ -158,17 +159,26 @@ export default function Home() {
       />
 
       <section id="home" className="hero-section">
-        <video
-          className="hero-media"
-          src={homeVideos.hero}
-          poster={homeImages.hero}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label="NextTrip travel video preview"
-        />
+        {!videoFailed ? (
+          <video
+            className="hero-media"
+            src={homeVideos.hero}
+            poster={homeImages.hero}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-label="NextTrip travel video preview"
+            onError={() => setVideoFailed(true)}
+          />
+        ) : (
+          <img
+            className="hero-media hero-media--fallback"
+            src={homeImages.hero}
+            alt="NextTrip"
+          />
+        )}
         <div className="hero-overlay" />
 
         <div className="hero-content">

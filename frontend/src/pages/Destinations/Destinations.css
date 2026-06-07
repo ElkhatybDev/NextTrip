@@ -7,8 +7,8 @@
 .destinations-hero {
   padding: 54px 0;
   background:
-    radial-gradient(circle at top left, rgba(255, 122, 26, 0.16), transparent 34%),
-    linear-gradient(135deg, #081632 0%, #143b96 58%, #f4a261 135%);
+    radial-gradient(circle at top left, rgba(249, 115, 22, 0.16), transparent 34%),
+    linear-gradient(135deg, #081632 0%, #1E3A8A 58%, #f4a261 135%);
   color: white;
 }
 
@@ -76,9 +76,9 @@
 }
 
 .destinations-primary {
-  background: #ff7a1a;
+  background: #F97316;
   color: white;
-  box-shadow: 0 18px 34px rgba(255, 122, 26, 0.26);
+  box-shadow: 0 18px 34px rgba(249, 115, 22, 0.26);
 }
 
 .destinations-secondary {
@@ -172,7 +172,7 @@
   align-items: center;
   gap: 10px;
   background: #f8fbff;
-  color: #143b96;
+  color: #1E3A8A;
 }
 
 .destinations-search input {
@@ -202,7 +202,7 @@
   padding: 0 15px;
   border-radius: 999px;
   background: #eef4ff;
-  color: #143b96;
+  color: #1E3A8A;
   font-weight: 900;
   cursor: pointer;
   transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
@@ -210,7 +210,7 @@
 
 .destinations-filter-row button:hover,
 .destinations-filter-row button.active {
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
   transform: translateY(-1px);
 }
@@ -244,7 +244,7 @@
   z-index: 2;
   background:
     linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.82)),
-    linear-gradient(135deg, rgba(20, 59, 150, 0.18), transparent);
+    linear-gradient(135deg, rgba(30, 58, 138, 0.18), transparent);
   pointer-events: none;
 }
 
@@ -322,7 +322,7 @@
   padding: 14px 18px;
   border-radius: 999px;
   background: white;
-  color: #143b96;
+  color: #1E3A8A;
   font-weight: 900;
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
 }
@@ -393,7 +393,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  scrollbar-color: rgba(20, 59, 150, 0.28) transparent;
+  scrollbar-color: rgba(30, 58, 138, 0.28) transparent;
   scrollbar-width: thin;
 }
 
@@ -407,7 +407,7 @@
 
 .city-modal-content::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(20, 59, 150, 0.28);
+  background: rgba(30, 58, 138, 0.28);
 }
 
 .city-modal-eyebrow {
@@ -453,7 +453,7 @@
 }
 
 .city-modal-meta svg {
-  color: #143b96;
+  color: #1E3A8A;
 }
 
 .city-modal-meta span,

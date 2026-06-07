@@ -7,8 +7,8 @@
 .agency-hero {
   padding: 58px 0;
   background:
-    radial-gradient(circle at 15% 20%, rgba(255, 122, 26, 0.16), transparent 30%),
-    linear-gradient(135deg, #071426 0%, #102a6b 60%, #143b96 100%);
+    radial-gradient(circle at 15% 20%, rgba(249, 115, 22, 0.16), transparent 30%),
+    linear-gradient(135deg, #071426 0%, #102a6b 60%, #1E3A8A 100%);
   color: white;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .agency-primary {
-  background: #ff7a1a;
+  background: #F97316;
   color: white;
 }
 
@@ -136,7 +136,7 @@
 }
 
 .agency-metric-orange {
-  background: rgba(255, 122, 26, 0.2);
+  background: rgba(249, 115, 22, 0.2);
 }
 
 .agency-message {
@@ -181,7 +181,7 @@
   align-items: center;
   justify-content: center;
   background: #edf4ff;
-  color: #143b96;
+  color: #1E3A8A;
 }
 
 .agency-tool-card h3 {

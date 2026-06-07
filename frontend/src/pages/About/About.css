@@ -1,14 +1,15 @@
 .about-platform-page {
   min-height: 100vh;
-  background: #fbf8f3;
+  background: #f8fafc;
   color: #102033;
 }
 
 .about-platform-hero {
-  padding: 58px 0;
+  padding: 64px 0;
   background:
-    radial-gradient(circle at 80% 10%, rgba(255, 122, 26, 0.16), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #f4efe7 100%);
+    radial-gradient(circle at 82% 12%, rgba(249, 115, 22, 0.2), transparent 30%),
+    radial-gradient(circle at 12% 88%, rgba(30, 58, 138, 0.12), transparent 32%),
+    linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
 }
 
 .about-platform-grid {
@@ -67,21 +68,24 @@
   display: inline-flex;
   align-items: center;
   color: white;
-  background: #143b96;
+  background: linear-gradient(135deg, #1E3A8A, #2563eb);
   text-decoration: none;
   font-weight: 900;
+  box-shadow: 0 14px 28px rgba(30, 58, 138, 0.18);
 }
 
 .about-platform-actions a:last-child {
-  color: #143b96;
-  background: #edf4ff;
+  color: #1E3A8A;
+  background: #ffffff;
+  border: 1px solid rgba(30, 58, 138, 0.12);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
 }
 
 .about-platform-card {
   width: min(100%, 360px);
   min-height: 280px;
   padding: 24px;
-  border-radius: 28px;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -89,7 +93,7 @@
     linear-gradient(180deg, rgba(16, 42, 107, 0.02), rgba(16, 42, 107, 0.9)),
     url("https://images.unsplash.com/flagged/photo-1555169048-3c4845cfcf1c?auto=format&fit=crop&w=900&q=80") center/cover;
   color: white;
-  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 28px 64px rgba(15, 23, 42, 0.18);
 }
 
 .about-platform-card span {
@@ -118,7 +122,7 @@
   max-width: 760px;
   margin: 0 auto;
   font-size: clamp(32px, 4vw, 54px);
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
 }
 
 .about-platform-parts {
@@ -131,14 +135,20 @@
 .about-platform-parts article {
   text-align: center;
   padding: 24px;
-  border-radius: 26px;
+  border-radius: 20px;
   background: white;
   border: 1px solid rgba(148, 163, 184, 0.14);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-platform-parts article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 46px rgba(15, 23, 42, 0.09);
 }
 
 .about-platform-parts svg {
-  color: #143b96;
+  color: #1E3A8A;
 }
 
 .about-platform-parts h3 {
@@ -155,9 +165,12 @@
   margin-top: 56px;
   margin-bottom: 58px;
   padding: 36px;
-  border-radius: 32px;
-  background: #102a6b;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(249, 115, 22, 0.28), transparent 32%),
+    linear-gradient(135deg, #172554, #1E3A8A);
   color: white;
+  box-shadow: 0 24px 58px rgba(30, 58, 138, 0.2);
 }
 
 .about-platform-statement h2 {

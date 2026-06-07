@@ -19,7 +19,7 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(20, 59, 150, 0.45),
+    rgba(30, 58, 138, 0.45),
     rgba(15, 23, 42, 0.58)
   );
 }
@@ -35,7 +35,7 @@
 .section-badge {
   display: inline-block;
   margin-bottom: 10px;
-  color: #ff8a1d;
+  color: #F97316;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -61,6 +61,41 @@
   color: #e5e7eb;
   font-size: 16px;
   line-height: 1.8;
+}
+
+.checkout-hero {
+  min-height: 340px;
+  background-image: url("https://images.pexels.com/photos/7412095/pexels-photo-7412095.jpeg?auto=compress&cs=tinysrgb&w=1600");
+}
+
+.checkout-hero .packages-hero-overlay {
+  background:
+    radial-gradient(circle at 74% 20%, rgba(249, 115, 22, 0.32), transparent 34%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.72), rgba(30, 58, 138, 0.78));
+}
+
+.checkout-hero-link {
+  min-height: 44px;
+  margin-top: 20px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.checkout-hero-link:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .packages-main {
@@ -98,7 +133,7 @@
   padding: 14px 18px;
   border-radius: 18px;
   background: #fff8f2;
-  border: 1px solid rgba(255, 138, 29, 0.18);
+  border: 1px solid rgba(249, 115, 22, 0.18);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.05);
 }
 
@@ -141,7 +176,7 @@
   text-align: center;
   border-radius: 28px;
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 138, 29, 0.18), transparent 36%),
+    radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.18), transparent 36%),
     #ffffff;
   border: 1px solid rgba(148, 163, 184, 0.14);
   box-shadow: 0 22px 48px rgba(15, 23, 42, 0.06);
@@ -168,7 +203,7 @@
   border: none;
   border-radius: 999px;
   padding: 0 20px;
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
   font-size: 14px;
   font-weight: 900;
@@ -189,9 +224,9 @@
 }
 
 .primary-btn {
-  background: linear-gradient(90deg, #143b96, #1d4ed8);
+  background: linear-gradient(90deg, #1E3A8A, #1d4ed8);
   color: white;
-  box-shadow: 0 10px 30px rgba(20, 59, 150, 0.2);
+  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
 }
 
 .secondary-btn {
@@ -206,13 +241,13 @@
 }
 
 .primary-btn:hover {
-  box-shadow: 0 14px 32px rgba(20, 59, 150, 0.26);
+  box-shadow: 0 14px 32px rgba(30, 58, 138, 0.26);
 }
 
 .secondary-btn:hover {
   background: #f8fbff;
-  border-color: rgba(20, 59, 150, 0.2);
-  color: #143b96;
+  border-color: rgba(30, 58, 138, 0.2);
+  color: #1E3A8A;
 }
 
 @media (max-width: 1100px) {

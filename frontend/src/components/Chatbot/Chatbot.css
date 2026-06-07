@@ -535,7 +535,7 @@ body.nexttrip-side-menu-open .nt-chatbot-root {
   filter: saturate(1.08);
   transform: translateY(-3px) scale(1.04);
   box-shadow:
-    0 22px 44px rgba(20, 59, 150, 0.32),
+    0 22px 44px rgba(30, 58, 138, 0.32),
     0 0 0 7px rgba(249, 115, 22, 0.12);
   outline: none;
 }

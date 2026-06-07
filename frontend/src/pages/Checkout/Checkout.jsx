@@ -1,43 +1,55 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { CreditCard, Landmark, ShieldCheck } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { calculatePackagePricing, getPackageDetails } from "../../services/packagesService";
 import BookingSuccessView from "../Packages/components/BookingSuccessView";
-import "../../styles/portalPages.css";
+import BookingView from "../Packages/components/BookingView";
+import "../Packages/Packages.css";
+
+const checkoutInitialState = {
+  fullName: "",
+  email: "",
+  phone: "",
+  travelers: "2",
+  specialRequest: "",
+  cardName: "",
+  cardNumber: "",
+  expiry: "",
+  cvv: "",
+};
 
 export default function Checkout() {
   const navigate = useNavigate();
   const { packageId } = useParams();
   const travelPackage = getPackageDetails(packageId || 1) || getPackageDetails(1);
-  const [travelers, setTravelers] = useState(2);
+  const [bookingForm, setBookingForm] = useState(checkoutInitialState);
+  const [saveCard, setSaveCard] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [bookingForm, setBookingForm] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    specialRequest: "",
-  });
-  const pricing = calculatePackagePricing(travelPackage, travelers);
-  const paymentCards = ["VISA", "Mastercard", "Bank Card"];
+
+  const travelersCount = Math.max(1, parseInt(bookingForm.travelers || "1", 10) || 1);
+  const pricing = useMemo(
+    () => calculatePackagePricing(travelPackage, travelersCount),
+    [travelPackage, travelersCount]
+  );
 
   const handleBookingChange = (event) => {
     const { name, value } = event.target;
-
     setBookingForm((currentForm) => ({
       ...currentForm,
       [name]: value,
     }));
   };
 
-  const confirmBooking = (event) => {
-    event.preventDefault();
-    setIsConfirmed(true);
-
+  const scrollTopSafe = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
+  };
+
+  const confirmBooking = () => {
+    setIsConfirmed(true);
+    scrollTopSafe();
   };
 
   if (isConfirmed) {
@@ -45,157 +57,49 @@ export default function Checkout() {
       <BookingSuccessView
         selectedPackage={travelPackage}
         bookingForm={bookingForm}
-        travelersCount={travelers}
+        travelersCount={travelersCount}
         pricing={pricing}
-        saveCard
-        onBackToBooking={() => setIsConfirmed(false)}
+        saveCard={saveCard}
+        onBackToBooking={() => {
+          setIsConfirmed(false);
+          scrollTopSafe();
+        }}
         onBackToPackages={() => navigate("/packages")}
       />
     );
   }
 
   return (
-    <div className="portal-page checkout-page">
+    <div className="packages-page checkout-page">
       <Navbar />
-      <main className="site-shell portal-main">
-        <section className="portal-hero">
-          <div>
-            <p className="portal-eyebrow">Secure checkout</p>
-            <h1>Review and confirm your package.</h1>
-            <p>
-              This page keeps checkout ready for backend payment integration while the
-              current version stays simple and readable.
-            </p>
-          </div>
-          <Link to={`/packages/${travelPackage.id}`} className="portal-btn portal-btn-ghost">
-            Package details
+      <section className="packages-hero checkout-hero">
+        <div className="packages-hero-overlay" />
+        <div className="trip-container packages-hero-content">
+          <p className="packages-badge">Paiement sécurisé</p>
+          <h1>Vérifiez et confirmez votre forfait.</h1>
+          <p>
+            Vérifiez les informations voyageur, les détails de paiement et le
+            total avant de confirmer votre réservation NextTrip.
+          </p>
+          <Link to={`/packages/${travelPackage.id}`} className="checkout-hero-link">
+            Détails du forfait
           </Link>
-        </section>
+        </div>
+      </section>
 
-        <section className="portal-grid portal-grid-two">
-          <article className="portal-card">
-            <h2>Traveler information</h2>
-            <form className="portal-form-grid" onSubmit={confirmBooking}>
-              <div className="portal-field">
-                <label>Full name</label>
-                <input
-                  name="fullName"
-                  value={bookingForm.fullName}
-                  onChange={handleBookingChange}
-                  placeholder="Traveler full name"
-                />
-              </div>
-              <div className="portal-field">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={bookingForm.email}
-                  onChange={handleBookingChange}
-                  placeholder="email@example.com"
-                />
-              </div>
-              <div className="portal-field">
-                <label>Phone number</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={bookingForm.phone}
-                  onChange={handleBookingChange}
-                  placeholder="Phone number"
-                />
-              </div>
-              <div className="portal-field">
-                <label>Travelers</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={travelers}
-                  onChange={(event) => setTravelers(Number(event.target.value) || 1)}
-                />
-              </div>
-              <div className="portal-field">
-                <label>Payment method</label>
-                <select defaultValue="card">
-                  <option value="card">Bank card</option>
-                  <option value="agency">Pay with agency</option>
-                  <option value="deposit">Deposit request</option>
-                </select>
-              </div>
-              <div className="checkout-payment-strip portal-field-full">
-                <div className="checkout-payment-head">
-                  <CreditCard size={18} />
-                  <span>Accepted cards</span>
-                </div>
-                <div className="checkout-card-icons">
-                  {paymentCards.map((card) => (
-                    <span key={card} className={`checkout-card-icon checkout-card-${card.toLowerCase().replace(/\s+/g, "-")}`}>
-                      {card}
-                    </span>
-                  ))}
-                </div>
-                <p>
-                  <ShieldCheck size={15} />
-                  Secure payment section ready for backend gateway integration.
-                </p>
-              </div>
-              <div className="portal-field portal-field-full">
-                <label>Special request</label>
-                <textarea
-                  name="specialRequest"
-                  value={bookingForm.specialRequest}
-                  onChange={handleBookingChange}
-                  placeholder="Pickup, room preference, food request..."
-                />
-              </div>
-              <div className="portal-inline-actions portal-field-full">
-                <button type="submit" className="portal-btn portal-btn-primary">
-                  Confirm booking
-                </button>
-                <Link to={`/packages/${travelPackage.id}`} className="portal-btn portal-btn-secondary">
-                  Back to package
-                </Link>
-              </div>
-            </form>
-          </article>
+      <BookingView
+        selectedPackage={travelPackage}
+        bookingForm={bookingForm}
+        travelersCount={travelersCount}
+        pricing={pricing}
+        saveCard={saveCard}
+        onBookingChange={handleBookingChange}
+        onSaveCardChange={() => setSaveCard((value) => !value)}
+        onCheckout={confirmBooking}
+        onBackToPackages={() => navigate(`/packages/${travelPackage.id}`)}
+        backLabel="Retour au forfait"
+      />
 
-          <aside className="portal-card">
-            <span className="portal-status">Order summary</span>
-            <h2>{travelPackage.title}</h2>
-            <p>{travelPackage.location}</p>
-            <div className="portal-list">
-              <div className="portal-summary-item">
-                <span>Package price</span>
-                <strong>{pricing.tripPrice.toLocaleString()} MAD</strong>
-              </div>
-              <div className="portal-summary-item">
-                <span>Taxes</span>
-                <strong>{pricing.taxes.toLocaleString()} MAD</strong>
-              </div>
-              <div className="portal-summary-item">
-                <span>Insurance</span>
-                <strong>{pricing.insurance.toLocaleString()} MAD</strong>
-              </div>
-              <div className="portal-summary-item">
-                <span>Total</span>
-                <strong>{pricing.total.toLocaleString()} MAD</strong>
-              </div>
-            </div>
-            <div className="portal-inline-actions">
-              <button type="button" className="portal-btn portal-btn-primary" onClick={confirmBooking}>
-                Confirm booking
-              </button>
-              <Link to="/support" className="portal-btn portal-btn-secondary">
-                Need help?
-              </Link>
-            </div>
-            <div className="checkout-bank-note">
-              <Landmark size={18} />
-              <span>Bank transfer and agency deposit can be connected later.</span>
-            </div>
-          </aside>
-        </section>
-      </main>
       <Footer />
     </div>
   );

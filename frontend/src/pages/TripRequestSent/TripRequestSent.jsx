@@ -1,29 +1,33 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowRight,
   Building2,
   CalendarDays,
   CheckCircle2,
   Clock3,
   Edit3,
+  Hotel,
   MapPin,
   Route,
   Send,
+  ShieldCheck,
   UsersRound,
   WalletCards,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import { getAgencyById } from "../../data/agencyCatalog";
 import {
   getAgencyMatchesForRequest,
   getRequestOffers,
   getTripRequestById,
+  selectTripOffer,
 } from "../../data/userWorkspaceContent";
 import "../../styles/portalPages.css";
 
 export default function TripRequestSent() {
   const { requestId } = useParams();
+  const navigate = useNavigate();
   const request = getTripRequestById(requestId);
   const agencies = getAgencyMatchesForRequest(request);
   const offers = getRequestOffers(requestId);
@@ -47,6 +51,14 @@ export default function TripRequestSent() {
     );
   }
 
+  const chooseOffer = (offerId) => {
+    const selectedRequest = selectTripOffer(request.id, offerId);
+
+    if (selectedRequest) {
+      navigate(`/trip-requests/${request.id}/booking`);
+    }
+  };
+
   const summary = [
     { icon: MapPin, label: "Destination", value: request.destination },
     { icon: CalendarDays, label: "Dates", value: request.dates },
@@ -68,13 +80,13 @@ export default function TripRequestSent() {
     {
       title: "Offers in progress",
       text: activeOffers.length
-        ? `${activeOffers.length} offer(s) are ready to compare.`
+        ? `${activeOffers.length} active offer(s) are ready to compare below.`
         : "Agencies can now prepare price, hotel, transport, and itinerary options.",
       icon: Clock3,
     },
     {
-      title: "Compare offers",
-      text: "You will choose the best agency offer from your request page.",
+      title: "Choose and book",
+      text: "Select the best proposal, then continue to the booking and payment step.",
       icon: Route,
     },
   ];
@@ -93,10 +105,10 @@ export default function TripRequestSent() {
               <Send size={14} />
               Request sent successfully
             </p>
-            <h1>Your trip request is now on its way to agencies.</h1>
+            <h1>Your trip request is now in your traveler workspace.</h1>
             <p>
-              NextTrip saved your request, selected matching agencies, and opened
-              the offer step. You can still view or edit the request from here.
+              NextTrip saved your request, notified matching agencies, and keeps
+              every proposal in this same page so you can compare and book later.
             </p>
           </div>
 
@@ -124,20 +136,21 @@ export default function TripRequestSent() {
             <span>Edit request</span>
             <strong>Update and resend</strong>
           </Link>
-          <Link
-            to={`/trip-requests/${request.id}/offers`}
-            className="request-action-card"
-          >
+          <a href="#request-offers" className="request-action-card">
             <WalletCards size={20} />
-            <span>Offers</span>
-            <strong>{activeOffers.length} ready to compare</strong>
-          </Link>
+            <span>Agency offers</span>
+            <strong>
+              {activeOffers.length
+                ? `${activeOffers.length} ready to compare`
+                : "Waiting for offers"}
+            </strong>
+          </a>
         </section>
 
         <section className="request-sent-grid">
           <article className="request-sent-card request-sent-status-card">
             <span className="portal-status">Delivery progress</span>
-            <h2>What happens after send request</h2>
+            <h2>How this request moves</h2>
             <div className="request-sent-steps">
               {steps.map((step, index) => {
                 const Icon = step.icon;
@@ -183,23 +196,18 @@ export default function TripRequestSent() {
         <section className="request-sent-card request-sent-agencies">
           <div className="profile-card-head">
             <div>
-              <span className="portal-status">Agencies receiving request</span>
+              <span className="portal-status">Agencies notified</span>
               <h2>Who can answer this trip request</h2>
               <p>
-                This section shows the agencies selected by NextTrip. Their role
-                is to receive the brief and send offers with price, hotel,
-                transport, and itinerary.
+                Travelers only see the agencies selected by NextTrip. The agency
+                reply form stays in the protected agency workspace.
               </p>
             </div>
             <Building2 size={28} />
           </div>
           <div className="request-agency-grid">
             {agencies.map((agency) => (
-              <Link
-                to={`/agency/requests/${request.id}?agency=${agency.id}`}
-                className="request-agency-card"
-                key={agency.id}
-              >
+              <article className="request-agency-card" key={agency.id}>
                 <img src={agency.cover} alt={agency.name} />
                 <div>
                   <span>{agency.verified ? "Verified agency" : "Agency"}</span>
@@ -217,13 +225,155 @@ export default function TripRequestSent() {
                     ))}
                   </div>
                   <span className="request-agency-link">
-                    Open agency request form
-                    <ArrowRight size={14} />
+                    Agency notified
+                    <CheckCircle2 size={14} />
                   </span>
                 </div>
-              </Link>
+              </article>
             ))}
           </div>
+        </section>
+
+        <section id="request-offers" className="request-offers-section">
+          <div className="request-offers-head">
+            <div>
+              <span className="portal-status">Agency proposals</span>
+              <h2>Compare offers from agencies</h2>
+              <p>
+                This is the same traveler page after the request is sent. Once
+                agencies answer, their offers appear here for selection.
+              </p>
+            </div>
+            <div className="request-offers-stat">
+              <WalletCards size={22} />
+              <span>{activeOffers.length}</span>
+              <strong>active offer(s)</strong>
+            </div>
+          </div>
+
+          {offers.length === 0 ? (
+            <section className="request-empty-state request-offers-empty">
+              <Clock3 size={34} />
+              <span className="portal-status">Waiting for agencies</span>
+              <h2>No offers yet</h2>
+              <p>
+                The traveler stays on this page while agencies prepare their
+                proposals in the protected agency workspace.
+              </p>
+              <div className="portal-actions">
+                <Link
+                  to={`/trip-requests/${request.id}/edit`}
+                  className="portal-btn portal-btn-primary"
+                >
+                  Edit request
+                </Link>
+                <Link
+                  to={`/trip-requests/${request.id}`}
+                  className="portal-btn portal-btn-secondary"
+                >
+                  Review request
+                </Link>
+              </div>
+            </section>
+          ) : (
+            <section className="offer-comparison-grid request-offers-grid">
+              {offers.map((offer) => {
+                const agency = getAgencyById(offer.agencyId);
+                const isSelected = request.selectedOfferId === offer.id;
+                const needsUpdate = offer.status === "Needs update";
+                const itineraryLines = String(offer.itinerary || "")
+                  .split("\n")
+                  .filter(Boolean);
+
+                return (
+                  <article
+                    className={
+                      isSelected ? "offer-card offer-card-selected" : "offer-card"
+                    }
+                    key={offer.id}
+                  >
+                    <div className="offer-card-cover">
+                      {agency?.cover ? (
+                        <img src={agency.cover} alt={offer.agencyName} />
+                      ) : null}
+                      <span
+                        className={needsUpdate ? "offer-status muted" : "offer-status"}
+                      >
+                        {isSelected ? "Selected" : offer.status}
+                      </span>
+                    </div>
+                    <div className="offer-card-body">
+                      <div className="offer-card-head">
+                        <div>
+                          <span>{offer.agencyName}</span>
+                          <h2>{offer.title}</h2>
+                        </div>
+                        {isSelected ? (
+                          <CheckCircle2 size={26} />
+                        ) : (
+                          <ShieldCheck size={26} />
+                        )}
+                      </div>
+
+                      <div className="offer-price-row">
+                        <div>
+                          <span>Total price</span>
+                          <strong>{offer.totalPrice}</strong>
+                        </div>
+                        <div>
+                          <span>Deposit</span>
+                          <strong>{offer.deposit}</strong>
+                        </div>
+                      </div>
+
+                      <div className="offer-detail-list">
+                        <p>
+                          <Hotel size={16} />
+                          {offer.hotelPlan}
+                        </p>
+                        <p>
+                          <Route size={16} />
+                          {offer.transportPlan}
+                        </p>
+                        {agency?.location ? (
+                          <p>
+                            <MapPin size={16} />
+                            {agency.location}
+                          </p>
+                        ) : null}
+                      </div>
+
+                      <div className="offer-itinerary">
+                        <span>Itinerary</span>
+                        {itineraryLines.map((line) => (
+                          <p key={line}>{line}</p>
+                        ))}
+                      </div>
+
+                      <div className="offer-message">
+                        <span>Agency message</span>
+                        <p>{offer.message}</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="portal-btn portal-btn-primary"
+                        disabled={needsUpdate}
+                        onClick={() => chooseOffer(offer.id)}
+                      >
+                        <Send size={16} />
+                        {needsUpdate
+                          ? "Needs update"
+                          : isSelected
+                            ? "Continue booking"
+                            : "Select offer"}
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </section>
+          )}
         </section>
       </main>
       <Footer />

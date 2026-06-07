@@ -1,5 +1,39 @@
 import React from "react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  CreditCard,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+  Users,
+  WalletCards,
+} from "lucide-react";
 import "./BookingView.css";
+
+const formatPrice = (value) => `${Number(value || 0).toLocaleString()} MAD`;
+
+function formatTravelDate(date) {
+  if (!date) {
+    return "Date flexible";
+  }
+
+  const parsedDate = new Date(`${date}T00:00:00`);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return date;
+  }
+
+  return new Intl.DateTimeFormat("fr", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(parsedDate);
+}
 
 export default function BookingView({
   selectedPackage,
@@ -11,179 +45,323 @@ export default function BookingView({
   onSaveCardChange,
   onCheckout,
   onBackToPackages,
+  backLabel = "Retour aux forfaits",
 }) {
+  const serviceFees = pricing.taxes + pricing.insurance;
+  const travelDate = formatTravelDate(selectedPackage.nextDeparture);
+  const pricePerTraveler = selectedPackage.price;
+
   return (
-    <main className="packages-main">
-      <div className="booking-grid">
-        <section className="booking-card">
-          <div className="selected-package-box">
-            <img
-              src={selectedPackage.image}
-              alt={selectedPackage.title}
-              className="selected-package-image"
-              decoding="async"
-            />
-            <div className="selected-package-content">
-              <p className="section-badge">SELECTED PACKAGE</p>
-              <h2>{selectedPackage.title}</h2>
-              <p className="package-location">{selectedPackage.location}</p>
-              <div className="selected-package-meta">
-                <p>
-                  <span>Duration:</span> {selectedPackage.duration}
-                </p>
-                <p>
-                  <span>Category:</span> {selectedPackage.category}
-                </p>
-                <p>
-                  <span>Guests:</span> {travelersCount} Traveler(s)
-                </p>
-                <p>
-                  <span>Rating:</span> {"\u2605"} {selectedPackage.rating}
-                </p>
+    <main className="packages-main booking-main">
+      <div className="checkout-layout">
+        <div className="checkout-left-column">
+          <section className="checkout-card checkout-trip-card" aria-label="Voyage sélectionné">
+            <div className="checkout-card-heading">
+              <div>
+                <p className="section-badge">Voyage sélectionné</p>
+                <h2>{selectedPackage.title}</h2>
+              </div>
+              <span className="checkout-status-pill">
+                <CheckCircle2 size={16} />
+                Prêt à réserver
+              </span>
+            </div>
+
+            <div className="checkout-trip-overview">
+              <div className="checkout-trip-media" aria-label={selectedPackage.title}>
+                <img
+                  src={selectedPackage.image}
+                  alt=""
+                  className="checkout-trip-image"
+                  decoding="async"
+                  onError={(event) => {
+                    event.currentTarget.classList.add("checkout-trip-image-hidden");
+                  }}
+                />
+                <span>{selectedPackage.location.split(",")[0]}</span>
+              </div>
+              <div className="checkout-trip-copy">
+                <span>{selectedPackage.category}</span>
+                <h3>{selectedPackage.location}</h3>
+                <p>{selectedPackage.description}</p>
               </div>
             </div>
-          </div>
 
-          <div className="booking-section">
-            <p className="section-badge">TRAVELER DETAILS</p>
-            <h3>Enter your information</h3>
-          </div>
-          <div className="booking-form-grid">
-            <div className="booking-field">
-              <label>Full name</label>
-              <input
-                name="fullName"
-                value={bookingForm.fullName}
-                onChange={onBookingChange}
-                placeholder="Enter your full name"
-              />
+            <div className="checkout-info-grid">
+              <div className="checkout-info-tile">
+                <MapPin size={18} />
+                <span>Destination</span>
+                <strong>{selectedPackage.location}</strong>
+              </div>
+              <div className="checkout-info-tile">
+                <CalendarDays size={18} />
+                <span>Date de voyage</span>
+                <strong>{travelDate}</strong>
+              </div>
+              <div className="checkout-info-tile">
+                <Users size={18} />
+                <span>Voyageurs</span>
+                <strong>{travelersCount} voyageur(s)</strong>
+              </div>
+              <div className="checkout-info-tile">
+                <WalletCards size={18} />
+                <span>Prix par voyageur</span>
+                <strong>{formatPrice(pricePerTraveler)}</strong>
+              </div>
             </div>
-            <div className="booking-field">
-              <label>Email</label>
-              <input
-                name="email"
-                value={bookingForm.email}
-                onChange={onBookingChange}
-                placeholder="Enter your email"
-              />
-            </div>
-            <div className="booking-field">
-              <label>Phone number</label>
-              <input
-                name="phone"
-                value={bookingForm.phone}
-                onChange={onBookingChange}
-                placeholder="Enter your phone number"
-              />
-            </div>
-            <div className="booking-field">
-              <label>Number of travelers</label>
-              <input
-                type="number"
-                min="1"
-                name="travelers"
-                value={bookingForm.travelers}
-                onChange={onBookingChange}
-                placeholder="2"
-              />
-            </div>
-            <div className="booking-field booking-field-full">
-              <label>Special request</label>
-              <textarea
-                name="specialRequest"
-                value={bookingForm.specialRequest}
-                onChange={onBookingChange}
-                rows={5}
-                placeholder="Add any note, room preference, food request, or airport pickup details..."
-              />
-            </div>
-          </div>
+          </section>
 
-          <div className="booking-section payment-space">
-            <p className="section-badge">PAYMENT DETAILS</p>
-            <h3>Bank card information</h3>
-          </div>
-          <div className="booking-form-grid">
-            <div className="booking-field booking-field-full">
-              <label>Cardholder name</label>
-              <input
-                name="cardName"
-                value={bookingForm.cardName}
-                onChange={onBookingChange}
-                placeholder="Name on card"
-              />
+          <section className="checkout-card" aria-label="Détails voyageur">
+            <div className="checkout-card-heading">
+              <div>
+                <p className="section-badge">Détails voyageur</p>
+                <h2>Informations de contact</h2>
+              </div>
+              <span className="checkout-icon-badge">
+                <UserRound size={18} />
+              </span>
             </div>
-            <div className="booking-field booking-field-full">
-              <label>Card number</label>
-              <input
-                name="cardNumber"
-                value={bookingForm.cardNumber}
-                onChange={onBookingChange}
-                placeholder="1234 5678 9012 3456"
-              />
-            </div>
-            <div className="booking-field">
-              <label>Expiry date</label>
-              <input
-                name="expiry"
-                value={bookingForm.expiry}
-                onChange={onBookingChange}
-                placeholder="MM/YY"
-              />
-            </div>
-            <div className="booking-field">
-              <label>CVV</label>
-              <input
-                name="cvv"
-                value={bookingForm.cvv}
-                onChange={onBookingChange}
-                placeholder="123"
-              />
-            </div>
-          </div>
-          <div className="save-card-box">
-            <input
-              id="saveCard"
-              type="checkbox"
-              checked={saveCard}
-              onChange={onSaveCardChange}
-            />
-            <label htmlFor="saveCard">Save this card for faster future bookings</label>
-          </div>
-        </section>
 
-        <aside className="booking-sidebar">
-          <section className="booking-card">
-            <p className="section-badge">ORDER SUMMARY</p>
-            <h3>Checkout</h3>
+            <div className="booking-form-grid">
+              <div className="booking-field">
+                <label htmlFor="fullName">Nom complet</label>
+                <div className="checkout-input-wrap">
+                  <UserRound size={17} />
+                  <input
+                    id="fullName"
+                    name="fullName"
+                    value={bookingForm.fullName}
+                    onChange={onBookingChange}
+                    placeholder="Nom complet du voyageur"
+                    autoComplete="name"
+                  />
+                </div>
+              </div>
+              <div className="booking-field">
+                <label htmlFor="email">Email</label>
+                <div className="checkout-input-wrap">
+                  <Mail size={17} />
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={bookingForm.email}
+                    onChange={onBookingChange}
+                    placeholder="email@example.com"
+                    autoComplete="email"
+                  />
+                </div>
+              </div>
+              <div className="booking-field">
+                <label htmlFor="phone">Numéro de téléphone</label>
+                <div className="checkout-input-wrap">
+                  <Phone size={17} />
+                  <input
+                    id="phone"
+                    type="tel"
+                    name="phone"
+                    value={bookingForm.phone}
+                    onChange={onBookingChange}
+                    placeholder="Numéro de téléphone"
+                    autoComplete="tel"
+                  />
+                </div>
+              </div>
+              <div className="booking-field">
+                <label htmlFor="travelers">Nombre de voyageurs</label>
+                <div className="checkout-input-wrap">
+                  <Users size={17} />
+                  <input
+                    id="travelers"
+                    type="number"
+                    min="1"
+                    name="travelers"
+                    value={bookingForm.travelers}
+                    onChange={onBookingChange}
+                    placeholder="2"
+                  />
+                </div>
+              </div>
+              <div className="booking-field booking-field-full">
+                <label htmlFor="specialRequest">Demande spéciale</label>
+                <textarea
+                  id="specialRequest"
+                  name="specialRequest"
+                  value={bookingForm.specialRequest}
+                  onChange={onBookingChange}
+                  rows={4}
+                  placeholder="Pickup, préférence de chambre, demande repas, ou autre détail utile..."
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="checkout-card checkout-payment-card" aria-label="Détails de paiement">
+            <div className="checkout-card-heading">
+              <div>
+                <p className="section-badge">Formulaire de paiement</p>
+                <h2>Détails de la carte</h2>
+              </div>
+              <span className="checkout-icon-badge checkout-icon-badge-orange">
+                <CreditCard size={18} />
+              </span>
+            </div>
+
+            <div className="accepted-cards" aria-label="Cartes acceptées">
+              <div className="accepted-cards-label">
+                <WalletCards size={16} />
+                <span>Cartes acceptées</span>
+              </div>
+              <div className="accepted-card-brands">
+                <strong>VISA</strong>
+                <strong>Mastercard</strong>
+                <strong>Carte bancaire</strong>
+              </div>
+            </div>
+
+            <div className="booking-form-grid">
+              <div className="booking-field booking-field-full">
+                <label htmlFor="cardName">Nom du titulaire</label>
+                <div className="checkout-input-wrap">
+                  <UserRound size={17} />
+                  <input
+                    id="cardName"
+                    name="cardName"
+                    value={bookingForm.cardName}
+                    onChange={onBookingChange}
+                    placeholder="Nom figurant sur la carte"
+                    autoComplete="cc-name"
+                  />
+                </div>
+              </div>
+              <div className="booking-field booking-field-full">
+                <label htmlFor="cardNumber">Numéro de carte</label>
+                <div className="checkout-input-wrap checkout-card-number">
+                  <CreditCard size={17} />
+                  <input
+                    id="cardNumber"
+                    name="cardNumber"
+                    value={bookingForm.cardNumber}
+                    onChange={onBookingChange}
+                    placeholder="1234 5678 9012 3456"
+                    inputMode="numeric"
+                    autoComplete="cc-number"
+                  />
+                  <span>123</span>
+                </div>
+              </div>
+              <div className="booking-field">
+                <label htmlFor="expiry">Date d'expiration</label>
+                <div className="checkout-input-wrap">
+                  <CalendarDays size={17} />
+                  <input
+                    id="expiry"
+                    name="expiry"
+                    value={bookingForm.expiry}
+                    onChange={onBookingChange}
+                    placeholder="MM/AA"
+                    inputMode="numeric"
+                    autoComplete="cc-exp"
+                  />
+                </div>
+              </div>
+              <div className="booking-field">
+                <label htmlFor="cvv">Code CVV</label>
+                <div className="checkout-input-wrap">
+                  <Lock size={17} />
+                  <input
+                    id="cvv"
+                    name="cvv"
+                    value={bookingForm.cvv}
+                    onChange={onBookingChange}
+                    placeholder="123"
+                    inputMode="numeric"
+                    autoComplete="cc-csc"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="save-card-box">
+              <input
+                id="saveCard"
+                type="checkbox"
+                checked={saveCard}
+                onChange={onSaveCardChange}
+              />
+              <label htmlFor="saveCard">
+                Enregistrer cette carte pour les prochaines réservations
+              </label>
+            </div>
+
+            <p className="secure-payment-note">
+              <ShieldCheck size={17} />
+              Paiement sécurisé par NextTrip.
+            </p>
+          </section>
+        </div>
+
+        <aside className="checkout-summary-column" aria-label="Résumé de commande">
+          <section className="checkout-card checkout-summary-card">
+            <div className="checkout-summary-top">
+              <p className="section-badge">Résumé de commande</p>
+              <h2>{selectedPackage.title}</h2>
+              <p>
+                {selectedPackage.location} - {selectedPackage.duration}
+              </p>
+            </div>
+
+            <div className="summary-trip-strip">
+              <div>
+                <Sparkles size={18} />
+                <span>{selectedPackage.dealTag || "Forfait NextTrip"}</span>
+              </div>
+              <strong>{selectedPackage.rating} avis</strong>
+            </div>
+
             <div className="price-info-box">
-              Price updates automatically based on <strong>{travelersCount}</strong>{" "}
-              traveler(s).
+              Le total se met à jour automatiquement quand le nombre de voyageurs change.
             </div>
+
             <div className="price-lines">
               <div>
-                <span>Package price</span>
-                <strong>{pricing.tripPrice.toLocaleString()} MAD</strong>
+                <span>Prix par voyageur</span>
+                <strong>{formatPrice(pricePerTraveler)}</strong>
               </div>
               <div>
-                <span>Taxes and fees</span>
-                <strong>{pricing.taxes.toLocaleString()} MAD</strong>
+                <span>Nombre de voyageurs</span>
+                <strong>{travelersCount}</strong>
               </div>
               <div>
-                <span>Travel insurance</span>
-                <strong>{pricing.insurance.toLocaleString()} MAD</strong>
+                <span>Prix de base</span>
+                <strong>{formatPrice(pricing.tripPrice)}</strong>
+              </div>
+              <div>
+                <span>Frais de service</span>
+                <strong>{formatPrice(serviceFees)}</strong>
               </div>
             </div>
+
             <div className="price-total">
-              <span>Total</span>
-              <strong>{pricing.total.toLocaleString()} MAD</strong>
+              <span>Prix total</span>
+              <strong>{formatPrice(pricing.total)}</strong>
             </div>
+
+            <div className="checkout-security-box">
+              <ShieldCheck size={20} />
+              <div>
+                <strong>Paiement chiffré</strong>
+                <span>Paiement sécurisé par NextTrip</span>
+              </div>
+            </div>
+
             <div className="booking-actions">
-              <button type="button" className="primary-btn" onClick={onCheckout}>
-                Checkout
+              <button type="button" className="checkout-confirm-btn" onClick={onCheckout}>
+                <ShieldCheck size={18} />
+                Confirmer le paiement
               </button>
               <button type="button" className="secondary-btn" onClick={onBackToPackages}>
-                Back to packages
+                {backLabel}
               </button>
             </div>
           </section>

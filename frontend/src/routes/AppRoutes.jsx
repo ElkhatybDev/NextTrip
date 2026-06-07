@@ -45,8 +45,8 @@ const Services = lazy(() => import("../pages/Services/Services"));
 const ServiceDetails = lazy(() => import("../pages/ServiceDetails/ServiceDetails"));
 const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 
-function protect(element) {
-  return <ProtectedRoute>{element}</ProtectedRoute>;
+function protect(element, allowedRoles) {
+  return <ProtectedRoute allowedRoles={allowedRoles}>{element}</ProtectedRoute>;
 }
 
 const mainRoutes = [
@@ -76,7 +76,7 @@ const travelerRoutes = [
 
 const discoveryRoutes = [
   { path: "/agency", element: <Agency /> },
-  { path: "/agency/requests/:requestId", element: <AgencyRequestForm /> },
+  { path: "/agency/requests/:requestId", element: protect(<AgencyRequestForm />, ["agency"]) },
   { path: "/agency/:agencyId", element: <AgencyDetails /> },
   { path: "/agencies/:agencyId", element: <AgencyDetails /> },
   { path: "/experience", element: <TravelExperience /> },

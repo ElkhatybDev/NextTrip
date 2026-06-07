@@ -19,7 +19,7 @@
   position: absolute;
   background: linear-gradient(
     to bottom,
-    rgba(20, 59, 150, 0.45),
+    rgba(30, 58, 138, 0.45),
     rgba(15, 23, 42, 0.55)
   );
 }
@@ -94,7 +94,7 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #ff8a1d;
+  color: #F97316;
 }
 
 .community-card h2,
@@ -136,7 +136,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 1.6px;
-  color: #ff8a1d;
+  color: #F97316;
 }
 
 .stat-box h3 {
@@ -159,7 +159,7 @@
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
   display: flex;
   align-items: center;
@@ -188,7 +188,7 @@
 .composer-form input:focus,
 .composer-form textarea:focus,
 .comment-form input:focus {
-  border-color: #143b96;
+  border-color: #1E3A8A;
   background: white;
 }
 
@@ -223,7 +223,7 @@
   margin-right: 12px;
   border: 0;
   border-radius: 12px;
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
   padding: 10px 16px;
   font-weight: 700;
@@ -240,13 +240,13 @@
   width: 100%;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(90deg, #143b96, #1d4ed8);
+  background: linear-gradient(90deg, #1E3A8A, #1d4ed8);
   color: white;
   padding: 15px 24px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(20, 59, 150, 0.2);
+  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
 }
 
 .post-card {
@@ -320,8 +320,8 @@
   align-items: center;
   gap: 4px;
   background: #edf3ff;
-  color: #143b96;
-  border: 1px solid rgba(20, 59, 150, 0.1);
+  color: #1E3A8A;
+  border: 1px solid rgba(30, 58, 138, 0.1);
   border-radius: 999px;
   padding: 5px 10px;
   font-size: 12px;
@@ -342,7 +342,7 @@
 .post-label {
   border-radius: 999px;
   background: #fff7ed;
-  color: #ff8a1d;
+  color: #F97316;
   border: 1px solid #fed7aa;
   padding: 10px 16px;
   font-size: 12px;
@@ -366,7 +366,7 @@
 .post-placeholder {
   width: 100%;
   height: 220px;
-  background: linear-gradient(135deg, #143b96, #1d4ed8);
+  background: linear-gradient(135deg, #1E3A8A, #1d4ed8);
   color: white;
   display: flex;
   align-items: center;
@@ -417,7 +417,7 @@
 .post-details-link {
   margin-top: 16px;
   border: none;
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
   border-radius: 999px;
   padding: 11px 16px;
@@ -453,9 +453,9 @@
 }
 
 .like-btn.liked {
-  background: #143b96;
+  background: #1E3A8A;
   color: white;
-  border-color: #143b96;
+  border-color: #1E3A8A;
 }
 
 .comments-count {
@@ -556,7 +556,7 @@
 .comment-form button {
   justify-content: center;
   border: none;
-  background: #ff8a1d;
+  background: #F97316;
   color: white;
   padding: 12px 20px;
   cursor: pointer;

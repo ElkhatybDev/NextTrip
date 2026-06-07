@@ -11,7 +11,7 @@
   overflow: auto;
   padding: 22px;
   background:
-    radial-gradient(circle at center, rgba(20, 59, 150, 0.18), transparent 34%),
+    radial-gradient(circle at center, rgba(30, 58, 138, 0.18), transparent 34%),
     rgba(8, 17, 31, 0.62);
   backdrop-filter: blur(10px);
   animation: requestLoadingFadeIn 0.22s ease both;
@@ -25,7 +25,7 @@
   padding: 34px;
   border-radius: 30px;
   background:
-    radial-gradient(circle at top right, rgba(255, 138, 29, 0.12), transparent 34%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.12), transparent 34%),
     linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
   border: 1px solid rgba(255, 255, 255, 0.72);
   box-shadow: 0 34px 80px rgba(2, 6, 23, 0.32);
@@ -41,22 +41,22 @@
   place-items: center;
   border-radius: 999px;
   background: #eef4ff;
-  box-shadow: inset 0 0 0 1px rgba(20, 59, 150, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(30, 58, 138, 0.08);
 }
 
 .request-loading-spinner span {
   width: 48px;
   height: 48px;
   border-radius: 999px;
-  border: 5px solid rgba(20, 59, 150, 0.14);
-  border-top-color: #ff7a1a;
-  border-right-color: #143b96;
+  border: 5px solid rgba(30, 58, 138, 0.14);
+  border-top-color: #F97316;
+  border-right-color: #1E3A8A;
   animation: requestLoadingSpin 0.88s linear infinite;
 }
 
 .request-loading-eyebrow {
   margin: 18px 0 0;
-  color: #ff7a1a;
+  color: #F97316;
   font-size: 12px;
   font-weight: 950;
   letter-spacing: 0.12em;
@@ -96,7 +96,7 @@
   border-radius: 999px;
   background: #ffffff;
   border: 1px solid #eef2f7;
-  color: #143b96;
+  color: #1E3A8A;
   font-size: 12px;
   font-weight: 900;
   animation: requestLoadingStepPulse 1.35s ease-in-out infinite;

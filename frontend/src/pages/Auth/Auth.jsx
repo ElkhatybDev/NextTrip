@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Compass, MessageCircleMore, ShieldCheck } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 import AuthForm from "../../components/AuthForm/AuthForm";
 import { saveAuthSession } from "../../utils/authSession";
 import "./Auth.css";
@@ -234,6 +235,7 @@ export default function Auth() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

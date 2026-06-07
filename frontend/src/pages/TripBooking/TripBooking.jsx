@@ -6,8 +6,10 @@ import {
   CheckCircle2,
   CreditCard,
   Hotel,
+  MapPin,
   Route,
   ShieldCheck,
+  Users,
   WalletCards,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
@@ -106,6 +108,24 @@ export default function TripBooking() {
               </div>
             </div>
 
+            <div className="trip-booking-request-grid">
+              <div>
+                <MapPin size={17} />
+                <span>Destination</span>
+                <strong>{request.destination}</strong>
+              </div>
+              <div>
+                <CalendarCheck size={17} />
+                <span>Travel dates</span>
+                <strong>{request.dates}</strong>
+              </div>
+              <div>
+                <Users size={17} />
+                <span>Travelers</span>
+                <strong>{request.travelers}</strong>
+              </div>
+            </div>
+
             <div className="offer-detail-list">
               <p>
                 <Hotel size={16} />
@@ -158,18 +178,22 @@ export default function TripBooking() {
           </article>
 
           <aside className="booking-side-card">
-            <span className="portal-status">What NextTrip keeps</span>
-            <h2>Clean handoff</h2>
+            <span className="portal-status">Next step</span>
+            <h2>{confirmed ? "Payment is ready" : "Prepare the booking"}</h2>
             <p>
-              The traveler chose an agency offer, so NextTrip can lock the selected
-              proposal, open payment, and keep the conversation attached to this
-              booking.
+              The selected agency offer stays linked to this traveler request, so the
+              payment step can continue with the right destination, dates, price, and
+              agency context.
             </p>
             <div className="portal-pill-row">
               <span className="portal-pill">Selected offer</span>
               <span className="portal-pill">Agency context</span>
               <span className="portal-pill">Payment step</span>
               <span className="portal-pill">Booking status</span>
+            </div>
+            <div className="trip-booking-secure-note">
+              <ShieldCheck size={18} />
+              <span>Secure checkout remains connected to this booking request.</span>
             </div>
           </aside>
         </section>

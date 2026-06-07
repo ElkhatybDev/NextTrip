@@ -69,13 +69,13 @@
 
 .trip-filter-chip:hover {
   transform: translateY(-1px);
-  border-color: rgba(20, 59, 150, 0.2);
-  color: #143b96;
+  border-color: rgba(30, 58, 138, 0.2);
+  color: #1E3A8A;
 }
 
 .trip-filter-chip.active {
-  background: #143b96;
-  border-color: #143b96;
+  background: #1E3A8A;
+  border-color: #1E3A8A;
   color: white;
 }
 

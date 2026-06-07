@@ -1,89 +1,247 @@
-.booking-grid {
+.booking-main {
+  width: min(1180px, calc(100% - 40px));
+}
+
+.checkout-layout {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
+  gap: 28px;
+  align-items: start;
 }
 
-.booking-card {
+.checkout-left-column {
+  display: grid;
+  gap: 22px;
+}
+
+.checkout-card {
+  position: relative;
+  overflow: hidden;
   padding: 24px;
-  background: white;
-  border: 1px solid #eef2f7;
-  border-radius: 28px;
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: var(--nt-radius-card);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.94)),
+    var(--nt-white);
+  box-shadow: var(--nt-card-shadow);
 }
 
-.selected-package-box {
+.checkout-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--nt-orange), var(--nt-blue));
+  opacity: 0.92;
+}
+
+.checkout-card-heading,
+.checkout-summary-top {
+  position: relative;
+}
+
+.checkout-card-heading {
   display: flex;
-  gap: 24px;
-  margin-bottom: 32px;
-  padding: 20px;
-  background: #f8fbff;
-  border: 1px solid #eef2f7;
-  border-radius: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
 }
 
-.selected-package-image {
-  width: 224px;
-  height: 160px;
-  border-radius: 22px;
-  object-fit: cover;
-}
-
-.selected-package-content {
-  flex: 1;
-}
-
-.selected-package-content h2,
-.booking-section h3,
-.booking-card h3 {
+.checkout-card-heading h2,
+.checkout-summary-top h2 {
   margin: 0;
-  color: #0f172a;
+  color: var(--nt-ink);
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.14;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.checkout-status-pill,
+.checkout-icon-badge,
+.summary-trip-strip,
+.checkout-security-box,
+.secure-payment-note {
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkout-status-pill {
+  flex: 0 0 auto;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: var(--nt-blue);
+  border: 1px solid rgba(30, 58, 138, 0.12);
+  font-size: 13px;
   font-weight: 900;
 }
 
-.selected-package-content h2 {
-  font-size: 32px;
+.checkout-icon-badge {
+  width: 46px;
+  height: 46px;
+  justify-content: center;
+  border-radius: 16px;
+  background: #eef4ff;
+  color: var(--nt-blue);
+  border: 1px solid rgba(30, 58, 138, 0.12);
 }
 
-.booking-section h3,
-.booking-card h3 {
-  font-size: 30px;
+.checkout-icon-badge-orange {
+  background: #fff7ed;
+  color: var(--nt-orange);
+  border-color: rgba(249, 115, 22, 0.18);
 }
 
-.package-location {
-  margin: 8px 0 0;
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 700;
+.checkout-trip-card {
+  padding-bottom: 22px;
 }
 
-.selected-package-meta {
+.checkout-payment-card {
+  background:
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 255, 255, 0.95)),
+    var(--nt-white);
+}
+
+.checkout-trip-overview {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+  padding: 16px;
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(30, 58, 138, 0.06), rgba(249, 115, 22, 0.06)),
+    #fbfdff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.checkout-trip-media {
+  position: relative;
+  min-height: 170px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(30, 58, 138, 0.86), rgba(249, 115, 22, 0.78)),
+    linear-gradient(45deg, #dbeafe, #fff7ed);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.checkout-trip-media span {
+  position: relative;
+  z-index: 1;
+  max-width: 80%;
+  color: var(--nt-white);
+  font-size: 22px;
+  font-weight: 950;
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: 0 12px 28px rgba(15, 23, 42, 0.28);
+}
+
+.checkout-trip-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  z-index: 2;
+}
+
+.checkout-trip-image-hidden {
+  display: none;
+}
+
+.checkout-trip-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.checkout-trip-copy span,
+.accepted-cards-label,
+.checkout-info-tile span,
+.price-lines span,
+.checkout-security-box span {
+  color: var(--nt-muted);
+}
+
+.checkout-trip-copy span {
+  width: fit-content;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff7ed;
+  color: var(--nt-orange);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.checkout-trip-copy h3 {
+  margin: 0;
+  color: var(--nt-blue);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.22;
+}
+
+.checkout-trip-copy p {
+  margin: 10px 0 0;
+  color: var(--nt-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.checkout-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   margin-top: 16px;
-  color: #64748b;
+}
+
+.checkout-info-tile {
+  min-height: 116px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.checkout-info-tile svg {
+  color: var(--nt-orange);
+}
+
+.checkout-info-tile span {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.checkout-info-tile strong {
+  color: var(--nt-ink);
   font-size: 14px;
-}
-
-.selected-package-meta span,
-.price-info-box strong {
-  color: #1e293b;
-  font-weight: 800;
-}
-
-.booking-section {
-  margin-bottom: 24px;
-}
-
-.payment-space {
-  margin-top: 40px;
+  line-height: 1.35;
 }
 
 .booking-form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .booking-field {
@@ -96,73 +254,262 @@
 }
 
 .booking-field label {
-  margin-bottom: 10px;
+  margin-bottom: 9px;
   color: #334155;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 900;
 }
 
-.booking-field input,
+.checkout-input-wrap {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: var(--nt-radius-field);
+  background: #f8fafc;
+  padding: 0 16px;
+  color: var(--nt-blue);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.checkout-input-wrap svg {
+  flex: 0 0 auto;
+}
+
+.checkout-input-wrap:focus-within,
+.booking-field textarea:focus {
+  border-color: rgba(30, 58, 138, 0.7);
+  background: var(--nt-white);
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.08);
+}
+
+.checkout-input-wrap input,
 .booking-field textarea {
   width: 100%;
-  border: 1px solid #dbe3ef;
-  border-radius: 16px;
-  background: #f8fafc;
-  padding: 14px 16px;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--nt-ink);
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.booking-field input:focus,
-.booking-field textarea:focus {
-  border-color: #143b96;
-  background: white;
+.checkout-input-wrap input::placeholder,
+.booking-field textarea::placeholder {
+  color: #94a3b8;
 }
 
 .booking-field textarea {
-  min-height: 130px;
+  min-height: 122px;
+  border: 1px solid #dbe3ef;
+  border-radius: var(--nt-radius-field);
+  background: #f8fafc;
+  padding: 15px 16px;
   resize: vertical;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.checkout-card-number span {
+  flex: 0 0 auto;
+  min-width: 38px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.accepted-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8fafc, #fff7ed);
+  border: 1px solid rgba(249, 115, 22, 0.14);
+}
+
+.accepted-cards-label {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.accepted-cards-label svg {
+  flex: 0 0 auto;
+  color: var(--nt-blue);
+}
+
+.accepted-card-brands {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.accepted-card-brands strong {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--nt-blue);
+  color: var(--nt-white);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.accepted-card-brands strong:nth-of-type(2) {
+  background: #111827;
+}
+
+.accepted-card-brands strong:nth-of-type(3) {
+  background: #0f766e;
 }
 
 .save-card-box {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 24px;
-  padding: 16px;
-  background: #f8fbff;
-  border: 1px solid #eef2f7;
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 16px;
+}
+
+.save-card-box input {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  flex: 0 0 auto;
+  appearance: none;
+  border: 2px solid rgba(30, 58, 138, 0.28);
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.save-card-box input:checked {
+  background: var(--nt-orange);
+  border-color: var(--nt-orange);
+}
+
+.save-card-box input:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.save-card-box input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18);
 }
 
 .save-card-box label {
   color: #334155;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 750;
+  line-height: 1.45;
 }
 
-.booking-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.secure-payment-note {
+  gap: 8px;
+  margin: 14px 0 0;
+  color: var(--nt-blue);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.checkout-summary-column {
+  position: sticky;
+  top: 96px;
+}
+
+.checkout-summary-card {
+  padding: 26px;
+}
+
+.checkout-summary-top h2 {
+  font-size: clamp(22px, 2.2vw, 28px);
+}
+
+.checkout-summary-top p:last-child {
+  margin: 9px 0 0;
+  color: var(--nt-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.summary-trip-strip {
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #eef4ff;
+  color: var(--nt-blue);
+}
+
+.summary-trip-strip div {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+}
+
+.summary-trip-strip strong {
+  flex: 0 0 auto;
+  color: var(--nt-orange);
+  font-size: 13px;
 }
 
 .price-info-box {
   margin-top: 16px;
   padding: 14px 16px;
-  background: #f8fbff;
-  border: 1px solid #eef2f7;
-  border-radius: 16px;
-  color: #64748b;
-  font-size: 14px;
+  border-radius: 14px;
+  background: #fff7ed;
+  border: 1px solid rgba(249, 115, 22, 0.18);
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.55;
 }
 
 .price-lines {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 14px;
+  margin-top: 22px;
 }
 
 .price-lines div,
@@ -170,78 +517,195 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
 }
 
 .price-lines div {
-  color: #64748b;
+  color: var(--nt-muted);
   font-size: 14px;
 }
 
-.price-lines strong,
-.price-total span {
-  color: #0f172a;
+.price-lines strong {
+  color: var(--nt-ink);
+  text-align: right;
 }
 
 .price-total {
-  margin-top: 24px;
+  margin-top: 22px;
   padding-top: 20px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--nt-line);
 }
 
 .price-total span {
-  font-weight: 800;
-}
-
-.price-total strong {
-  color: #143b96;
-  font-size: 30px;
+  color: var(--nt-ink);
+  font-size: 15px;
   font-weight: 900;
 }
 
-.booking-actions {
-  display: flex;
-  flex-wrap: wrap;
+.price-total strong {
+  color: var(--nt-blue);
+  font-size: clamp(28px, 3.2vw, 36px);
+  font-weight: 950;
+  line-height: 1.05;
+  text-align: right;
+}
+
+.checkout-security-box {
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 22px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
-@media (max-width: 1100px) {
-  .booking-grid {
+.checkout-security-box svg {
+  flex: 0 0 auto;
+  color: var(--nt-blue);
+}
+
+.checkout-security-box strong,
+.checkout-security-box span {
+  display: block;
+}
+
+.checkout-security-box strong {
+  color: var(--nt-ink);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.checkout-security-box span {
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.booking-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.checkout-confirm-btn {
+  min-height: 54px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: none;
+  border-radius: 999px;
+  padding: 0 22px;
+  background: linear-gradient(135deg, var(--nt-orange), var(--nt-orange-deep));
+  color: var(--nt-white);
+  box-shadow: 0 18px 36px rgba(249, 115, 22, 0.28);
+  font-size: 15px;
+  font-weight: 950;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.checkout-confirm-btn:hover,
+.checkout-confirm-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 42px rgba(249, 115, 22, 0.36);
+  filter: saturate(1.04);
+  outline: none;
+}
+
+@media (max-width: 1120px) {
+  .checkout-layout {
     grid-template-columns: 1fr;
   }
 
-  .selected-package-meta {
-    grid-template-columns: repeat(2, 1fr);
+  .checkout-summary-column {
+    position: static;
   }
 }
 
-@media (max-width: 900px) {
-  .selected-package-box {
-    flex-direction: column;
-  }
-
-  .selected-package-image {
-    width: 100%;
-    height: 220px;
-  }
-
-  .booking-form-grid {
+@media (max-width: 920px) {
+  .checkout-trip-overview {
     grid-template-columns: 1fr;
   }
+
+  .checkout-trip-media {
+    height: 240px;
+  }
+
+  .checkout-info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-@media (max-width: 600px) {
-  .booking-card {
+@media (max-width: 700px) {
+  .booking-main {
+    width: min(1180px, calc(100% - 24px));
+  }
+
+  .checkout-card {
     padding: 20px;
+    border-radius: 20px;
   }
 
-  .selected-package-meta {
+  .checkout-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .checkout-status-pill,
+  .checkout-icon-badge {
+    align-self: flex-start;
+  }
+
+  .booking-form-grid,
+  .checkout-info-grid {
     grid-template-columns: 1fr;
   }
 
-  .booking-actions {
+  .checkout-trip-media {
+    height: 210px;
+  }
+
+  .accepted-cards {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .accepted-card-brands {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-card {
+    padding: 18px;
+  }
+
+  .checkout-trip-overview {
+    padding: 12px;
+  }
+
+  .checkout-trip-media {
+    height: 184px;
+  }
+
+  .price-lines div,
+  .price-total {
+    align-items: flex-start;
     flex-direction: column;
-    align-items: stretch;
+  }
+
+  .price-lines strong,
+  .price-total strong {
+    text-align: left;
+  }
+
+  .summary-trip-strip {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
