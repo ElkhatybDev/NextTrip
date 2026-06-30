@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import AuthForm from "../../components/AuthForm/AuthForm";
+import { login, signup, socialAuth } from "../../services/authApi";
 import { saveAuthSession } from "../../utils/authSession";
 import "./Auth.css";
 
@@ -32,7 +33,15 @@ const trustStats = [
 ];
 
 function getRoleHomePath(role) {
-  return role === "agency" ? "/agency-dashboard" : "/traveler-dashboard";
+  if (role === "agency") {
+    return "/agency-dashboard";
+  }
+
+  if (role === "admin") {
+    return "/nexttrip-dashboard";
+  }
+
+  return "/traveler-dashboard";
 }
 
 export default function Auth() {
@@ -62,6 +71,14 @@ export default function Auth() {
 
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [socialModal, setSocialModal] = useState(null);
+  const [socialData, setSocialData] = useState({
+    name: "",
+    email: "",
+    agencyName: "",
+    phone: "",
+  });
 
   const clearFeedback = () => {
     setMessage("");
@@ -78,7 +95,21 @@ export default function Auth() {
     setSignupData({ ...signupData, [name]: value });
   };
 
-  const handleLoginSubmit = (e) => {
+  const getApiFieldErrors = (error) => {
+    const apiErrors = error?.data?.errors || {};
+
+    return Object.entries(apiErrors).reduce((mappedErrors, [field, messages]) => {
+      const message = Array.isArray(messages) ? messages[0] : messages;
+      const key = field === "email" ? "loginEmail" : field === "password" ? "loginPassword" : field;
+
+      return {
+        ...mappedErrors,
+        [key]: message,
+      };
+    }, {});
+  };
+
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -96,15 +127,28 @@ export default function Auth() {
       return;
     }
 
-    saveAuthSession({ email: loginData.email, role });
-    setMessage(`Login success for ${loginData.email}`);
-    setErrors({});
-    navigate(location.state?.from || getRoleHomePath(role), {
-      replace: true,
-    });
+    setIsSubmitting(true);
+
+    try {
+      const session = await login(loginData);
+      saveAuthSession(session);
+      setMessage(`Login success for ${session.user.email}`);
+      setErrors({});
+      navigate(location.state?.from || getRoleHomePath(session.user.role), {
+        replace: true,
+      });
+    } catch (error) {
+      setMessage("");
+      setErrors({
+        loginEmail: error?.data?.message || "Login failed. Check your credentials.",
+        ...getApiFieldErrors(error),
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
@@ -128,8 +172,8 @@ export default function Auth() {
     }
     if (!signupData.password.trim()) {
       newErrors.password = "Password is required";
-    } else if (signupData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (signupData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
     }
     if (!signupData.confirmPassword.trim()) {
       newErrors.confirmPassword = "Confirm password is required";
@@ -140,8 +184,23 @@ export default function Auth() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      saveAuthSession({ email: signupData.email, role });
-      setMessage(`Account created for ${signupData.fullName} as ${role}`);
+      setIsSubmitting(true);
+
+      try {
+        const session = await signup({
+          name: signupData.fullName,
+          email: signupData.email,
+          phone: signupData.phone || undefined,
+          password: signupData.password,
+          role,
+          agency_name: signupData.agencyName || undefined,
+          business_email: signupData.businessEmail || undefined,
+          license_number: signupData.licenseNumber || undefined,
+        });
+
+        saveAuthSession(session);
+        setMessage(`Account created for ${session.user.name} as ${session.user.role}`);
+        setErrors({});
       setSignupData({
         fullName: "",
         email: "",
@@ -152,17 +211,100 @@ export default function Auth() {
         password: "",
         confirmPassword: "",
       });
-      navigate(getRoleHomePath(role), { replace: true });
+        navigate(getRoleHomePath(session.user.role), { replace: true });
+      } catch (error) {
+        const apiErrors = error?.data?.errors || {};
+
+        setMessage("");
+        setErrors({
+          email: apiErrors.email?.[0] || error?.data?.message || "Signup failed.",
+          fullName: apiErrors.name?.[0],
+          phone: apiErrors.phone?.[0],
+          agencyName: apiErrors.agency_name?.[0],
+          businessEmail: apiErrors.business_email?.[0],
+          password: apiErrors.password?.[0],
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     } else {
       setMessage("");
     }
   };
 
   const handleSocialLogin = (provider) => {
-    saveAuthSession({ email: `${provider}@nexttrip.local`, role });
-    navigate(location.state?.from || getRoleHomePath(role), {
-      replace: true,
+    setMessage("");
+    setErrors({});
+    setSocialData({
+      name: signupData.fullName || "",
+      email: signupData.email || loginData.email || "",
+      agencyName: signupData.agencyName || "",
+      phone: signupData.phone || "",
     });
+    setSocialModal(provider);
+  };
+
+  const handleSocialChange = (event) => {
+    const { name, value } = event.target;
+    setSocialData((current) => ({ ...current, [name]: value }));
+  };
+
+  const closeSocialModal = () => {
+    if (!isSubmitting) {
+      setSocialModal(null);
+    }
+  };
+
+  const submitSocialAuth = async (event) => {
+    event.preventDefault();
+
+    const nextErrors = {};
+
+    if (!socialData.name.trim()) {
+      nextErrors.socialName = "Name is required";
+    }
+    if (!socialData.email.trim()) {
+      nextErrors.socialEmail = "Email is required";
+    }
+    if (role === "agency" && !socialData.agencyName.trim()) {
+      nextErrors.socialAgencyName = "Agency name is required";
+    }
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const session = await socialAuth({
+        provider: socialModal,
+        name: socialData.name,
+        email: socialData.email,
+        role,
+        agency_name: socialData.agencyName || undefined,
+        business_email: socialData.email,
+        phone: socialData.phone || undefined,
+      });
+
+      saveAuthSession(session);
+      setSocialModal(null);
+      setErrors({});
+      navigate(getRoleHomePath(session.user.role), { replace: true });
+    } catch (error) {
+      const apiErrors = error?.data?.errors || {};
+
+      setErrors({
+        socialEmail: apiErrors.email?.[0] || error?.data?.message || "Social signup failed.",
+        socialName: apiErrors.name?.[0],
+        socialAgencyName: apiErrors.agency_name?.[0],
+        phone: apiErrors.phone?.[0],
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -235,11 +377,65 @@ export default function Auth() {
               onSignupSubmit={handleSignupSubmit}
               onSocialLogin={handleSocialLogin}
               clearFeedback={clearFeedback}
+              isSubmitting={isSubmitting}
             />
           </div>
         </section>
       </main>
       <Footer />
+
+      {socialModal ? (
+        <div className="social-auth-backdrop" role="presentation" onMouseDown={closeSocialModal}>
+          <form
+            className="social-auth-modal"
+            onSubmit={submitSocialAuth}
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div>
+              <span>Continuer avec {socialModal === "google" ? "Google" : "Facebook"}</span>
+              <h2>{activeTab === "signup" ? "Créer votre compte" : "Connexion rapide"}</h2>
+              <p>
+                Saisissez les informations du compte {role === "agency" ? "agence" : "voyageur"} à associer.
+              </p>
+            </div>
+
+            <label>
+              Nom complet
+              <input name="name" value={socialData.name} onChange={handleSocialChange} />
+              {errors.socialName ? <small>{errors.socialName}</small> : null}
+            </label>
+
+            <label>
+              E-mail
+              <input type="email" name="email" value={socialData.email} onChange={handleSocialChange} />
+              {errors.socialEmail ? <small>{errors.socialEmail}</small> : null}
+            </label>
+
+            {role === "agency" ? (
+              <>
+                <label>
+                  Nom de l’agence
+                  <input name="agencyName" value={socialData.agencyName} onChange={handleSocialChange} />
+                  {errors.socialAgencyName ? <small>{errors.socialAgencyName}</small> : null}
+                </label>
+                <label>
+                  Téléphone
+                  <input name="phone" value={socialData.phone} onChange={handleSocialChange} />
+                </label>
+              </>
+            ) : null}
+
+            <div className="social-auth-actions">
+              <button type="button" onClick={closeSocialModal} disabled={isSubmitting}>
+                Annuler
+              </button>
+              <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Connexion..." : "Continuer"}
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
     </div>
   );
 }

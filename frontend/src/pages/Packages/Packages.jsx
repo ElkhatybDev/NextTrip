@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import { packageCategories } from "../../data/packageCatalog";
 import {
   calculatePackagePricing,
+  fetchPackages,
   filterPackages,
   getOffers,
   getPackages,
@@ -40,8 +41,9 @@ export default function Packages({ variant = "packages" }) {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [bookingForm, setBookingForm] = useState(bookingInitialState);
   const [saveCard, setSaveCard] = useState(true);
+  const [apiPackages, setApiPackages] = useState(null);
 
-  const packages = getPackages();
+  const packages = apiPackages || getPackages();
   const offers = getOffers();
   const visiblePackages = isOffersPage ? offers : packages;
   const visibleCategories = useMemo(
@@ -72,6 +74,26 @@ export default function Packages({ variant = "packages" }) {
       activeHomeFilters.guests,
     ].filter(Boolean);
   }, [activeHomeFilters]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchPackages()
+      .then((items) => {
+        if (isMounted && items.length) {
+          setApiPackages(items);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setApiPackages(null);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!filtersFromHome) {

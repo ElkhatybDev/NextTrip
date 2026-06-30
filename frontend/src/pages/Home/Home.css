@@ -1851,6 +1851,13 @@ html[dir="rtl"] .home-page .testimonial-profile {
   cursor: pointer;
 }
 
+.newsletter-message {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+  font-weight: 900;
+}
+
 .package-modal-overlay {
   position: fixed;
   inset: 0;

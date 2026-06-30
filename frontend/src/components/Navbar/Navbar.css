@@ -7,6 +7,110 @@
   border-bottom: 1px solid rgba(148, 163, 184, 0.14);
 }
 
+.site-account-btn,
+.site-logout-btn,
+.site-drawer-account-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  border-radius: 999px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.site-account-btn {
+  padding: 0 14px 0 6px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #F97316, #1E3A8A);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(30, 58, 138, 0.16);
+}
+
+.site-account-btn-initials {
+  width: 44px;
+  min-width: 44px;
+  padding: 0;
+}
+
+.site-account-btn:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #1E3A8A, #F97316);
+  box-shadow:
+    0 14px 28px rgba(30, 58, 138, 0.22),
+    0 0 0 4px rgba(249, 115, 22, 0.1);
+}
+
+.site-logout-btn {
+  width: 44px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #1e3a8a;
+  cursor: pointer;
+}
+
+.site-logout-btn:hover {
+  border-color: rgba(249, 115, 22, 0.35);
+  color: #f97316;
+}
+
+.site-account-avatar-img,
+.site-account-avatar-placeholder {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 999px;
+}
+
+.site-account-avatar-img {
+  display: block;
+  object-fit: cover;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.76);
+}
+
+.site-account-avatar-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #6d4b78 0%, #f97316 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow:
+    0 0 0 1px rgba(30, 58, 138, 0.12),
+    0 8px 18px rgba(249, 115, 22, 0.22);
+}
+
+.site-drawer-account-link {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #1e3a8a;
+  color: #ffffff;
+}
+
+.site-drawer-account-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-drawer-account-head .site-account-avatar-img,
+.site-drawer-account-head .site-account-avatar-placeholder {
+  width: 44px;
+  height: 44px;
+  flex-basis: 44px;
+}
+
+.site-drawer-account-head .site-account-avatar-placeholder {
+  background: linear-gradient(135deg, #1e3a8a 0%, #f97316 100%);
+  color: #ffffff;
+  font-size: 15px;
+}
+
 .site-header-inner {
   min-height: 74px;
   display: flex;

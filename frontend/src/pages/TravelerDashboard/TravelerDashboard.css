@@ -97,6 +97,12 @@
   color: #ffe0d0;
 }
 
+.traveler-sidebar-home {
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 .traveler-main {
   min-width: 0;
 }
@@ -290,11 +296,23 @@
   font-weight: 900;
 }
 
-.traveler-profile-pill img {
+.traveler-profile-pill img,
+.traveler-profile-pill .traveler-avatar-placeholder {
   width: 38px;
   height: 38px;
   border-radius: 999px;
   object-fit: cover;
+}
+
+.traveler-avatar-placeholder {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a 0%, #f97316 100%);
+  color: #ffffff;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .traveler-content {
@@ -799,11 +817,66 @@
   background: linear-gradient(135deg, rgba(30, 58, 138, 0.08), rgba(249, 115, 22, 0.08));
 }
 
-.traveler-profile-panel img {
+.traveler-profile-photo-wrap {
+  position: relative;
+  width: 112px;
+  flex-shrink: 0;
+}
+
+.traveler-profile-panel .traveler-profile-photo,
+.traveler-profile-panel .traveler-avatar-placeholder {
   width: 92px;
   height: 92px;
   border-radius: 24px;
   object-fit: cover;
+}
+
+.traveler-profile-panel .traveler-avatar-placeholder {
+  font-size: 28px;
+}
+
+.traveler-photo-btn {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid #d7e1f4;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1e3a8a;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.16);
+}
+
+.traveler-hidden-file {
+  display: none;
+}
+
+.traveler-profile-alert {
+  padding: 16px 18px;
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.traveler-profile-alert strong {
+  display: block;
+  color: #c2410c;
+  font-size: 15px;
+}
+
+.traveler-profile-alert p {
+  margin: 6px 0 0;
+  color: #7c2d12;
+  font-weight: 800;
+  line-height: 1.55;
 }
 
 .traveler-profile-panel span {

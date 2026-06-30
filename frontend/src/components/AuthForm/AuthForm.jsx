@@ -31,6 +31,7 @@ export default function AuthForm({
   onSignupSubmit,
   onSocialLogin,
   clearFeedback,
+  isSubmitting = false,
 }) {
   const isLogin = activeTab === "login";
   const isAgencySignup = role === "agency";
@@ -112,8 +113,8 @@ export default function AuthForm({
             </button>
           </div>
 
-          <button type="submit" className="main-btn">
-            Login <ArrowRight size={18} />
+          <button type="submit" className="main-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Signing in..." : "Login"} <ArrowRight size={18} />
           </button>
         </form>
       ) : (
@@ -288,8 +289,8 @@ export default function AuthForm({
               )}
             </div>
 
-            <button type="submit" className="main-btn">
-              Create My Account <ArrowRight size={18} />
+            <button type="submit" className="main-btn" disabled={isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create My Account"} <ArrowRight size={18} />
             </button>
           </form>
         </>

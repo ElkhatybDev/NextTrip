@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 import { footerBottomLinks, footerSections } from "../../data/siteNavigation";
 import logo from "../../Assets/images/NextTrip logo.png";
+import { subscribeNewsletter } from "../../services/newsletterApi";
 
 function FooterItem({ item }) {
   if (!item.to) {
@@ -19,6 +20,32 @@ function FooterItem({ item }) {
 export default function Footer({
   description = "Smarter travel planning with trusted agencies, curated packages, and support that stays close to every trip.",
 }) {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const submitNewsletter = async (event) => {
+    event.preventDefault();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setMessage("Enter a valid email.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage("");
+
+    try {
+      await subscribeNewsletter({ email, source: "footer" });
+      setMessage("Subscribed.");
+      setEmail("");
+    } catch (error) {
+      setMessage(error?.data?.message || "Subscription failed.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="site-footer">
       <div className="site-shell site-footer-grid">
@@ -51,10 +78,18 @@ export default function Footer({
         <div>
           <h4>Newsletter</h4>
           <p className="site-footer-text site-footer-text-wide">{description}</p>
-          <div className="site-footer-newsletter">
-            <input placeholder="Enter your email" />
-            <button type="button">Subscribe</button>
-          </div>
+          <form className="site-footer-newsletter" onSubmit={submitNewsletter}>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Subscribe"}
+            </button>
+          </form>
+          {message ? <p className="site-footer-newsletter-message">{message}</p> : null}
         </div>
       </div>
 

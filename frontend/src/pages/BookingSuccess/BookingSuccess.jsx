@@ -34,6 +34,7 @@ export default function BookingSuccess() {
   };
   const travelersCount = getSafeTravelersCount(state.travelersCount, bookingForm);
   const saveCard = state.saveCard ?? true;
+  const booking = state.booking || null;
 
   if (!selectedPackage) {
     return <Navigate to="/packages" replace />;
@@ -48,6 +49,7 @@ export default function BookingSuccess() {
       travelersCount={travelersCount}
       pricing={pricing}
       saveCard={saveCard}
+      booking={booking}
       onBackToBooking={() =>
         navigate(`/checkout/${selectedPackage.id}`, {
           state: { bookingForm, saveCard },

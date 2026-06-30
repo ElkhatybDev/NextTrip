@@ -99,6 +99,13 @@
   cursor: pointer;
 }
 
+.site-footer-newsletter-message {
+  margin: 10px 0 0;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .site-footer-bottom {
   padding: 18px 0 22px;
   border-top: 1px solid rgba(100, 116, 139, 0.3);

@@ -18,7 +18,7 @@ export default function ProtectedRoute({ children, allowedRoles }) {
   const session = getAuthSession();
   const requestedPath = `${location.pathname}${location.search}`;
 
-  if (!session?.email) {
+  if (!session?.token) {
     return (
       <Navigate
         to="/auth"

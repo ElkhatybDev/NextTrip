@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { getPackageDetails } from "../../services/packagesService";
+import { fetchPackageDetails, getPackageDetails } from "../../services/packagesService";
 import "./PackageDetails.css";
 
 function DetailList({ title, items, tone = "default" }) {
@@ -34,10 +34,50 @@ function DetailList({ title, items, tone = "default" }) {
 
 export default function PackageDetails() {
   const { id } = useParams();
-  const travelPackage = getPackageDetails(id);
+  const [apiPackage, setApiPackage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const travelPackage = apiPackage || getPackageDetails(id);
   const isOfferDetails = Number(travelPackage?.id) >= 100;
   const backLink = isOfferDetails ? "/offers" : "/packages";
   const backLabel = isOfferDetails ? "Back to offers" : "Back to packages";
+
+  useEffect(() => {
+    let isMounted = true;
+
+    setIsLoading(true);
+    fetchPackageDetails(id)
+      .then((item) => {
+        if (isMounted) {
+          setApiPackage(item);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setApiPackage(null);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  if (isLoading && !travelPackage) {
+    return (
+      <div className="package-detail-page">
+        <Navbar />
+        <main className="site-shell package-detail-empty">
+          <h1>Loading package...</h1>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!travelPackage) {
     return (

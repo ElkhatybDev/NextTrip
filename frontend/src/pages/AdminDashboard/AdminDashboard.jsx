@@ -27,6 +27,15 @@ import {
 } from "lucide-react";
 import nextTripLogo from "../../Assets/images/NextTrip logo.png";
 import { clearAuthSession } from "../../utils/authSession";
+import { fetchAdminDashboard } from "../../services/dashboardApi";
+import {
+  deletePackage as deletePackageApi,
+  updateAgencyStatus as updateAgencyStatusApi,
+  updateBookingStatus as updateBookingStatusApi,
+  updatePackageStatus,
+  updateTripRequestStatus,
+  updateUserStatus,
+} from "../../services/managementApi";
 import {
   adminProfile,
   agenciesData,
@@ -166,6 +175,95 @@ const statusFilters = {
 };
 
 const bookingPaymentFilters = ["Tous", "Payé", "En attente", "Échoué", "Remboursé"];
+
+function mapAdminUser(user) {
+  return {
+    id: user.id,
+    apiId: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    status: user.status === "active" ? "Actif" : "Bloqué",
+    source: "Backend",
+    createdAt: user.created_at || "",
+  };
+}
+
+function mapAdminAgency(agency) {
+  return {
+    id: agency.id,
+    apiId: agency.id,
+    name: agency.name,
+    email: agency.email || agency.user?.email || "",
+    phone: agency.phone || "",
+    location: [agency.city, agency.country].filter(Boolean).join(", "),
+    city: agency.city || "",
+    country: agency.country || "",
+    packages: agency.packages_count || 0,
+    rating: agency.rating || 0,
+    status: agency.status === "approved" ? "Approuvé" : agency.status === "suspended" ? "Suspendu" : "En attente",
+  };
+}
+
+function mapAdminPackage(item) {
+  return {
+    id: item.id,
+    apiId: item.id,
+    title: item.title,
+    agency: item.agency?.name || "Agence NextTrip",
+    destination: item.destination,
+    duration: `${item.duration_days || 1} jour(s)`,
+    price: Number(item.price || 0),
+    status: item.status === "published" ? "Publié" : item.status === "hidden" ? "Masqué" : "En attente",
+    route: `/packages/${item.id}`,
+  };
+}
+
+function mapAdminBooking(booking) {
+  const packageItem = booking.package || {};
+  const payment = booking.payment || {};
+
+  return {
+    id: booking.booking_reference || `BK-${booking.id}`,
+    apiId: booking.id,
+    client: booking.user?.name || "Client NextTrip",
+    agency: packageItem.agency?.name || "Agence NextTrip",
+    destination: packageItem.destination || "Destination NextTrip",
+    packageTitle: packageItem.title || "Forfait NextTrip",
+    amount: Number(booking.total_amount || 0),
+    bookingStatus: booking.status === "confirmed" ? "Confirmé" : "En attente",
+    paymentStatus: payment.status === "confirmed" ? "Payé" : "En attente",
+    date: booking.confirmed_at || booking.created_at || "",
+    route: packageItem.id ? `/checkout/${packageItem.id}` : "/packages",
+  };
+}
+
+function mapAdminPayment(payment) {
+  return {
+    id: payment.provider_reference || `PAY-${payment.id}`,
+    apiId: payment.id,
+    booking: payment.booking?.booking_reference || `BK-${payment.booking_id}`,
+    destination: payment.booking?.package?.destination || "Destination NextTrip",
+    amount: Number(payment.amount || 0),
+    method: payment.provider || "Carte",
+    status: payment.status === "confirmed" ? "Payé" : "En attente",
+    date: payment.paid_at || payment.created_at || "",
+  };
+}
+
+function mapAdminTripRequest(request) {
+  return {
+    id: String(request.id),
+    apiId: request.id,
+    client: request.user?.name || "Client NextTrip",
+    destination: request.destination,
+    budget: request.budget ? `${Number(request.budget).toLocaleString()} ${request.currency || "MAD"}` : "Budget à confirmer",
+    status: request.offers?.length ? "Offre reçue" : "Nouveau",
+    agencies: (request.offers || []).map((offer) => offer.agency?.name).filter(Boolean),
+    route: `/trip-requests/${request.id}`,
+    offersRoute: `/trip-requests/${request.id}/offers`,
+  };
+}
 
 function normalize(value) {
   return String(value || "")
@@ -542,7 +640,7 @@ export default function AdminDashboard() {
   const [packages, setPackages] = useState(packagesData);
   const [destinations, setDestinations] = useState(destinationsData);
   const [bookings, setBookings] = useState(bookingsData);
-  const payments = paymentsData;
+  const [payments, setPayments] = useState(paymentsData);
   const [customRequests, setCustomRequests] = useState(customRequestsData);
   const [experiences, setExperiences] = useState(experiencesData);
   const [notifications, setNotifications] = useState(notificationsData);
@@ -561,6 +659,43 @@ export default function AdminDashboard() {
 
   const page = pageCopy[activeSection] || pageCopy.overview;
   const unreadNotifications = notifications.filter((item) => item.status === "Non lu").length;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchAdminDashboard()
+      .then((data) => {
+        if (!isMounted) {
+          return;
+        }
+
+        if (data.users?.length) {
+          setUsers(data.users.map(mapAdminUser));
+        }
+        if (data.agencies?.length) {
+          setAgencies(data.agencies.map(mapAdminAgency));
+        }
+        if (data.packages?.length) {
+          setPackages(data.packages.map(mapAdminPackage));
+        }
+        if (data.bookings?.length) {
+          setBookings(data.bookings.map(mapAdminBooking));
+        }
+        if (data.payments?.length) {
+          setPayments(data.payments.map(mapAdminPayment));
+        }
+        if (data.trip_requests?.length) {
+          setCustomRequests(data.trip_requests.map(mapAdminTripRequest));
+        }
+      })
+      .catch(() => {
+        // Keep static dashboard data when the API is unavailable or the user is not admin.
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!showNotifications) {
@@ -624,9 +759,31 @@ export default function AdminDashboard() {
     setFilters((current) => ({ ...current, [key]: value }));
   };
 
-  const confirmDelete = (setItems, id, label) => {
+  const confirmDelete = async (setItems, id, label, apiDelete) => {
     if (!window.confirm(`Voulez-vous vraiment supprimer ${label} ?`)) {
       return;
+    }
+
+    const currentItem = [
+      ...users,
+      ...agencies,
+      ...packages,
+      ...destinations,
+      ...bookings,
+      ...customRequests,
+      ...experiences,
+      ...notifications,
+    ].find((item) => item.id === id);
+    const inferredDelete = apiDelete || (setItems === setPackages && currentItem?.apiId
+      ? () => deletePackageApi(currentItem.apiId)
+      : null);
+
+    if (inferredDelete) {
+      try {
+        await inferredDelete();
+      } catch {
+        notify("Suppression backend indisponible, suppression locale appliquée.");
+      }
     }
 
     setItems((items) => items.filter((item) => item.id !== id));
@@ -637,7 +794,69 @@ export default function AdminDashboard() {
     setItems((items) => items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   };
 
-  const updateItemWithToast = (setItems, id, patch, message) => {
+  const updateItemWithToast = async (setItems, id, patch, message, apiUpdate) => {
+    const currentItem = [
+      ...users,
+      ...agencies,
+      ...packages,
+      ...bookings,
+      ...customRequests,
+    ].find((item) => item.id === id);
+    let inferredUpdate = apiUpdate;
+
+    if (!inferredUpdate && currentItem?.apiId) {
+      if (setItems === setUsers && patch.status) {
+        inferredUpdate = () => updateUserStatus(currentItem.apiId, patch.status === "Actif" ? "active" : "blocked");
+      }
+
+      if (setItems === setAgencies && patch.status) {
+        const statusMap = {
+          "Approuvé": "approved",
+          "Suspendu": "suspended",
+          "En attente": "pending",
+        };
+        inferredUpdate = () => updateAgencyStatusApi(currentItem.apiId, statusMap[patch.status] || "pending");
+      }
+
+      if (setItems === setPackages && patch.status) {
+        const statusMap = {
+          "Publié": "published",
+          "Masqué": "hidden",
+          "En attente": "draft",
+        };
+        inferredUpdate = () => updatePackageStatus(currentItem.apiId, statusMap[patch.status] || "draft");
+      }
+
+      if (setItems === setBookings && patch.bookingStatus) {
+        const statusMap = {
+          "Confirmé": "confirmed",
+          "Annulé": "cancelled",
+          "Terminé": "completed",
+          "En attente": "pending",
+        };
+        inferredUpdate = () => updateBookingStatusApi(currentItem.apiId, statusMap[patch.bookingStatus] || "pending");
+      }
+
+      if (setItems === setCustomRequests && patch.status) {
+        const statusMap = {
+          "Nouveau": "open",
+          "Envoyé": "open",
+          "Offre reçue": "offer_selected",
+          "Confirmé": "confirmed",
+          "Annulé": "cancelled",
+        };
+        inferredUpdate = () => updateTripRequestStatus(currentItem.apiId, statusMap[patch.status] || "open");
+      }
+    }
+
+    if (inferredUpdate) {
+      try {
+        await inferredUpdate();
+      } catch {
+        notify("Mise à jour backend indisponible, mise à jour locale appliquée.");
+      }
+    }
+
     updateItem(setItems, id, patch);
     notify(message);
   };

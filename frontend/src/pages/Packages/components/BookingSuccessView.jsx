@@ -255,13 +255,16 @@ export default function BookingSuccessView({
   travelersCount,
   pricing,
   saveCard,
+  booking,
   onBackToPackages,
   onBackToBooking,
 }) {
   const [showReceiptPanel, setShowReceiptPanel] = useState(false);
   const [showEmailPanel, setShowEmailPanel] = useState(false);
-  const receiptId = "NT-2026-08421";
-  const issuedAt = "11 Apr 2026";
+  const receiptId = booking?.receipt?.receipt_number || booking?.booking_reference || "NT-2026-08421";
+  const issuedAt = booking?.receipt?.issued_at
+    ? new Date(booking.receipt.issued_at).toLocaleDateString("fr")
+    : "11 Apr 2026";
   const receiptText = buildReceiptText({
     receiptId,
     issuedAt,

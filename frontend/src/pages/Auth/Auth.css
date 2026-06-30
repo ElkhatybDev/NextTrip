@@ -246,6 +246,108 @@
   justify-content: center;
 }
 
+.social-auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(10px);
+}
+
+.social-auth-modal {
+  width: min(460px, 100%);
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.32);
+}
+
+.social-auth-modal span {
+  color: #f97316;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.social-auth-modal h2 {
+  margin: 6px 0 8px;
+  color: #132033;
+  font-size: 30px;
+  line-height: 1.05;
+}
+
+.social-auth-modal p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.social-auth-modal label {
+  display: grid;
+  gap: 8px;
+  color: #132033;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.social-auth-modal input {
+  min-height: 48px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 14px;
+  padding: 0 14px;
+  color: #334155;
+  font: inherit;
+  font-weight: 700;
+  outline: 0;
+}
+
+.social-auth-modal input:focus {
+  border-color: rgba(30, 58, 138, 0.38);
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.08);
+}
+
+.social-auth-modal small {
+  color: #dc2626;
+  font-size: 12px;
+}
+
+.social-auth-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.social-auth-actions button {
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 0 18px;
+  border: 1px solid #dbe3ef;
+  background: #ffffff;
+  color: #1e3a8a;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.social-auth-actions button[type="submit"] {
+  border-color: transparent;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(249, 115, 22, 0.24);
+}
+
+.social-auth-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
 @media (max-width: 1100px) {
   .auth-container {
     grid-template-columns: 1fr;

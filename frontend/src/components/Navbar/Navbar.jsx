@@ -12,6 +12,7 @@ import {
   Gift,
   Heart,
   Info,
+  LogOut,
   Menu,
   Percent,
   Phone,
@@ -32,6 +33,46 @@ import {
   supportedCurrencies,
   supportedLanguages,
 } from "../../i18n/siteLanguage";
+import { clearAuthSession, getAuthSession } from "../../utils/authSession";
+
+const roleHomePaths = {
+  agency: "/agency-dashboard",
+  admin: "/nexttrip-dashboard",
+  traveler: "/traveler-dashboard",
+};
+
+function getRoleHomePath(role) {
+  return roleHomePaths[role] || roleHomePaths.traveler;
+}
+
+function getAccountInitials(session) {
+  const label = session?.user?.name || session?.email || "NextTrip";
+
+  return (
+    label
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "NT"
+  );
+}
+
+function AccountAvatar({ session, className = "", initialsOnly = false }) {
+  const avatar = session?.user?.avatar_url;
+  const label = session?.user?.name || session?.email || "Compte NextTrip";
+
+  if (avatar && !initialsOnly) {
+    return <img className={`site-account-avatar-img ${className}`.trim()} src={avatar} alt={label} decoding="async" />;
+  }
+
+  return (
+    <span className={`site-account-avatar-placeholder ${className}`.trim()} aria-hidden="true">
+      {getAccountInitials(session)}
+    </span>
+  );
+}
 
 function isPathActive(pathname, to) {
   if (!to) {
@@ -158,7 +199,7 @@ const drawerSections = [
   },
 ];
 
-function SideMenuDrawer({ isOpen, onClose, onSignIn, pathname }) {
+function SideMenuDrawer({ isOpen, onClose, onSignIn, pathname, session, onLogout }) {
   const drawerRef = useRef(null);
 
   useEffect(() => {
@@ -218,19 +259,45 @@ function SideMenuDrawer({ isOpen, onClose, onSignIn, pathname }) {
           </button>
         </div>
 
-        <div className="site-drawer-login-card">
-          <strong>Plan smarter with NextTrip</strong>
-          <p>Find packages, compare offers, or send a clear custom trip request.</p>
-          <button
-            type="button"
-            onClick={() => {
-              onClose();
-              onSignIn();
-            }}
-          >
-            Sign in to continue
-          </button>
-        </div>
+        {session?.token ? (
+          <div className="site-drawer-login-card">
+            <div className="site-drawer-account-head">
+              <AccountAvatar session={session} />
+              <strong>{session.user?.name || session.email || "Compte NextTrip"}</strong>
+            </div>
+            <p>Votre session est active.</p>
+            <Link
+              to={getRoleHomePath(session.role)}
+              onClick={onClose}
+              className="site-drawer-account-link"
+            >
+              Ouvrir mon espace
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onLogout();
+              }}
+            >
+              Déconnexion
+            </button>
+          </div>
+        ) : (
+          <div className="site-drawer-login-card">
+            <strong>Plan smarter with NextTrip</strong>
+            <p>Find packages, compare offers, or send a clear custom trip request.</p>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onSignIn();
+              }}
+            >
+              Sign in to continue
+            </button>
+          </div>
+        )}
 
         <section className="site-drawer-preferences">
           <HeaderPreferences onPreferenceSelected={onClose} />
@@ -402,7 +469,15 @@ export default function Navbar({
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [session, setSession] = useState(() => getAuthSession());
+  const isSignedIn = Boolean(session?.token);
+  const accountPath = getRoleHomePath(session?.role);
   const handleSignIn = onSignIn || (() => navigate("/auth"));
+  const handleLogout = () => {
+    clearAuthSession();
+    setSession(null);
+    navigate("/", { replace: true });
+  };
   const closeMenu = () => setIsMenuOpen(false);
   const toggleMenu = () => {
     if (!isMenuOpen) {
@@ -421,6 +496,19 @@ export default function Navbar({
       document.removeEventListener("nexttrip:close-side-menu", closeOnExternalRequest);
     };
   }, []);
+
+  useEffect(() => {
+    const refreshSession = () => setSession(getAuthSession());
+
+    refreshSession();
+    window.addEventListener("storage", refreshSession);
+    window.addEventListener("nexttrip:auth-session-changed", refreshSession);
+
+    return () => {
+      window.removeEventListener("storage", refreshSession);
+      window.removeEventListener("nexttrip:auth-session-changed", refreshSession);
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -470,6 +558,21 @@ export default function Navbar({
         <div className="site-header-actions">
           {rightSlot ? (
             rightSlot
+          ) : isSignedIn ? (
+            <>
+              <Link
+                to={accountPath}
+                className="site-account-btn site-account-btn-initials"
+                onClick={closeMenu}
+                aria-label={session.user?.name || "Mon espace"}
+                title={session.user?.name || "Mon espace"}
+              >
+                <AccountAvatar session={session} initialsOnly />
+              </Link>
+              <button type="button" className="site-logout-btn" onClick={handleLogout}>
+                <LogOut size={17} />
+              </button>
+            </>
           ) : (
             <>
               <button type="button" className="site-signin-btn" onClick={handleSignIn}>
@@ -498,6 +601,8 @@ export default function Navbar({
         isOpen={isMenuOpen}
         onClose={closeMenu}
         onSignIn={handleSignIn}
+        session={session}
+        onLogout={handleLogout}
         pathname={location.pathname}
       />
     </header>

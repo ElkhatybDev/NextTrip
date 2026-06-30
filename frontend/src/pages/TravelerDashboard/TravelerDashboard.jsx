@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import {
   Bell,
   CalendarCheck,
+  Camera,
   CheckCircle2,
   ClipboardList,
   CreditCard,
   Download,
   Eye,
+  Home,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -25,19 +27,19 @@ import {
 } from "lucide-react";
 import nextTripLogo from "../../Assets/images/NextTrip logo.png";
 import {
-  customRequests as customRequestData,
   experiences as experienceData,
   formatMad,
-  notifications as notificationData,
-  payments as paymentData,
-  receipts as receiptData,
-  receivedOffers as offerData,
-  recentActivity,
-  reservations as reservationData,
-  travelerProfile as travelerProfileData,
   travelerSettings,
 } from "../../data/travelerDashboardData";
-import { clearAuthSession } from "../../utils/authSession";
+import { fetchTravelerDashboard } from "../../services/dashboardApi";
+import {
+  fetchReceiptDownload,
+  updateBookingStatus as updateBookingStatusApi,
+  updateProfile,
+  updateTripOfferStatus,
+  updateTripRequestStatus,
+} from "../../services/managementApi";
+import { clearAuthSession, getAuthSession, saveAuthSession } from "../../utils/authSession";
 import "./TravelerDashboard.css";
 
 const sidebarItems = [
@@ -166,6 +168,203 @@ const initialFilterState = {
   experiences: "Tous",
   notifications: "Tous",
 };
+
+function mapApiBookingToReservation(booking) {
+  const packageItem = booking.package || {};
+  const payment = booking.payment || {};
+  const receipt = booking.receipt || {};
+  const travelersCount = Number(booking.guests_count || 1);
+
+  return {
+    id: booking.booking_reference || `BK-${booking.id}`,
+    apiId: booking.id,
+    destination: packageItem.destination || "Destination NextTrip",
+    packageTitle: packageItem.title || "Forfait NextTrip",
+    agency: packageItem.agency?.name || "Agence NextTrip",
+    departureDate: packageItem.starts_at || booking.confirmed_at || "Date flexible",
+    travelers: `${travelersCount} ${travelersCount > 1 ? "voyageurs" : "voyageur"}`,
+    amount: Number(booking.total_amount || 0),
+    status: booking.status === "confirmed" ? "Confirmée" : "En attente",
+    paymentStatus: payment.status === "confirmed" ? "Payé" : "En attente",
+    receiptId: receipt.receipt_number || `REC-${booking.id}`,
+    checkoutRoute: packageItem.id ? `/checkout/${packageItem.id}` : "/checkout",
+    agencyRoute: packageItem.agency?.id ? `/agency/${packageItem.agency.id}` : "/agency",
+    nextAction:
+      payment.status === "confirmed"
+        ? "Télécharger le reçu et vérifier les documents du voyage."
+        : "Finaliser le paiement ou confirmer les détails avec l’agence.",
+    image: packageItem.image_url,
+    route: packageItem.id ? `/packages/${packageItem.id}` : "/packages",
+  };
+}
+
+function mapApiBookingToPayment(booking) {
+  const payment = booking.payment || {};
+  const packageItem = booking.package || {};
+
+  return {
+    id: payment.provider_reference || `PAY-${booking.id}`,
+    apiId: payment.id,
+    reservationId: booking.booking_reference || `BK-${booking.id}`,
+    destination: packageItem.destination || "Destination NextTrip",
+    amount: Number(payment.amount || booking.total_amount || 0),
+    method: payment.provider || "Carte",
+    status: payment.status === "confirmed" ? "Payé" : "En attente",
+    date: payment.paid_at || booking.confirmed_at || "À programmer",
+    receiptId: booking.receipt?.receipt_number || `REC-${booking.id}`,
+    checkoutRoute: packageItem.id ? `/checkout/${packageItem.id}` : "/checkout",
+  };
+}
+
+function mapApiBookingToReceipt(booking) {
+  const receipt = booking.receipt || {};
+  const packageItem = booking.package || {};
+
+  return {
+    id: receipt.receipt_number || `REC-${booking.id}`,
+    apiId: receipt.id,
+    reservationId: booking.booking_reference || `BK-${booking.id}`,
+    destination: packageItem.destination || "Destination NextTrip",
+    date: receipt.issued_at || booking.confirmed_at || "À programmer",
+    amount: Number(receipt.total || booking.total_amount || 0),
+    status: receipt.id ? "Disponible" : "En attente",
+    email: booking.traveler_details?.email || "",
+  };
+}
+
+function mapApiTripRequest(request) {
+  const preferences = request.preferences || {};
+
+  return {
+    id: String(request.id),
+    apiId: request.id,
+    title: `${request.destination} custom trip`,
+    destination: request.destination,
+    departureDate: request.start_date || "Dates flexibles",
+    travelers: `${request.travelers_count || 1} voyageur(s)`,
+    budget: request.budget ? `${Number(request.budget).toLocaleString()} ${request.currency || "MAD"}` : "Budget à confirmer",
+    services: preferences.extras || [],
+    notes: request.notes || "Aucune note ajoutée pour cette demande.",
+    status: request.status === "open" ? "Nouvelle" : "En attente",
+    createdAt: request.created_at || "Cette semaine",
+    route: `/trip-requests/${request.id}`,
+  };
+}
+
+function mapApiTripOffer(offer) {
+  const request = offer.trip_request || {};
+
+  return {
+    id: String(offer.id),
+    apiId: offer.id,
+    requestId: String(offer.trip_request_id),
+    agency: offer.agency?.name || "Agence NextTrip",
+    agencyRoute: offer.agency?.id ? `/agency/${offer.agency.id}` : "/agency",
+    destination: request.destination || "Destination NextTrip",
+    price: Number(offer.price || 0),
+    duration: "Durée flexible",
+    services: offer.details?.services || [],
+    hotel: offer.details?.hotelPlan || "Hébergement proposé par l’agence",
+    transport: offer.details?.transportPlan || "Transport à confirmer avec l’agence",
+    message: offer.description || "L’agence a préparé une proposition adaptée à votre demande.",
+    sentAt: offer.created_at || "Cette semaine",
+    validUntil: offer.expires_at || "Validité à confirmer",
+    status: offer.status === "selected" ? "Acceptée" : "Nouvelle",
+    totalLabel: `${Number(offer.price || 0).toLocaleString()} ${offer.currency || "MAD"}`,
+  };
+}
+
+function buildBackendNotifications(reservations, requests, offers) {
+  return [
+    reservations[0]
+      ? {
+          id: `NOT-BK-${reservations[0].id}`,
+          title: "Réservation mise à jour",
+          type: "Réservation",
+          message: `${reservations[0].packageTitle} est dans votre espace voyageur.`,
+          date: reservations[0].departureDate,
+          status: "Non lu",
+        }
+      : null,
+    requests[0]
+      ? {
+          id: `NOT-RQ-${requests[0].id}`,
+          title: "Demande personnalisée enregistrée",
+          type: "Demande",
+          message: `${requests[0].destination} est suivie depuis votre espace.`,
+          date: requests[0].createdAt,
+          status: "Non lu",
+        }
+      : null,
+    offers[0]
+      ? {
+          id: `NOT-OF-${offers[0].id}`,
+          title: "Offre reçue",
+          type: "Offre",
+          message: `${offers[0].agency} a envoyé une offre pour ${offers[0].destination}.`,
+          date: offers[0].sentAt,
+          status: "Non lu",
+        }
+      : null,
+  ].filter(Boolean);
+}
+
+function getEmptyTravelerProfile() {
+  const session = getAuthSession();
+  const user = session?.user || {};
+
+  return {
+    name: user.name || session?.email || "",
+    email: user.email || session?.email || "",
+    phone: user.phone || "",
+    city: "",
+    country: "",
+    memberSince: "",
+    status: "",
+    avatar: user.avatar_url || getStoredProfileAvatar(user),
+    preferences: [],
+  };
+}
+
+function getProfilePhotoStorageKey(user = {}) {
+  const identifier = user.id || user.email || getAuthSession()?.email || "guest";
+
+  return `nexttrip:traveler-profile-photo:${identifier}`;
+}
+
+function getStoredProfileAvatar(user = {}) {
+  try {
+    return localStorage.getItem(getProfilePhotoStorageKey(user)) || "";
+  } catch {
+    return "";
+  }
+}
+
+function getProfileInitials(name = "") {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+
+  return initials || "NT";
+}
+
+function ProfileAvatar({ profile, className = "" }) {
+  const label = profile.name || profile.email || "Voyageur NextTrip";
+
+  if (profile.avatar) {
+    return <img className={className} src={profile.avatar} alt={label} />;
+  }
+
+  return (
+    <div className={`traveler-avatar-placeholder ${className}`} aria-label={label}>
+      {getProfileInitials(label)}
+    </div>
+  );
+}
 
 function normalize(value) {
   return String(value || "")
@@ -337,20 +536,90 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [toast, setToast] = useState("");
   const [modal, setModal] = useState(null);
-  const [reservations, setReservations] = useState(reservationData);
-  const [customRequests, setCustomRequests] = useState(customRequestData);
-  const [receivedOffers, setReceivedOffers] = useState(offerData);
-  const [payments] = useState(paymentData);
-  const [receipts] = useState(receiptData);
+  const [reservations, setReservations] = useState([]);
+  const [customRequests, setCustomRequests] = useState([]);
+  const [receivedOffers, setReceivedOffers] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [receipts, setReceipts] = useState([]);
   const [experiences, setExperiences] = useState(experienceData);
-  const [notifications, setNotifications] = useState(notificationData);
-  const [profile, setProfile] = useState(travelerProfileData);
+  const [notifications, setNotifications] = useState([]);
+  const [profile, setProfile] = useState(() => getEmptyTravelerProfile());
   const [settings, setSettings] = useState(travelerSettings);
+  const photoInputRef = useRef(null);
 
   useEffect(() => {
     setActiveSection(getInitialSection(initialSection));
     setQuery("");
   }, [initialSection]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchTravelerDashboard()
+      .then((response) => {
+        const apiBookings = response.bookings || [];
+        const apiRequests = response.trip_requests || [];
+        const apiReservations = apiBookings.map(mapApiBookingToReservation);
+        const apiPayments = apiBookings.map(mapApiBookingToPayment);
+        const apiReceipts = apiBookings.map(mapApiBookingToReceipt);
+        const apiCustomRequests = apiRequests.map(mapApiTripRequest);
+        const apiOffers = apiRequests.flatMap((request) =>
+          (request.offers || []).map((offer) => mapApiTripOffer({ ...offer, trip_request: request }))
+        );
+
+        if (isMounted) {
+          setReservations(apiReservations);
+          setPayments(apiPayments);
+          setReceipts(apiReceipts);
+          setCustomRequests(apiCustomRequests);
+          setReceivedOffers(apiOffers);
+          setNotifications(buildBackendNotifications(apiReservations, apiCustomRequests, apiOffers));
+        }
+        if (isMounted && response.user) {
+          const travelerProfile = response.user.traveler_profile || {};
+          const preferences = travelerProfile.preferences || {};
+          const preferenceCards = [
+            preferences.travelStyle
+              ? { label: "Style de voyage", value: preferences.travelStyle }
+              : null,
+            preferences.preferredBudget
+              ? { label: "Budget préféré", value: preferences.preferredBudget }
+              : null,
+            preferences.favoriteRegions
+              ? { label: "Régions favorites", value: preferences.favoriteRegions }
+              : null,
+            preferences.supportLanguages
+              ? { label: "Langues de support", value: preferences.supportLanguages }
+              : null,
+          ].filter(Boolean);
+
+          setProfile({
+            ...getEmptyTravelerProfile(),
+            name: response.user.name || "",
+            email: response.user.email || "",
+            phone: response.user.phone || "",
+            city: travelerProfile.city || "",
+            country: travelerProfile.country || "",
+            memberSince: response.user.created_at
+              ? new Date(response.user.created_at).toLocaleDateString("fr-FR", {
+                  month: "long",
+                  year: "numeric",
+            })
+              : "",
+            status: response.user.status === "active" ? "Voyageur actif" : response.user.status || "",
+            avatar: response.user.avatar_url || getStoredProfileAvatar(response.user),
+            preferences: preferenceCards,
+          });
+        }
+      })
+      .catch(() => {
+        // Keep static dashboard data available when the API is offline or the user is signed out.
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const currentCopy = pageCopy[activeSection] || pageCopy.overview;
   const unreadCount = notifications.filter((item) => item.status === "Non lu").length;
@@ -447,9 +716,17 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
     navigate("/auth", { replace: true });
   };
 
-  const cancelReservation = (reservation) => {
+  const cancelReservation = async (reservation) => {
     if (!window.confirm(`Annuler la réservation ${reservation.id} ?`)) {
       return;
+    }
+
+    if (reservation.apiId) {
+      try {
+        await updateBookingStatusApi(reservation.apiId, "cancelled");
+      } catch {
+        notify("La réservation sera annulée localement. API indisponible.");
+      }
     }
 
     setReservations((items) =>
@@ -458,9 +735,17 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
     notify(`${reservation.id} est maintenant annulée.`);
   };
 
-  const cancelRequest = (request) => {
+  const cancelRequest = async (request) => {
     if (!window.confirm(`Annuler la demande ${request.id} ?`)) {
       return;
+    }
+
+    if (request.apiId) {
+      try {
+        await updateTripRequestStatus(request.apiId, "cancelled");
+      } catch {
+        notify("La demande sera annulée localement. API indisponible.");
+      }
     }
 
     setCustomRequests((items) =>
@@ -469,11 +754,19 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
     notify(`${request.id} est maintenant annulée.`);
   };
 
-  const updateOfferStatus = (offer, status) => {
+  const updateOfferStatus = async (offer, status) => {
     const label = status === "Acceptée" ? "acceptée" : "refusée";
 
     if (!window.confirm(`Confirmer l’offre ${offer.id} comme ${label} ?`)) {
       return;
+    }
+
+    if (offer.apiId) {
+      try {
+        await updateTripOfferStatus(offer.apiId, status === "Acceptée" ? "selected" : "refused");
+      } catch {
+        notify("Le statut de l’offre sera mis à jour localement. API indisponible.");
+      }
     }
 
     setReceivedOffers((items) =>
@@ -514,8 +807,19 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
     notify(`${experience.id} a été supprimée.`);
   };
 
-  const downloadReceipt = (receipt) => {
-    downloadTextFile(`${receipt.id}.txt`, makeReceiptText(receipt, profile));
+  const downloadReceipt = async (receipt) => {
+    let content = makeReceiptText(receipt, profile);
+
+    if (receipt.apiId) {
+      try {
+        const response = await fetchReceiptDownload(receipt.apiId);
+        content = response.text || content;
+      } catch {
+        notify("Reçu backend indisponible, génération locale utilisée.");
+      }
+    }
+
+    downloadTextFile(`${receipt.id}.txt`, content);
     notify(`Téléchargement du reçu ${receipt.id} lancé.`);
   };
 
@@ -715,6 +1019,49 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
       )
       .slice(0, 10);
   }, [customRequests, experiences, notifications, payments, profile, query, receipts, receivedOffers, reservations, settings]);
+
+  const accountActivity = useMemo(() => {
+    const activities = [
+      reservations[0]
+        ? {
+            id: `activity-booking-${reservations[0].id}`,
+            title: "Réservation enregistrée",
+            detail: `${reservations[0].packageTitle} - ${reservations[0].destination}`,
+            time: reservations[0].departureDate,
+          }
+        : null,
+      customRequests[0]
+        ? {
+            id: `activity-request-${customRequests[0].id}`,
+            title: "Demande personnalisée",
+            detail: customRequests[0].destination,
+            time: customRequests[0].createdAt,
+          }
+        : null,
+      receivedOffers[0]
+        ? {
+            id: `activity-offer-${receivedOffers[0].id}`,
+            title: "Offre reçue",
+            detail: `${receivedOffers[0].agency} - ${receivedOffers[0].totalLabel}`,
+            time: receivedOffers[0].sentAt,
+          }
+        : null,
+    ].filter(Boolean);
+
+    return activities;
+  }, [customRequests, receivedOffers, reservations]);
+
+  const missingProfileFields = useMemo(
+    () =>
+      [
+        ["Téléphone", profile.phone],
+        ["Ville", profile.city],
+        ["Pays", profile.country],
+      ]
+        .filter(([, value]) => !String(value || "").trim())
+        .map(([label]) => label),
+    [profile.city, profile.country, profile.phone]
+  );
 
   const openReservationDetails = (reservation) => {
     setModal({
@@ -943,9 +1290,66 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
     });
   };
 
-  const saveProfile = (event) => {
+  const saveProfile = async (event) => {
     event.preventDefault();
+    try {
+      const response = await updateProfile({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        avatar_url: profile.avatar,
+        city: profile.city,
+        country: profile.country,
+      });
+      const session = getAuthSession();
+      if (session?.token && response.user) {
+        saveAuthSession({ ...session, user: response.user });
+      }
+    } catch {
+      notify("Profil mis à jour localement. API indisponible.");
+      return;
+    }
     notify("Profil voyageur mis à jour dans l’interface.");
+  };
+
+  const handleProfilePhotoChange = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      notify("Choisis une image valide pour la photo de profil.");
+      event.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const avatar = String(reader.result || "");
+
+      setProfile((current) => ({ ...current, avatar }));
+      try {
+        localStorage.setItem(getProfilePhotoStorageKey({ id: getAuthSession()?.user?.id, email: profile.email }), avatar);
+      } catch {
+        // The backend save below is the source of truth; local storage is only a quick fallback.
+      }
+
+      try {
+        const response = await updateProfile({ avatar_url: avatar });
+        const session = getAuthSession();
+        if (session?.token && response.user) {
+          saveAuthSession({ ...session, user: response.user });
+        }
+        notify("Photo de profil ajoutée.");
+      } catch {
+        notify("Photo ajoutée localement. Enregistre le profil quand l’API sera disponible.");
+        return;
+      }
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
   };
 
   const saveSettings = (event) => {
@@ -1108,16 +1512,20 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
             </div>
           </div>
           <div className="traveler-timeline">
-            {recentActivity.map((activity) => (
-              <div key={activity.id}>
-                <span />
-                <div>
-                  <strong>{activity.title}</strong>
-                  <p>{activity.detail}</p>
-                  <small>{activity.time}</small>
+            {accountActivity.length ? (
+              accountActivity.map((activity) => (
+                <div key={activity.id}>
+                  <span />
+                  <div>
+                    <strong>{activity.title}</strong>
+                    <p>{activity.detail}</p>
+                    <small>{activity.time}</small>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <EmptyState text="Aucune activité réelle pour le moment." />
+            )}
           </div>
         </article>
       </section>
@@ -1400,12 +1808,39 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
 
   const renderProfile = () => (
     <form className="traveler-card traveler-form-card" onSubmit={saveProfile}>
+      {missingProfileFields.length ? (
+        <div className="traveler-profile-alert">
+          <strong>Complète ton profil</strong>
+          <p>
+            Ajoute tes vraies informations pour faciliter les réservations et les échanges avec les agences :
+            {" "}
+            {missingProfileFields.join(", ")}.
+          </p>
+        </div>
+      ) : null}
       <div className="traveler-profile-panel">
-        <img src={profile.avatar} alt={profile.name} />
+        <div className="traveler-profile-photo-wrap">
+          <ProfileAvatar profile={profile} className="traveler-profile-photo" />
+          <button
+            type="button"
+            className="traveler-photo-btn"
+            onClick={() => photoInputRef.current?.click()}
+          >
+            <Camera size={16} />
+            Photo
+          </button>
+          <input
+            ref={photoInputRef}
+            type="file"
+            accept="image/*"
+            className="traveler-hidden-file"
+            onChange={handleProfilePhotoChange}
+          />
+        </div>
         <div>
           <span>Voyageur NextTrip</span>
           <h2>{profile.name}</h2>
-          <p>{profile.status}</p>
+          <p>{profile.status || "Profil à compléter"}</p>
         </div>
       </div>
       <div className="traveler-form-grid">
@@ -1434,14 +1869,16 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
           <input value={profile.memberSince} onChange={(event) => setProfile((current) => ({ ...current, memberSince: event.target.value }))} />
         </label>
       </div>
-      <div className="traveler-preferences-grid">
-        {profile.preferences.map((preference) => (
-          <div key={preference.label}>
-            <span>{preference.label}</span>
-            <strong>{preference.value}</strong>
-          </div>
-        ))}
-      </div>
+      {profile.preferences.length ? (
+        <div className="traveler-preferences-grid">
+          {profile.preferences.map((preference) => (
+            <div key={preference.label}>
+              <span>{preference.label}</span>
+              <strong>{preference.value}</strong>
+            </div>
+          ))}
+        </div>
+      ) : null}
       <button type="submit" className="primary-btn">
         <Save size={16} />
         Modifier le profil
@@ -1529,6 +1966,14 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
             </div>
           </div>
           <nav aria-label="Navigation espace voyageur">
+            <button
+              type="button"
+              className="traveler-sidebar-link traveler-sidebar-home"
+              onClick={() => navigate("/")}
+            >
+              <Home size={18} />
+              <span>Accueil</span>
+            </button>
             {sidebarItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -1592,8 +2037,8 @@ export default function TravelerDashboard({ initialSection = "overview" }) {
                 ) : null}
               </div>
               <button type="button" className="traveler-profile-pill" onClick={() => changeSection("profile")}>
-                <img src={profile.avatar} alt={profile.name} />
-                <span>{profile.name}</span>
+                <ProfileAvatar profile={profile} />
+                <span>{profile.name || profile.email || "Profil"}</span>
               </button>
             </div>
           </header>

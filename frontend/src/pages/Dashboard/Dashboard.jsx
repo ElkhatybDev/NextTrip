@@ -10,6 +10,7 @@ import {
   CreditCard,
   Download,
   Eye,
+  Home,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -28,28 +29,25 @@ import {
 } from "lucide-react";
 import nextTripLogo from "../../Assets/images/NextTrip logo.png";
 import {
-  agencyProfile,
-  agencySettings,
-  agencyStats,
-  clientRequests as requestData,
-  clients as clientsData,
   formatMad,
-  messages as messageData,
-  notifications as notificationData,
-  paymentStats,
-  payments as paymentData,
-  recentActivity,
-  reservations as reservationData,
-  revenueSummary,
-  sentOffers as offerData,
 } from "../../data/agencyDashboardData";
-import { clearAuthSession } from "../../utils/authSession";
+import { fetchAgencyDashboard } from "../../services/dashboardApi";
+import { createTripOffer } from "../../services/tripRequestsApi";
+import {
+  createAgencyPackage,
+  updateAgencyProfile,
+  updateBookingStatus as updateBookingStatusApi,
+  updateTripOfferStatus,
+  updateTripRequestStatus,
+} from "../../services/managementApi";
+import { clearAuthSession, getAuthSession } from "../../utils/authSession";
 import "./Dashboard.css";
 
 const sidebarItems = [
   { key: "overview", label: "Tableau de bord", icon: LayoutDashboard },
   { key: "requests", label: "Demandes reçues", icon: ClipboardList },
   { key: "offers", label: "Offres envoyées", icon: BriefcaseBusiness },
+  { key: "packages", label: "Forfaits", icon: Plus },
   { key: "reservations", label: "Réservations", icon: CalendarCheck },
   { key: "clients", label: "Clients", icon: UsersRound },
   { key: "payments", label: "Paiements", icon: CreditCard },
@@ -80,6 +78,13 @@ const pageCopy = {
     description:
       "Gérez les offres transmises aux clients et mettez à jour leur statut.",
     search: "Rechercher une offre...",
+  },
+  packages: {
+    eyebrow: "Forfaits agence",
+    title: "Forfaits",
+    description:
+      "Créez et suivez les forfaits publiés par votre agence.",
+    search: "Rechercher un forfait...",
   },
   reservations: {
     eyebrow: "Suivi opérationnel",
@@ -154,11 +159,15 @@ const statusTone = {
   Actif: "green",
   "Suivi en cours": "orange",
   Vérifiée: "green",
+  published: "green",
+  draft: "orange",
+  hidden: "red",
 };
 
 const sectionFilters = {
   requests: ["Tous", "Nouvelle", "En attente", "Offre envoyée", "Confirmée", "Refusée"],
   offers: ["Tous", "Envoyée", "Acceptée", "Refusée", "Expirée", "Annulée"],
+  packages: ["Tous", "published", "draft", "hidden"],
   reservations: ["Tous", "En attente", "Confirmée", "Annulée", "Terminée"],
   clients: ["Tous", "Actif", "Suivi en cours"],
   payments: ["Tous", "Payé", "Non payé", "En attente", "En attente de paiement", "Échoué", "Remboursé"],
@@ -180,6 +189,251 @@ const emptyOfferForm = {
   services: "",
   message: "",
 };
+
+const emptyPackageForm = {
+  title: "",
+  destination: "",
+  description: "",
+  price: "",
+  duration_days: "3",
+  capacity: "10",
+  starts_at: "",
+  ends_at: "",
+  image_url: "",
+  status: "published",
+};
+
+const emptyAgencyProfile = {
+  id: "",
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  city: "",
+  country: "",
+  description: "",
+  manager: "",
+  verificationStatus: "",
+  rating: "",
+  responseTime: "",
+  logo: "",
+  specialties: [],
+  services: [],
+  license: "",
+};
+
+const emptyAgencySettings = {
+  accountEmail: "",
+  language: "Français",
+  theme: "Clair",
+  notifyRequests: true,
+  notifyPayments: true,
+};
+
+function getInitialAgencyProfile() {
+  const session = getAuthSession();
+  const user = session?.user || {};
+  const agency = user.agency || {};
+
+  return {
+    ...emptyAgencyProfile,
+    id: agency.id || "",
+    name: agency.name || user.name || "",
+    email: agency.email || user.email || "",
+    phone: agency.phone || user.phone || "",
+    address: agency.address || "",
+    city: agency.city || "",
+    country: agency.country || "",
+    description: agency.description || "",
+    verificationStatus: agency.status === "approved" ? "Vérifiée" : agency.status || "",
+    logo: agency.logo_url || "",
+  };
+}
+
+function getInitialAgencySettings() {
+  const profile = getInitialAgencyProfile();
+
+  return {
+    ...emptyAgencySettings,
+    accountEmail: profile.email,
+  };
+}
+
+function mapAgencyRequest(request) {
+  const traveler = request.user || {};
+  const preferences = request.preferences || {};
+
+  return {
+    id: String(request.id),
+    apiId: request.id,
+    client: traveler.name || "Client NextTrip",
+    email: traveler.email || "",
+    phone: traveler.phone || "",
+    destination: request.destination,
+    departureDate: request.start_date || "Dates flexibles",
+    travelers: `${request.travelers_count || 1} voyageur(s)`,
+    budget: request.budget ? `${Number(request.budget).toLocaleString()} ${request.currency || "MAD"}` : "Budget à confirmer",
+    services: preferences.extras || [],
+    notes: request.notes || "Aucune note ajoutée.",
+    status: request.offers?.length ? "Offre envoyée" : "Nouvelle",
+    createdAt: request.created_at || "",
+  };
+}
+
+function mapAgencyOffer(offer) {
+  const request = offer.trip_request || {};
+
+  return {
+    id: String(offer.id),
+    apiId: offer.id,
+    requestId: String(offer.trip_request_id),
+    client: request.user?.name || "Client NextTrip",
+    destination: request.destination || "Destination NextTrip",
+    price: Number(offer.price || 0),
+    duration: offer.details?.duration || "Durée à confirmer",
+    hotel: offer.details?.hotelPlan || "Hôtel ou riad selon le budget du client",
+    transport: offer.details?.transportPlan || "Transport privé coordonné par l’agence",
+    services: offer.details?.services || [],
+    message: offer.description || "",
+    status: "Envoyée",
+    sentAt: offer.created_at || "Aujourd'hui",
+  };
+}
+
+function mapAgencyBooking(booking) {
+  const packageItem = booking.package || {};
+  const user = booking.user || {};
+  const payment = booking.payment || {};
+
+  return {
+    id: booking.booking_reference || `BK-${booking.id}`,
+    apiId: booking.id,
+    client: user.name || "Client NextTrip",
+    destination: packageItem.destination || "Destination NextTrip",
+    packageTitle: packageItem.title || "Forfait NextTrip",
+    travelers: `${booking.guests_count || 1} voyageur(s)`,
+    amount: Number(booking.total_amount || 0),
+    date: packageItem.starts_at || booking.confirmed_at || "Date flexible",
+    reservationStatus:
+      booking.status === "confirmed"
+        ? "Confirmée"
+        : booking.status === "completed"
+          ? "Terminée"
+          : booking.status === "cancelled"
+            ? "Annulée"
+            : "En attente",
+    paymentStatus: payment.status === "confirmed" ? "Payé" : "En attente",
+    departureDate: packageItem.starts_at || booking.confirmed_at || "Date flexible",
+  };
+}
+
+function mapAgencyPayment(booking) {
+  const packageItem = booking.package || {};
+  const user = booking.user || {};
+  const payment = booking.payment || {};
+
+  return {
+    id: payment.provider_reference || `PAY-${booking.id}`,
+    client: user.name || "Client NextTrip",
+    reservationId: booking.booking_reference || `BK-${booking.id}`,
+    amount: Number(payment.amount || booking.total_amount || 0),
+    method: payment.provider || "Carte",
+    status: payment.status === "confirmed" ? "Payé" : "En attente",
+    date: payment.paid_at || packageItem.starts_at || booking.confirmed_at || "Date flexible",
+  };
+}
+
+function mapAgencyPackage(packageItem) {
+  return {
+    id: packageItem.id,
+    title: packageItem.title || "Forfait agence",
+    destination: packageItem.destination || "Destination",
+    description: packageItem.description || "",
+    price: Number(packageItem.price || 0),
+    currency: packageItem.currency || "MAD",
+    duration_days: packageItem.duration_days || 1,
+    capacity: packageItem.capacity || 1,
+    starts_at: packageItem.starts_at || "",
+    ends_at: packageItem.ends_at || "",
+    status: packageItem.status || "published",
+  };
+}
+
+function buildAgencyClients(requests, reservations) {
+  const clients = new Map();
+
+  requests.forEach((request) => {
+    const existing = clients.get(request.client) || {
+      id: `CL-${clients.size + 1}`,
+      name: request.client,
+      email: request.email || "",
+      phone: request.phone || "",
+      bookings: 0,
+      lastRequest: request.destination,
+      status: "Suivi en cours",
+    };
+
+    clients.set(request.client, {
+      ...existing,
+      lastRequest: request.destination || existing.lastRequest,
+    });
+  });
+
+  reservations.forEach((reservation) => {
+    const existing = clients.get(reservation.client) || {
+      id: `CL-${clients.size + 1}`,
+      name: reservation.client,
+      email: "",
+      phone: "",
+      bookings: 0,
+      lastRequest: reservation.destination,
+      status: "Actif",
+    };
+
+    clients.set(reservation.client, {
+      ...existing,
+      bookings: existing.bookings + 1,
+      status: "Actif",
+    });
+  });
+
+  return Array.from(clients.values());
+}
+
+function buildAgencyNotifications(requests, offers, reservations) {
+  return [
+    requests[0]
+      ? {
+          id: `NOT-RQ-${requests[0].id}`,
+          title: "Nouvelle demande reçue",
+          type: "Demande",
+          message: `${requests[0].client} attend une réponse pour ${requests[0].destination}.`,
+          date: "Aujourd’hui",
+          status: "Non lu",
+        }
+      : null,
+    offers[0]
+      ? {
+          id: `NOT-OF-${offers[0].id}`,
+          title: "Offre envoyée",
+          type: "Offre",
+          message: `Offre envoyée à ${offers[0].client} pour ${offers[0].destination}.`,
+          date: offers[0].sentAt || "Aujourd’hui",
+          status: "Lu",
+        }
+      : null,
+    reservations[0]
+      ? {
+          id: `NOT-BK-${reservations[0].id}`,
+          title: "Réservation suivie",
+          type: "Réservation",
+          message: `${reservations[0].client} a une réservation pour ${reservations[0].destination}.`,
+          date: reservations[0].date,
+          status: "Lu",
+        }
+      : null,
+  ].filter(Boolean);
+}
 
 function normalize(value) {
   return String(value || "")
@@ -223,6 +477,32 @@ function ActionButton({ children, icon: Icon, tone = "secondary", ...props }) {
 
 function EmptyState({ text = "Aucun résultat trouvé." }) {
   return <div className="agency-empty-state">{text}</div>;
+}
+
+function getAgencyInitials(name = "") {
+  return (
+    name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "AG"
+  );
+}
+
+function AgencyLogoMark({ profile, className = "" }) {
+  const label = profile.name || "Agence NextTrip";
+
+  if (profile.logo) {
+    return <img className={className} src={profile.logo} alt={label} />;
+  }
+
+  return (
+    <div className={`agency-logo-placeholder ${className}`.trim()} aria-label={label}>
+      {getAgencyInitials(label)}
+    </div>
+  );
 }
 
 function DashboardTable({ columns, children, empty }) {
@@ -516,6 +796,9 @@ function OverviewSection({
   requests,
   offers,
   reservations,
+  stats,
+  revenue,
+  activity,
   onSectionChange,
   onOpenDetails,
   onCreateOffer,
@@ -523,7 +806,7 @@ function OverviewSection({
   return (
     <>
       <div className="agency-stats-grid">
-        {agencyStats.map((stat) => (
+        {stats.map((stat) => (
           <button
             type="button"
             key={stat.label}
@@ -587,16 +870,16 @@ function OverviewSection({
             description="Vue rapide des montants suivis par l’agence."
           />
           <div className="agency-revenue-box">
-            <strong>{revenueSummary.total}</strong>
+            <strong>{revenue.total}</strong>
             <span>Total des réservations suivies</span>
             <div className="agency-revenue-bars">
-              {revenueSummary.bars.map((height, index) => (
+              {revenue.bars.map((height, index) => (
                 <i key={`${height}-${index}`} style={{ height }} />
               ))}
             </div>
             <div className="agency-revenue-split">
-              <p><span>Payé</span><b>{revenueSummary.paid}</b></p>
-              <p><span>En attente</span><b>{revenueSummary.pending}</b></p>
+              <p><span>Payé</span><b>{revenue.paid}</b></p>
+              <p><span>En attente</span><b>{revenue.pending}</b></p>
             </div>
           </div>
         </section>
@@ -679,13 +962,13 @@ function OverviewSection({
             description="Historique local prêt pour une future connexion serveur."
           />
           <div className="agency-activity-list">
-            {recentActivity.map((activity) => (
+            {activity.length ? activity.map((activity) => (
               <article key={activity.id}>
                 <span>{activity.time}</span>
                 <strong>{activity.title}</strong>
                 <p>{activity.detail}</p>
               </article>
-            ))}
+            )) : <EmptyState text="Aucune activité réelle pour le moment." />}
           </div>
         </section>
       </div>
@@ -703,6 +986,7 @@ export default function Dashboard() {
   const [filters, setFilters] = useState({
     requests: "Tous",
     offers: "Tous",
+    packages: "Tous",
     reservations: "Tous",
     reservationPayments: "Tous",
     clients: "Tous",
@@ -710,17 +994,19 @@ export default function Dashboard() {
     messages: "Tous",
     notifications: "Tous",
   });
-  const [requests, setRequests] = useState(requestData);
-  const [offers, setOffers] = useState(offerData);
-  const [reservations, setReservations] = useState(reservationData);
-  const [clients] = useState(clientsData);
-  const [payments] = useState(paymentData);
-  const [messages, setMessages] = useState(messageData);
-  const [notifications, setNotifications] = useState(notificationData);
-  const [profileDraft, setProfileDraft] = useState(agencyProfile);
-  const [settingsDraft, setSettingsDraft] = useState(agencySettings);
+  const [requests, setRequests] = useState([]);
+  const [offers, setOffers] = useState([]);
+  const [packages, setPackages] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [profileDraft, setProfileDraft] = useState(() => getInitialAgencyProfile());
+  const [settingsDraft, setSettingsDraft] = useState(() => getInitialAgencySettings());
   const [detailModal, setDetailModal] = useState(null);
   const [offerModal, setOfferModal] = useState({ mode: "", form: emptyOfferForm });
+  const [packageForm, setPackageForm] = useState(emptyPackageForm);
   const [replyModal, setReplyModal] = useState(null);
 
   const toastTimerRef = useRef(null);
@@ -728,6 +1014,54 @@ export default function Dashboard() {
   const currentCopy = pageCopy[activeSection] || pageCopy.overview;
   const unreadNotifications = notifications.filter((item) => item.status === "Non lu").length;
   const unreadMessages = messages.filter((item) => item.status === "Non lu").length;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchAgencyDashboard()
+      .then((data) => {
+        if (!isMounted) {
+          return;
+        }
+
+        const apiRequests = (data.trip_requests || []).map(mapAgencyRequest);
+        const apiOffers = (data.offers || []).map(mapAgencyOffer);
+        const apiPackages = (data.packages || []).map(mapAgencyPackage);
+        const apiReservations = (data.bookings || []).map(mapAgencyBooking);
+        const apiPayments = (data.bookings || []).map(mapAgencyPayment);
+
+        setRequests(apiRequests);
+        setOffers(apiOffers);
+        setPackages(apiPackages);
+        setReservations(apiReservations);
+        setPayments(apiPayments);
+        setClients(buildAgencyClients(apiRequests, apiReservations));
+        setMessages([]);
+        setNotifications(buildAgencyNotifications(apiRequests, apiOffers, apiReservations));
+
+        if (data.agency) {
+          setProfileDraft((current) => ({
+            ...current,
+            name: data.agency.name || current.name,
+            email: data.agency.email || current.email,
+            phone: data.agency.phone || current.phone,
+            city: data.agency.city || current.city,
+            country: data.agency.country || current.country,
+            status: data.agency.status || current.status,
+            verificationStatus: data.agency.status === "approved" ? "Vérifiée" : data.agency.status || current.verificationStatus,
+            description: data.agency.description || current.description,
+            logo: data.agency.logo_url || current.logo,
+          }));
+        }
+      })
+      .catch(() => {
+        // Keep the agency workspace empty if the API is unavailable.
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -764,6 +1098,110 @@ export default function Dashboard() {
     setQuery(nextQuery);
     setIsSidebarOpen(false);
   };
+
+  const paidTotal = useMemo(
+    () => payments.filter((payment) => payment.status === "Payé").reduce((sum, payment) => sum + payment.amount, 0),
+    [payments]
+  );
+
+  const pendingTotal = useMemo(
+    () => payments.filter((payment) => payment.status !== "Payé").reduce((sum, payment) => sum + payment.amount, 0),
+    [payments]
+  );
+
+  const agencyStats = useMemo(
+    () => [
+      {
+        label: "Total demandes reçues",
+        value: String(requests.length),
+        note: "Demandes liées à votre agence",
+        tone: "blue",
+      },
+      {
+        label: "Offres envoyées",
+        value: String(offers.length),
+        note: "Propositions préparées",
+        tone: "orange",
+      },
+      {
+        label: "Réservations confirmées",
+        value: String(reservations.filter((reservation) => reservation.reservationStatus === "Confirmée").length),
+        note: "Voyages validés",
+        tone: "green",
+      },
+      {
+        label: "Revenus de l’agence",
+        value: formatMad(paidTotal),
+        note: "Paiements confirmés",
+        tone: "blue",
+      },
+      {
+        label: "Demandes en attente",
+        value: String(requests.filter((request) => ["Nouvelle", "En attente"].includes(request.status)).length),
+        note: "À traiter rapidement",
+        tone: "orange",
+      },
+      {
+        label: "Voyages terminés",
+        value: String(reservations.filter((reservation) => reservation.reservationStatus === "Terminée").length),
+        note: "Historique suivi",
+        tone: "green",
+      },
+    ],
+    [offers.length, paidTotal, requests, reservations]
+  );
+
+  const revenueSummary = useMemo(
+    () => ({
+      total: formatMad(reservations.reduce((sum, reservation) => sum + reservation.amount, 0)),
+      paid: formatMad(paidTotal),
+      pending: formatMad(pendingTotal),
+      bars: reservations.length
+        ? reservations.map((reservation) => Math.max(44, Math.min(170, Math.round(reservation.amount / 100))))
+        : [44, 44, 44],
+    }),
+    [paidTotal, pendingTotal, reservations]
+  );
+
+  const paymentStats = useMemo(
+    () => ({
+      paidTotal: formatMad(paidTotal),
+      pendingTotal: formatMad(pendingTotal),
+      failedCount: String(payments.filter((payment) => payment.status === "Échoué").length),
+    }),
+    [paidTotal, pendingTotal, payments]
+  );
+
+  const recentActivity = useMemo(
+    () =>
+      [
+        requests[0]
+          ? {
+              id: `ACT-RQ-${requests[0].id}`,
+              title: "Demande reçue",
+              detail: `${requests[0].id} · ${requests[0].destination}`,
+              time: requests[0].createdAt || "Aujourd’hui",
+            }
+          : null,
+        offers[0]
+          ? {
+              id: `ACT-OF-${offers[0].id}`,
+              title: "Offre envoyée",
+              detail: `${offers[0].id} · ${formatMad(offers[0].price)}`,
+              time: offers[0].sentAt || "Aujourd’hui",
+            }
+          : null,
+        payments[0]
+          ? {
+              id: `ACT-PAY-${payments[0].id}`,
+              title: "Paiement suivi",
+              detail: `${payments[0].id} · ${payments[0].status}`,
+              time: payments[0].date,
+            }
+          : null,
+      ].filter(Boolean),
+    [offers, payments, requests]
+  );
 
   const updateFilter = (key, value) => {
     setFilters((previous) => ({ ...previous, [key]: value }));
@@ -840,7 +1278,7 @@ export default function Dashboard() {
     }));
   };
 
-  const submitOffer = () => {
+  const submitOffer = async () => {
     const { mode, form } = offerModal;
     const price = Number(String(form.price).replace(/[^\d]/g, ""));
 
@@ -875,7 +1313,7 @@ export default function Dashboard() {
       );
       notify("Offre mise à jour.");
     } else {
-      const newOffer = {
+      let newOffer = {
         id: `OFF-AG-${Date.now().toString().slice(-5)}`,
         requestId: form.requestId,
         client: form.client,
@@ -890,6 +1328,32 @@ export default function Dashboard() {
         sentAt: new Date().toLocaleDateString("fr-FR"),
       };
 
+      try {
+        const apiOffer = await createTripOffer(form.requestId, {
+          title: `${form.destination} offer`,
+          description: form.message,
+          price,
+          currency: "MAD",
+          details: {
+            duration: form.duration,
+            hotelPlan: form.hotel,
+            transportPlan: form.transport,
+            services,
+          },
+        });
+
+        newOffer = mapAgencyOffer({
+          ...apiOffer,
+          trip_request_id: form.requestId,
+          trip_request: {
+            destination: form.destination,
+            user: { name: form.client },
+          },
+        });
+      } catch {
+        // Keep agency workflow usable if the API is temporarily unavailable.
+      }
+
       setOffers((previous) => [newOffer, ...previous]);
       setRequests((previous) =>
         previous.map((request) =>
@@ -903,9 +1367,57 @@ export default function Dashboard() {
     changeSection("offers");
   };
 
-  const refuseRequest = (id) => {
+  const updatePackageForm = (field, value) => {
+    setPackageForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const submitPackage = async (event) => {
+    event.preventDefault();
+
+    const price = Number(String(packageForm.price).replace(/[^\d.]/g, ""));
+
+    if (!packageForm.title.trim() || !packageForm.destination.trim() || !price) {
+      notify("Renseignez le titre, la destination et le prix du forfait.");
+      return;
+    }
+
+    try {
+      const createdPackage = await createAgencyPackage({
+        title: packageForm.title,
+        destination: packageForm.destination,
+        description: packageForm.description,
+        price,
+        currency: "MAD",
+        duration_days: Number(packageForm.duration_days) || 1,
+        capacity: Number(packageForm.capacity) || 1,
+        starts_at: packageForm.starts_at || null,
+        ends_at: packageForm.ends_at || null,
+        image_url: packageForm.image_url || null,
+        status: packageForm.status,
+      });
+
+      setPackages((current) => [mapAgencyPackage(createdPackage), ...current]);
+      setPackageForm(emptyPackageForm);
+      notify("Forfait créé par l’agence.");
+      changeSection("packages");
+    } catch (error) {
+      notify(error?.data?.message || "Création du forfait impossible.");
+    }
+  };
+
+  const refuseRequest = async (id) => {
     if (!window.confirm("Refuser cette demande ?")) {
       return;
+    }
+
+    const request = requests.find((item) => item.id === id);
+
+    if (request?.apiId) {
+      try {
+        await updateTripRequestStatus(request.apiId, "refused");
+      } catch {
+        notify("Demande refusée localement. API indisponible.");
+      }
     }
 
     setRequests((previous) =>
@@ -914,9 +1426,19 @@ export default function Dashboard() {
     notify("Demande refusée.");
   };
 
-  const cancelOffer = (id) => {
+  const cancelOffer = async (id) => {
     if (!window.confirm("Annuler cette offre ?")) {
       return;
+    }
+
+    const offer = offers.find((item) => item.id === id);
+
+    if (offer?.apiId) {
+      try {
+        await updateTripOfferStatus(offer.apiId, "cancelled");
+      } catch {
+        notify("Offre annulée localement. API indisponible.");
+      }
     }
 
     setOffers((previous) =>
@@ -925,9 +1447,25 @@ export default function Dashboard() {
     notify("Offre annulée.");
   };
 
-  const updateReservationStatus = (id, status) => {
+  const updateReservationStatus = async (id, status) => {
     if (["Annulée", "Terminée"].includes(status) && !window.confirm(`Marquer cette réservation comme ${status.toLowerCase()} ?`)) {
       return;
+    }
+
+    const reservation = reservations.find((item) => item.id === id);
+    const statusMap = {
+      "Confirmée": "confirmed",
+      "Annulée": "cancelled",
+      "Terminée": "completed",
+      "En attente": "pending",
+    };
+
+    if (reservation?.apiId) {
+      try {
+        await updateBookingStatusApi(reservation.apiId, statusMap[status] || "pending");
+      } catch {
+        notify("Réservation mise à jour localement. API indisponible.");
+      }
     }
 
     setReservations((previous) =>
@@ -1018,7 +1556,21 @@ export default function Dashboard() {
     notify("Reçu téléchargé.");
   };
 
-  const saveProfile = () => {
+  const saveProfile = async () => {
+    try {
+      await updateAgencyProfile({
+        name: profileDraft.name,
+        email: profileDraft.email,
+        phone: profileDraft.phone,
+        city: profileDraft.city,
+        country: profileDraft.country,
+        description: profileDraft.description,
+      });
+      notify("Profil agence enregistré.");
+      return;
+    } catch {
+      // Fall back to the existing local-only notification below.
+    }
     notify("Profil agence enregistré localement.");
   };
 
@@ -1047,6 +1599,14 @@ export default function Dashboard() {
 
     return applyStatusFilter(searched, filters.offers);
   }, [offers, query, filters.offers]);
+
+  const filteredPackages = useMemo(() => {
+    const searched = packages.filter((item) =>
+      matchesSearch(item, ["title", "destination", "description", "status"], query)
+    );
+
+    return applyStatusFilter(searched, filters.packages);
+  }, [packages, query, filters.packages]);
 
   const filteredReservations = useMemo(() => {
     const searched = reservations.filter((reservation) =>
@@ -1133,6 +1693,21 @@ export default function Dashboard() {
           title: `${offer.id} · ${offer.destination}`,
           subtitle: offer.client,
           meta: `${formatMad(offer.price)} · ${offer.status}`,
+        }
+      );
+    });
+
+    packages.forEach((item) => {
+      addResult(
+        matchesSearch(item, ["title", "destination", "description", "status"], query),
+        {
+          id: item.id,
+          type: "Forfait",
+          section: "packages",
+          sectionQuery: item.title,
+          title: item.title,
+          subtitle: item.destination,
+          meta: `${formatMad(item.price)} · ${item.status}`,
         }
       );
     });
@@ -1249,6 +1824,7 @@ export default function Dashboard() {
     query,
     requests,
     offers,
+    packages,
     reservations,
     clients,
     payments,
@@ -1266,10 +1842,10 @@ export default function Dashboard() {
 
   const headerProfile = (
     <div className="agency-header-profile">
-      <img src={profileDraft.logo || nextTripLogo} alt={profileDraft.name} />
+      <AgencyLogoMark profile={profileDraft} />
       <div>
-        <strong>{profileDraft.name}</strong>
-        <span>{profileDraft.verificationStatus}</span>
+        <strong>{profileDraft.name || "Agence NextTrip"}</strong>
+        <span>{profileDraft.verificationStatus || "Profil agence"}</span>
       </div>
     </div>
   );
@@ -1281,6 +1857,9 @@ export default function Dashboard() {
           requests={requests}
           offers={offers}
           reservations={reservations}
+          stats={agencyStats}
+          revenue={revenueSummary}
+          activity={recentActivity}
           onSectionChange={changeSection}
           onOpenDetails={openDetails}
           onCreateOffer={openOfferModal}
@@ -1403,6 +1982,93 @@ export default function Dashboard() {
                     <ActionButton icon={Ban} tone="danger" onClick={() => cancelOffer(offer.id)}>Annuler</ActionButton>
                   </div>
                 </td>
+              </tr>
+            ))}
+          </DashboardTable>
+        </section>
+      );
+    }
+
+    if (activeSection === "packages") {
+      return (
+        <section className="agency-card">
+          <SectionHeader
+            eyebrow="Forfaits"
+            title="Créer un forfait"
+            description="Publiez un forfait réel depuis l’espace agence."
+            actions={
+              <FilterTabs
+                filters={sectionFilters.packages}
+                value={filters.packages}
+                onChange={(value) => updateFilter("packages", value)}
+              />
+            }
+          />
+          <form className="agency-form-grid agency-package-form" onSubmit={submitPackage}>
+            <label>
+              Titre du forfait
+              <input value={packageForm.title} onChange={(event) => updatePackageForm("title", event.target.value)} />
+            </label>
+            <label>
+              Destination
+              <input value={packageForm.destination} onChange={(event) => updatePackageForm("destination", event.target.value)} />
+            </label>
+            <label>
+              Prix en MAD
+              <input inputMode="numeric" value={packageForm.price} onChange={(event) => updatePackageForm("price", event.target.value)} />
+            </label>
+            <label>
+              Durée en jours
+              <input inputMode="numeric" value={packageForm.duration_days} onChange={(event) => updatePackageForm("duration_days", event.target.value)} />
+            </label>
+            <label>
+              Capacité
+              <input inputMode="numeric" value={packageForm.capacity} onChange={(event) => updatePackageForm("capacity", event.target.value)} />
+            </label>
+            <label>
+              Statut
+              <select value={packageForm.status} onChange={(event) => updatePackageForm("status", event.target.value)}>
+                <option value="published">Publié</option>
+                <option value="draft">Brouillon</option>
+                <option value="hidden">Masqué</option>
+              </select>
+            </label>
+            <label>
+              Début
+              <input type="date" value={packageForm.starts_at} onChange={(event) => updatePackageForm("starts_at", event.target.value)} />
+            </label>
+            <label>
+              Fin
+              <input type="date" value={packageForm.ends_at} onChange={(event) => updatePackageForm("ends_at", event.target.value)} />
+            </label>
+            <label className="agency-form-wide">
+              Image URL
+              <input value={packageForm.image_url} onChange={(event) => updatePackageForm("image_url", event.target.value)} />
+            </label>
+            <label className="agency-form-wide">
+              Description
+              <textarea rows="4" value={packageForm.description} onChange={(event) => updatePackageForm("description", event.target.value)} />
+            </label>
+            <div className="agency-form-wide agency-row-actions">
+              <ActionButton icon={Plus} tone="primary" onClick={submitPackage}>
+                Créer le forfait
+              </ActionButton>
+            </div>
+          </form>
+
+          <DashboardTable
+            columns={["ID", "Titre", "Destination", "Prix", "Durée", "Capacité", "Statut"]}
+            empty={!filteredPackages.length}
+          >
+            {filteredPackages.map((item) => (
+              <tr key={item.id}>
+                <td><strong>{item.id}</strong></td>
+                <td>{item.title}</td>
+                <td>{item.destination}</td>
+                <td>{formatMad(item.price)}</td>
+                <td>{item.duration_days} jours</td>
+                <td>{item.capacity}</td>
+                <td><StatusBadge value={item.status} /></td>
               </tr>
             ))}
           </DashboardTable>
@@ -1687,7 +2353,13 @@ export default function Dashboard() {
           />
           <div className="agency-profile-panel">
             <div className="agency-profile-cover">
-              <img src={profileDraft.logo || nextTripLogo} alt={profileDraft.name} />
+              {profileDraft.logo ? (
+                <img src={profileDraft.logo} alt={profileDraft.name || "Agence NextTrip"} />
+              ) : (
+                <div className="agency-cover-placeholder" aria-hidden="true">
+                  {getAgencyInitials(profileDraft.name)}
+                </div>
+              )}
               <div>
                 <span><ShieldCheck size={16} /> {profileDraft.verificationStatus}</span>
                 <h3>{profileDraft.name}</h3>
@@ -1840,14 +2512,24 @@ export default function Dashboard() {
           </div>
 
           <div className="agency-sidebar-profile">
-            <img src={profileDraft.logo || nextTripLogo} alt={profileDraft.name} />
+            <AgencyLogoMark profile={profileDraft} />
             <div>
-              <strong>{profileDraft.name}</strong>
-              <span>{profileDraft.city}, {profileDraft.country}</span>
+              <strong>{profileDraft.name || "Agence NextTrip"}</strong>
+              <span>{[profileDraft.city, profileDraft.country].filter(Boolean).join(", ") || "Profil agence"}</span>
             </div>
           </div>
 
           <nav className="agency-sidebar-nav" aria-label="Navigation du tableau de bord agence">
+            <button
+              type="button"
+              className="agency-sidebar-link agency-sidebar-home"
+              onClick={() => navigate("/")}
+            >
+              <span>
+                <Home size={18} />
+                Accueil
+              </span>
+            </button>
             {sidebarItems.map((item) => {
               const Icon = item.icon;
 

@@ -151,11 +151,6 @@ export default function Home() {
     <div className="home-page">
       <Navbar
         navItems={menuItems}
-        rightSlot={
-          <button type="button" className="site-signin-btn" onClick={() => navigate("/auth")}>
-            Sign In
-          </button>
-        }
       />
 
       <section id="home" className="hero-section">

@@ -29,6 +29,8 @@ import {
   saveTripRequest,
 } from "../../data/userWorkspaceContent";
 import { fetchDestinationOptions } from "../../services/destinationsApi";
+import { createTripRequest } from "../../services/tripRequestsApi";
+import { getAuthSession } from "../../utils/authSession";
 import { calculateTripPrice } from "../../utils/tripPricing";
 import "./CreateTrip.css";
 
@@ -77,10 +79,17 @@ export default function CreateTrip() {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (submittedRequest || isSendingRequest) {
+      return;
+    }
+
+    const session = getAuthSession();
+
+    if (!session?.token) {
+      navigate("/auth", { state: { from: "/create-trip", role: "traveler" } });
       return;
     }
 
@@ -169,12 +178,40 @@ export default function CreateTrip() {
 
     setIsSendingRequest(true);
 
-    submitTimerRef.current = window.setTimeout(() => {
+    try {
+      const apiRequest = await createTripRequest({
+        destination: form.destination || "Not selected yet",
+        start_date: form.departureDate || null,
+        end_date: form.returnDate || null,
+        travelers_count: Number(form.travelers || 1),
+        budget: priceEstimate.total,
+        currency: "MAD",
+        preferences: {
+          ...routedRequest.preferences,
+          extras,
+          mood: form.tripMood,
+          pace: form.pace,
+          accommodation: form.accommodation,
+          localDraft: routedRequest,
+        },
+        notes: routedRequest.notes,
+      });
+      const savedRequest = {
+        ...routedRequest,
+        id: String(apiRequest.id),
+        apiId: apiRequest.id,
+        requestReference: apiRequest.request_reference,
+      };
+
+      saveTripRequest(savedRequest);
+      setSubmittedRequest(savedRequest);
+    } catch {
       saveTripRequest(routedRequest);
-      setIsSendingRequest(false);
       setSubmittedRequest(routedRequest);
+    } finally {
+      setIsSendingRequest(false);
       submitTimerRef.current = null;
-    }, 950);
+    }
   };
 
   useEffect(() => {

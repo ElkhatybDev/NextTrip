@@ -46,6 +46,8 @@ export default function BookingView({
   onCheckout,
   onBackToPackages,
   backLabel = "Retour aux forfaits",
+  checkoutError = "",
+  isSubmitting = false,
 }) {
   const serviceFees = pricing.taxes + pricing.insurance;
   const travelDate = formatTravelDate(selectedPackage.nextDeparture);
@@ -243,8 +245,9 @@ export default function BookingView({
                     name="cardNumber"
                     value={bookingForm.cardNumber}
                     onChange={onBookingChange}
-                    placeholder="1234 5678 9012 3456"
+                    placeholder="1234 5678 9012 34"
                     inputMode="numeric"
+                    maxLength={17}
                     autoComplete="cc-number"
                   />
                   <span>123</span>
@@ -261,6 +264,7 @@ export default function BookingView({
                     onChange={onBookingChange}
                     placeholder="MM/AA"
                     inputMode="numeric"
+                    maxLength={5}
                     autoComplete="cc-exp"
                   />
                 </div>
@@ -276,6 +280,7 @@ export default function BookingView({
                     onChange={onBookingChange}
                     placeholder="123"
                     inputMode="numeric"
+                    maxLength={3}
                     autoComplete="cc-csc"
                   />
                 </div>
@@ -356,9 +361,15 @@ export default function BookingView({
             </div>
 
             <div className="booking-actions">
-              <button type="button" className="checkout-confirm-btn" onClick={onCheckout}>
+              {checkoutError ? <p className="secure-payment-note">{checkoutError}</p> : null}
+              <button
+                type="button"
+                className="checkout-confirm-btn"
+                onClick={onCheckout}
+                disabled={isSubmitting}
+              >
                 <ShieldCheck size={18} />
-                Confirmer le paiement
+                {isSubmitting ? "Confirmation..." : "Confirmer le paiement"}
               </button>
               <button type="button" className="secondary-btn" onClick={onBackToPackages}>
                 {backLabel}

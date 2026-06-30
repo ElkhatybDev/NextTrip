@@ -61,7 +61,7 @@ const packageRoutes = [
   { path: "/packages", element: <Packages /> },
   { path: "/offers", element: <Packages variant="offers" /> },
   { path: "/packages/:id", element: <PackageDetails /> },
-  { path: "/create-trip", element: <CreateTrip /> },
+  { path: "/create-trip", element: protect(<CreateTrip />, ["traveler"]) },
   { path: "/trip-requests/:requestId/sent", element: <TripRequestSent /> },
   { path: "/trip-requests/:requestId/edit", element: <TripRequestEdit /> },
   { path: "/trip-requests/:requestId/offers", element: <TripOffers /> },
