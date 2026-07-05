@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\Booking;
 use App\Models\Receipt;
-use App\Models\TravelPackage;
 use App\Models\TravelerProfile;
+use App\Models\TravelPackage;
 use App\Models\TripOffer;
 use App\Models\TripRequest;
 use App\Models\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 

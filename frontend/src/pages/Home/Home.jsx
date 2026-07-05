@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Building2, CheckCircle2, Route } from "lucide-react";
-import Footer from "../../components/Footer/Footer";
 import HeroSearch from "../../components/HeroSearch/HeroSearch";
 import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 import {
   destinationHighlights,
   fallbackDestinations,

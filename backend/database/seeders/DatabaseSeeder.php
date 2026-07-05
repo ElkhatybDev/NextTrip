@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Agency;
-use App\Models\TravelPackage;
 use App\Models\TravelerProfile;
+use App\Models\TravelPackage;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
