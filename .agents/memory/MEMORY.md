@@ -1,0 +1,1 @@
+- [Laravel `artisan serve` strips env vars](laravel-artisan-serve-env-stripping.md) — DB/secret env vars silently vanish in request handler unless `--no-reload` is passed.
