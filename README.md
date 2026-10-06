@@ -92,4 +92,4 @@ npm start
 ## 👤 Auteur
 Amine EL KHTYB
 
-💼 LinkedIn : https://www.linkedin.com/in/amine-el-khatyb
+💼- **LinkedIn** : [Amine El Khatib](https://www.linkedin.com/in/amine-el-khatyb)
