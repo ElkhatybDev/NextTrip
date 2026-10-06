@@ -1,35 +1,41 @@
 # ✈️ Next Trip - Plateforme de Voyages Personnalisés
 
-**Next Trip** est une plateforme web moderne développée dans le cadre d'un Projet de Fin d'Études (PFE 2026). Elle permet aux utilisateurs de découvrir des offres de voyage, de personnaliser leurs trajets en temps réel et d'effectuer des réservations. La plateforme intègre également un espace dédié aux agences pour la gestion de leurs offres[cite: 1].
+**Next Trip** est une plateforme web moderne développée dans le cadre d'un Projet de Fin d'Études (PFE 2026). Elle permet aux utilisateurs de découvrir des offres de voyage, de personnaliser leurs trajets en temps réel et d'effectuer des réservations. La plateforme intègre également un espace dédié aux agences pour la gestion de leurs offres.
+
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white)
+![API REST](https://img.shields.io/badge/API-REST-0F766E)
 
 ---
 
 ## ✨ Fonctionnalités Principales
 
-- 🧳 **Consultation des Offres & Réservation** : Navigation fluide pour parcourir les offres de voyages et réserver facilement[cite: 1].
-- 🛠️ **Personnalisation de Voyage** : Un parcours utilisateur intuitif permettant d'adapter son voyage selon ses besoins[cite: 1].
-- 💰 **Calcul du Prix en Temps Réel** : Mise à jour dynamique du tarif lors de la personnalisation de l'offre[cite: 1].
-- 🏢 **Espace Agence** : Interface dédiée aux agences partenaires pour administrer leurs offres et réservations[cite: 1].
-- 🎨 **UI/UX Soignée** : Interface conçue et prototypée sur Figma pour garantir une expérience utilisateur optimale[cite: 1].
+- 🧳 **Consultation des Offres & Réservation** : Navigation fluide pour parcourir les offres de voyages et réserver facilement.
+- 🛠️ **Personnalisation de Voyage** : Un parcours utilisateur intuitif permettant d'adapter son voyage selon ses besoins.
+- 💰 **Calcul du Prix en Temps Réel** : Mise à jour dynamique du tarif lors de la personnalisation de l'offre.
+- 🏢 **Espace Agence** : Interface dédiée aux agences partenaires pour administrer leurs offres et réservations.
+- 🎨 **UI/UX Soignée** : Interface conçue et prototypée sur Figma pour garantir une expérience utilisateur optimale.
 
 ---
 
 ## 🛠️ Tech Stack
 
 - **Front-end** : React.js, HTML5, CSS3 / Tailwind CSS
-- **Back-end** : Laravel (API REST)[cite: 1]
-- **Base de données** : MySQL[cite: 1]
-- **Design & Prototypage** : Figma[cite: 1]
-- **Gestion de version** : Git & GitHub[cite: 1]
+- **Back-end** : Laravel (API REST)
+- **Base de données** : MySQL
+- **Design & Prototypage** : Figma
+- **Gestion de version** : Git & GitHub
 
 ---
 
 ## 🏗️ Architecture du Projet
 
 Le projet repose sur une architecture découplée :
-- **Client (React)** : Consomme les endpoints de l'API REST pour afficher l'interface dynamique[cite: 1].
-- **Serveur (Laravel)** : Traite la logique métier, la sécurité, la gestion des rôles (utilisateurs / agences) et les requêtes vers la base de données[cite: 1].
-- **Base de Données (MySQL)** : Stocke les données des utilisateurs, des agences, des offres et des réservations[cite: 1].
+- **Client (React)** : Consomme les endpoints de l'API REST pour afficher l'interface dynamique.
+- **Serveur (Laravel)** : Traite la logique métier, la sécurité, la gestion des rôles (utilisateurs / agences) et les requêtes vers la base de données.
+- **Base de Données (MySQL)** : Stocke les données des utilisateurs, des agences, des offres et des réservations.
 
 ---
 
