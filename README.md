@@ -91,5 +91,3 @@ npm start
 
 ## 👤 Auteur
 Amine EL KHATYB
-
-- **LinkedIn** : [LinkedIn](https://www.linkedin.com/in/amine-el-khatyb)
