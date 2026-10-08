@@ -12,8 +12,10 @@
 
 ---
 
-## 🌐 Live Demo
-👉 **[Voir la Démo en Direct](https://next-trip-coral.vercel.app/)**
+
+### 🔗 ACCÉDER À LA DÉMO EN DIRECT
+
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-NEXT--TRIP--CORAL.VERCEL.APP-FF5722?style=for-the-badge&logo=vercel&logoColor=white)](https://next-trip-coral.vercel.app)
 
 ## ✨ Fonctionnalités Principales
 
