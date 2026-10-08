@@ -27,7 +27,7 @@
 
 ## 🛠️ Tech Stack
 
-- **Front-end** : React.js, HTML5, CSS3 / Tailwind CSS
+- **Front-end** : React.js, HTML5, CSS3 / Bootstrap
 - **Back-end** : Laravel (API REST)
 - **Base de données** : MySQL
 - **Design & Prototypage** : Figma
