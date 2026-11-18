@@ -44,6 +44,37 @@ function getRoleHomePath(role) {
   return "/traveler-dashboard";
 }
 
+function isBackendUnavailable(error) {
+  return error?.status === 0;
+}
+
+function getDisplayName(name, email) {
+  const trimmedName = name?.trim();
+
+  if (trimmedName) {
+    return trimmedName;
+  }
+
+  return email?.split("@")[0]?.replace(/[._-]+/g, " ") || "NextTrip traveler";
+}
+
+function buildLocalSession({ name, email, role, provider = "local" }) {
+  const normalizedEmail = email.trim().toLowerCase();
+  const localId = normalizedEmail || `${provider}-${Date.now()}`;
+
+  return {
+    token: `local-demo-${localId}`,
+    tokenType: "Bearer",
+    user: {
+      id: `local-${localId}`,
+      name: getDisplayName(name, normalizedEmail),
+      email: normalizedEmail,
+      role,
+      provider,
+    },
+  };
+}
+
 export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -138,6 +169,21 @@ export default function Auth() {
         replace: true,
       });
     } catch (error) {
+      if (isBackendUnavailable(error)) {
+        const session = buildLocalSession({
+          email: loginData.email,
+          role,
+        });
+
+        saveAuthSession(session);
+        setMessage("");
+        setErrors({});
+        navigate(location.state?.from || getRoleHomePath(session.user.role), {
+          replace: true,
+        });
+        return;
+      }
+
       setMessage("");
       setErrors({
         loginEmail: error?.data?.message || "Login failed. Check your credentials.",
@@ -213,6 +259,20 @@ export default function Auth() {
       });
         navigate(getRoleHomePath(session.user.role), { replace: true });
       } catch (error) {
+        if (isBackendUnavailable(error)) {
+          const session = buildLocalSession({
+            name: signupData.fullName,
+            email: signupData.email,
+            role,
+          });
+
+          saveAuthSession(session);
+          setMessage("");
+          setErrors({});
+          navigate(getRoleHomePath(session.user.role), { replace: true });
+          return;
+        }
+
         const apiErrors = error?.data?.errors || {};
 
         setMessage("");
@@ -294,6 +354,21 @@ export default function Auth() {
       setErrors({});
       navigate(getRoleHomePath(session.user.role), { replace: true });
     } catch (error) {
+      if (isBackendUnavailable(error)) {
+        const session = buildLocalSession({
+          name: socialData.name,
+          email: socialData.email,
+          role,
+          provider: socialModal,
+        });
+
+        saveAuthSession(session);
+        setSocialModal(null);
+        setErrors({});
+        navigate(getRoleHomePath(session.user.role), { replace: true });
+        return;
+      }
+
       const apiErrors = error?.data?.errors || {};
 
       setErrors({

@@ -63,8 +63,8 @@ class DashboardController extends Controller
                 })
                 ->latest()
                 ->get(),
-            'trip_requests' => TripRequest::with('offers.agency')->latest()->get(),
-            'offers' => TripOffer::with(['agency', 'tripRequest'])
+            'trip_requests' => TripRequest::with(['offers.agency', 'user'])->latest()->get(),
+            'offers' => TripOffer::with(['agency', 'tripRequest.user'])
                 ->when($agency, fn ($query) => $query->where('agency_id', $agency->id))
                 ->latest()
                 ->get(),

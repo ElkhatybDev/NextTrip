@@ -33,12 +33,14 @@ export async function apiRequest(path, options = {}) {
       headers,
     });
   } catch {
+    const message = `Backend unavailable. Check that the API server is reachable at ${API_BASE_URL}.`;
+
     throw new ApiError(
-      "Backend unavailable. Start the Laravel API server on http://127.0.0.1:8000.",
+      message,
       {
         status: 0,
         data: {
-          message: "Backend unavailable. Start the Laravel API server on http://127.0.0.1:8000.",
+          message,
         },
       }
     );
